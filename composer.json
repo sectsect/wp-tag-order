@@ -1,6 +1,7 @@
 {
     "name": "sectsect/wp-tag-order",
     "description": "Sort the tags manually in individual posts on wordpress.",
+	"keywords": ["github", "wordpress", "plugin", "tags", "order"],
     "type": "wordpress-plugin",
     "require": {
         "php": ">=5.3"
@@ -8,7 +9,8 @@
     "license": "GPL-3.0+",
     "authors": [
         {
-            "name": "SECT WEB INTERACTIVE"
+            "name": "SECT WEB INTERACTIVE",
+			"homepage": "https://www.ilovesect.com/",
         }
     ]
 }
