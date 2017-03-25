@@ -1,4 +1,4 @@
-# ![Alt text](images/logo.jpg "SECT") WP Tag Order
+# <img src="https://github-sect.s3-ap-northeast-1.amazonaws.com/logo.svg" width="28" height="auto"> WP Tag Order
 
 ### WP Tag Order plugin will order tags, non-hierarchical custom-taxonomy terms in individual posts with simple Drag and Drop Sortable capability. And supplies some functions to output it.
 
