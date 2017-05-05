@@ -1,4 +1,9 @@
 jQuery(document).ready(function() {
+	var removeElements = function(text, selector) {
+		var wrapped = jQuery("<div>" + text + "</div>");
+		wrapped.find(selector).remove();
+		return wrapped.html();
+	}
 	/*==================================================
 		Sync Tags to "#tagsdiv-post_tag" box
 	================================================== */
@@ -6,8 +11,7 @@ jQuery(document).ready(function() {
 	setTimeout(function(){
 	    jQuery("[id^='tagsdiv-']").find('.tagchecklist').on('DOMSubtreeModified propertychange', function() {
 			setTimeout(jQuery.proxy(function(){
-				var cont = jQuery(this).text();
-
+				var cont = jQuery(this).html();
 				if(cont == flag) {
 			        return;		//prevent multiple simultaneous triggers
 			    }
@@ -15,9 +19,11 @@ jQuery(document).ready(function() {
 
 				var postboxid = jQuery(this).closest('.postbox').attr('id');
 				var taxonomy = postboxid.replace('tagsdiv-', '');
-
-				var result = cont.substr(2);
-				var ary = result.split('X ');
+				var removedBtnString = removeElements(cont, "button");
+				var ary = new Array();
+				jQuery(removedBtnString).filter('span').each(function(){
+					ary.push(jQuery(this).text().substr(1));
+				});
 				var string = ary.join();
 				jQuery.ajax({
 					url          : wto_data.plugin_dir_url + "/includes/sync-tags.php",
