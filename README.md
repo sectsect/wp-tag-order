@@ -1,5 +1,7 @@
 # <img src="https://github-sect.s3-ap-northeast-1.amazonaws.com/logo.svg" width="28" height="auto"> WP Tag Order
 
+[![Latest Stable Version](https://poser.pugx.org/sectsect/wp-tag-order/v/stable)](https://packagist.org/packages/sectsect/wp-tag-order) [![Total Downloads](https://poser.pugx.org/sectsect/wp-tag-order/downloads)](https://packagist.org/packages/sectsect/wp-tag-order) [![License](https://poser.pugx.org/sectsect/wp-tag-order/license)](https://packagist.org/packages/sectsect/wp-tag-order) [![PHPPackages Rank](http://phppackages.org/p/sectsect/wp-tag-order/badge/rank.svg)](http://phppackages.org/p/sectsect/wp-tag-order)
+
 ### WP Tag Order plugin will order tags, non-hierarchical custom-taxonomy terms in individual posts with simple Drag and Drop Sortable capability. And supplies some functions to output it.
 
 ## Installation
@@ -16,6 +18,7 @@
 * To apply for the existing post, "`Add and Remove`" once something one tag.  
 Or, if you want to batch apply, Go to `Settings` -> `WP Tag Order` page, and click the `Apply` button.
 * Supports Multisite.
+* Tested on WP v4.7.4
 
 ## Screenshot
 
