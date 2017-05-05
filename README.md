@@ -76,6 +76,7 @@ if ($posttags && ! is_wp_error($posttags)) {
 
 ## Change log  
 
+ * **1.0.1** - Fix bug for WP v4.7
  * **1.0.0** - Initial Release
 
 ## License
