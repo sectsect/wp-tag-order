@@ -4,6 +4,10 @@
 
 ### WP Tag Order plugin will order tags, non-hierarchical custom-taxonomy terms in individual posts with simple Drag and Drop Sortable capability. And supplies some functions to output it.
 
+## Requirements
+
+- WordPress 4.7+
+
 ## Installation
 
  1. `cd /path-to-your/wp-content/plugins/`
@@ -15,6 +19,7 @@
 
 * Supports `post_tag` and `non-hierarchical taxonomy`.
 * Supports multiple `non-hierarchical taxonomies` in a post-type.
+* In the case of creating a new post, you need to save the post once to activate this feature.
 * To apply for the existing post, "`Add and Remove`" once something one tag.  
 Or, if you want to batch apply, Go to `Settings` -> `WP Tag Order` page, and click the `Apply` button.
 * Supports Multisite.
@@ -43,9 +48,9 @@ Or, if you want to batch apply, Go to `Settings` -> `WP Tag Order` page, and cli
 <?php
 $posttags = get_the_tags_ordered();
 if ($posttags && ! is_wp_error($posttags)) {
-	foreach ($posttags as $tag) {
-		echo $tag->name . ' ';
-	}
+    foreach ($posttags as $tag) {
+        echo $tag->name . ' ';
+    }
 }
 ?>
 
@@ -53,9 +58,9 @@ if ($posttags && ! is_wp_error($posttags)) {
 <?php
 $posttags = get_the_terms_ordered($post->ID, 'post_tag');
 if ($posttags && ! is_wp_error($posttags)) {
-	foreach ($posttags as $tag) {
-		echo $tag->name . ' ';
-	}
+    foreach ($posttags as $tag) {
+        echo $tag->name . ' ';
+    }
 }
 ?>
 
@@ -75,11 +80,29 @@ if ($posttags && ! is_wp_error($posttags)) {
 ## NOTES for Developer
 
 * The sorted tags will be saved in `wp_postmeta` table with an array of tag id that has been serialized as custom field.
+
+  <table>
+  <thead>
+  <tr>
+  <th>meta_id</th>
+  <th>post_id</th>
+  <th>meta_key</th>
+  <th>meta_value</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+  <td>19</td>
+  <td>7</td>
+  <td>wp-tag-order-post_tag</td>
+  <td><code style="word-break: break-all;">s:91:"a:7:{i:0;s:1:"7";i:1;s:1:"5";i:2;s:2:"10";i:3;s:1:"4";i:4;s:1:"6";i:5;s:1:"8";i:6;s:1:"9";}";</code></td>
+  </tr></tbody></table>
+
 * This Plugin does not hosting on the [wordpress.org](https://wordpress.org/) repo in order to prevent a flood of support requests from wide audience.
 
 ## Change log  
 
- * **1.0.1** - Fix bug for WP v4.7
+ * **1.0.1** - Specification change for Wordpress 4.7
  * **1.0.0** - Initial Release
 
 ## License
