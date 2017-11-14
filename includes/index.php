@@ -114,13 +114,14 @@ function load_wpto_admin_script( $hook ) {
     if ( $hook == 'post-new.php' || $hook == 'post.php' ) {
 		$pt = wto_has_tag_posttype();
 		if ( in_array( $post->post_type, $pt ) ) {
-			wp_enqueue_style( 'wto-style', plugin_dir_url(dirname(__FILE__)) . 'assets/css/admin.css', array() );
+			wp_enqueue_style( 'wto-style', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/css/admin.css', array() );
 			// wp_enqueue_script( 'jquery-ui-sortable' );
-    		wp_enqueue_script( 'wto-script', plugin_dir_url(dirname(__FILE__)) . 'assets/js/script.js', array() );
+    		wp_enqueue_script( 'wto-script', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/js/script.js', array() );
+			$post_id = ( isset( $_GET['post'] )) ? wp_unslash( $_GET['post'] ) : null;
 			wp_localize_script( 'wto-script', 'wto_data', array(
-				'post_id'        => wp_unslash($_GET['post']),
+				'post_id'        => $post_id,
 				'nonce'          => wp_create_nonce('wpto'),
-				'plugin_dir_url' => plugin_dir_url(dirname(__FILE__)),
+				'plugin_dir_url' => plugin_dir_url( dirname( __FILE__ ) ),
 		    ) );
         }
     }
