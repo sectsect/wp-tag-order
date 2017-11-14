@@ -26,7 +26,7 @@ jQuery(document).ready(function() {
 				});
 				var string = ary.join();
 				jQuery.ajax({
-					url          : wto_data.plugin_dir_url + "/includes/sync-tags.php",
+					url          : wto_data.plugin_dir_url + "includes/sync-tags.php",
 					dataType     : "json",
 					data         : {id : wto_data.post_id, nonce : wto_data.nonce, taxonomy : taxonomy, tags : string},
 					type         : "post",
@@ -61,7 +61,7 @@ jQuery(document).ready(function() {
 		    });
 			var string = ary.join();
 			jQuery.ajax({
-				url          : wto_data.plugin_dir_url + "/includes/ajax-update.php",
+				url          : wto_data.plugin_dir_url + "includes/ajax-update.php",
 				dataType     : "json",
 				data         : {id : wto_data.post_id, nonce : wto_data.nonce, taxonomy : taxonomy, tags : string},
 				type         : "post",
