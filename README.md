@@ -102,6 +102,7 @@ if ($posttags && ! is_wp_error($posttags)) {
 
 ## Change log  
 
+ * **1.0.2** - Fix PHP Notice for has_cap & Fix incorrect URL Paths for Ajax
  * **1.0.1** - Specification change for Wordpress 4.7
  * **1.0.0** - Initial Release
 
