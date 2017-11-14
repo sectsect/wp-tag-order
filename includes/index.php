@@ -132,7 +132,7 @@ add_action( 'admin_enqueue_scripts', 'load_wpto_admin_script', 10, 1 );
 ================================================== */
 add_action( 'admin_menu', 'wpto_menu' );
 function wpto_menu() {
-    $page_hook_suffix = add_options_page( 'WP Tag Order', 'WP Tag Order', 8, 'wpto_menu', 'wpto_options_page' );
+    $page_hook_suffix = add_options_page( 'WP Tag Order', 'WP Tag Order', 'manage_options', 'wpto_menu', 'wpto_options_page' );
     add_action( 'admin_print_styles-' . $page_hook_suffix, 'wpto_admin_styles' );
     add_action( 'admin_print_scripts-' . $page_hook_suffix, 'wpto_admin_scripts' );
     add_action( 'admin_init', 'register_wpto_settings' );
