@@ -20,7 +20,7 @@ require '../../../../wp-load.php';
 require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/functions.php';
 
 extract( $_POST, EXTR_SKIP );
-if ( !isset($tags) || !isset($nonce) || empty($nonce) || !wp_verify_nonce($nonce, 'wpto') || $_SERVER["REQUEST_METHOD"] != "POST" ) {
+if ( ! isset( $tags ) || ! isset( $nonce ) || empty( $nonce ) || ! wp_verify_nonce( $nonce, 'wpto' ) || 'POST' != $_SERVER['REQUEST_METHOD'] ) {
 	wp_safe_redirect( home_url( '/' ), 301 );
 	exit;
 }
