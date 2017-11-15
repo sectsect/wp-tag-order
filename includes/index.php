@@ -66,10 +66,10 @@ function add_wpto_meta_box() {
 			foreach ( $taxonomies as $taxonomy ) {
 				if ( ! is_taxonomy_hierarchical( $taxonomy ) && 'post_format' !== $taxonomy ) {
 					$obj   = get_taxonomy( $taxonomy );
-					$label = $obj->label;
+					$text  = $obj->label;
 					add_meta_box(
 						'wpto_meta_box-' . $taxonomy,
-						__( "'Tag Order - ' . $label", 'wp-tag-order' ),
+						__( "'Tag Order - ' . $text", 'wp-tag-order' ),
 						'wpto_meta_box_markup',
 						$screen,
 						'side',
