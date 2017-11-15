@@ -1,10 +1,32 @@
 <?php
+/**
+ * For Options Page.
+ *
+ * @link       https://www.ilovesect.com/
+ * @since      1.0.0
+ *
+ * @package    WP_Tag_Order
+ * @subpackage WP_Tag_Order/includes
+ */
+
+/**
+ * Template for catogory.
+ *
+ * @package    WP_Tag_Order
+ * @subpackage WP_Tag_Order/includes
+ */
+
 global $wpdb;
 
-/*==================================================
-	Add meta-box	@ https://www.sitepoint.com/adding-custom-meta-boxes-to-wordpress/
-================================================== */
-function wpto_meta_box_markup($object, $metabox) {
+/**
+ * Add meta-box.	@ https://www.sitepoint.com/adding-custom-meta-boxes-to-wordpress/
+ *
+ * @param  array $object "description".
+ * @param  array $metabox "description".
+ *
+ * @return void "description".
+ */
+function wpto_meta_box_markup( $object, $metabox ) {
 	wp_nonce_field( basename(__FILE__), "wpto-meta-box-nonce" );
 ?>
 <div class="inner">
@@ -28,20 +50,24 @@ function wpto_meta_box_markup($object, $metabox) {
 <?php
 }
 
+/**
+ * Add meta-box.	@ https://www.sitepoint.com/adding-custom-meta-boxes-to-wordpress/
+ *
+ * @return void "description".
+ */
 function add_wpto_meta_box() {
-	$screens = wto_has_tag_posttype();	// Get All Post-types that holds the non-hierarchical taxonomies
+	$screens = wto_has_tag_posttype();
 	foreach ( $screens as $screen ) {
 		$taxonomies = get_object_taxonomies( $screen );
 		if ( ! empty( $taxonomies ) ) {
 			foreach ( $taxonomies as $taxonomy ) {
-			    // Get taxonomy in Post-types that holds the non-hierarchical taxonomies
 				if ( ! is_taxonomy_hierarchical( $taxonomy ) && $taxonomy !== "post_format" ) {
 					$obj = get_taxonomy( $taxonomy );
 					$label = $obj->label;
 					add_meta_box (
-						'wpto_meta_box-' . $taxonomy,						// id for metabox
-						__('Tag Order - ' . $label, 'wp-tag-order'),		// label
-						'wpto_meta_box_markup',								// callback function for output
+						'wpto_meta_box-' . $taxonomy,
+						__('Tag Order - ' . $label, 'wp-tag-order'),
+						'wpto_meta_box_markup',
 						$screen,
 						'side',
 						'core',
@@ -58,12 +84,27 @@ function add_wpto_meta_box() {
 }
 add_action( 'add_meta_boxes', 'add_wpto_meta_box' );
 
+/**
+ * Add classes to meta-box.
+ *
+ * @param array $classes "description".
+ *
+ * @return array "description".
+ */
 function add_metabox_classes_tagsdiv( $classes ) {
 	$classes[] = 'wpto_meta_box';
 	$classes[] = 'wpto_meta_box_tagsdiv';
 
     return $classes;
 }
+
+/**
+ * Add classes to meta-box.
+ *
+ * @param array $classes "description".
+ *
+ * @return array "description".
+ */
 function add_metabox_classes_panel( $classes ) {
 	$classes[] = 'wpto_meta_box';
 	$classes[] = 'wpto_meta_box_panel';
@@ -71,8 +112,17 @@ function add_metabox_classes_panel( $classes ) {
     return $classes;
 }
 
+/**
+ * Save meta box.
+ *
+ * @param string $post_id "description".
+ * @param int    $post "description".
+ * @param string $update Optional. After tags.
+ *
+ * @return statement "description".
+ */
 function save_wpto_meta_box( $post_id, $post, $update ) {
-    if ( ! isset($_POST["wpto-meta-box-nonce"]) || ! wp_verify_nonce( $_POST["wpto-meta-box-nonce"], basename(__FILE__) ) )
+    if ( ! isset( $_POST["wpto-meta-box-nonce"] ) || ! wp_verify_nonce( $_POST["wpto-meta-box-nonce"], basename( __FILE__ ) ) )
         return $post_id;
 
     if( ! current_user_can( "edit_post", $post_id ) )
@@ -81,9 +131,6 @@ function save_wpto_meta_box( $post_id, $post, $update ) {
     if( defined("DOING_AUTOSAVE") && DOING_AUTOSAVE )
         return $post_id;
 
-    // $slug = "news";
-    // if($slug != $post->post_type)
-    //     return $post_id;
 	$pt = wto_has_tag_posttype();
 	if( ! in_array( $post->post_type, $pt ) ) {
 	    return $post_id;
@@ -92,7 +139,6 @@ function save_wpto_meta_box( $post_id, $post, $update ) {
 	$taxonomies = get_object_taxonomies( $post->post_type );
 	if( ! empty( $taxonomies ) ) {
 		foreach ( $taxonomies as $taxonomy ) {
-			// only want hierarchical -- no tags please
 			if( ! is_taxonomy_hierarchical( $taxonomy ) ) {
 				$meta_box_tags_value = "";
 				$fieldname = "wp-tag-order-" . $taxonomy;
@@ -106,21 +152,24 @@ function save_wpto_meta_box( $post_id, $post, $update ) {
 }
 add_action( "save_post", "save_wpto_meta_box", 10, 3 );
 
-/*==================================================
-	css / js
-================================================== */
+/**
+ * Load admin scripts.
+ *
+ * @param string $hook "description".
+ *
+ * @return void "description".
+ */
 function load_wpto_admin_script( $hook ) {
     global $post;
     if ( $hook == 'post-new.php' || $hook == 'post.php' ) {
 		$pt = wto_has_tag_posttype();
 		if ( in_array( $post->post_type, $pt ) ) {
 			wp_enqueue_style( 'wto-style', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/css/admin.css', array() );
-			// wp_enqueue_script( 'jquery-ui-sortable' );
     		wp_enqueue_script( 'wto-script', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/js/script.js', array() );
-			$post_id = ( isset( $_GET['post'] )) ? wp_unslash( $_GET['post'] ) : null;
+			$post_id = ( isset( $_GET['post'] ) ) ? wp_unslash( $_GET['post'] ) : null;
 			wp_localize_script( 'wto-script', 'wto_data', array(
 				'post_id'        => $post_id,
-				'nonce'          => wp_create_nonce('wpto'),
+				'nonce'          => wp_create_nonce( 'wpto' ),
 				'plugin_dir_url' => plugin_dir_url( dirname( __FILE__ ) ),
 		    ) );
         }
@@ -128,30 +177,56 @@ function load_wpto_admin_script( $hook ) {
 }
 add_action( 'admin_enqueue_scripts', 'load_wpto_admin_script', 10, 1 );
 
-/*==================================================
-    Add Options Page
-================================================== */
-add_action( 'admin_menu', 'wpto_menu' );
+/**
+ * Add Options Page.
+ *
+ * @return void "description".
+ */
 function wpto_menu() {
     $page_hook_suffix = add_options_page( 'WP Tag Order', 'WP Tag Order', 'manage_options', 'wpto_menu', 'wpto_options_page' );
     add_action( 'admin_print_styles-' . $page_hook_suffix, 'wpto_admin_styles' );
     add_action( 'admin_print_scripts-' . $page_hook_suffix, 'wpto_admin_scripts' );
     add_action( 'admin_init', 'register_wpto_settings' );
 }
+add_action( 'admin_menu', 'wpto_menu' );
+
+/**
+ * Load admin styles.
+ *
+ * @return void "description".
+ */
 function wpto_admin_styles() {
     wp_enqueue_style( 'sweetalert2', '//cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/4.3.3/sweetalert2.min.css', array() );
 }
+
+/**
+ * Load admin scripts.
+ *
+ * @return void "description".
+ */
 function wpto_admin_scripts() {
 	wp_enqueue_script( 'sweetalert2', '//cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/4.3.3/sweetalert2.min.js', array('jquery') );
-	wp_enqueue_script( 'wto-options-script', plugin_dir_url( dirname(__FILE__) ) . 'options/js/script.js', array('sweetalert2') );
+	wp_enqueue_script( 'wto-options-script', plugin_dir_url( dirname( __FILE__ ) ) . 'options/js/script.js', array('sweetalert2') );
 	wp_localize_script( 'wto-options-script', 'wto_options_data', array(
-		'nonce'          => wp_create_nonce('wpto-options'),
-		'plugin_dir_url' => plugin_dir_url(dirname(__FILE__)),
+		'nonce'          => wp_create_nonce( 'wpto-options' ),
+		'plugin_dir_url' => plugin_dir_url( dirname( __FILE__ ) ),
 	) );
 }
+
+/**
+ * Register settings.
+ *
+ * @return void "description".
+ */
 function register_wpto_settings() {
 
 }
+
+/**
+ * Load file for Options Page.
+ *
+ * @return void "description".
+ */
 function wpto_options_page() {
     require_once plugin_dir_path( dirname(__FILE__) ) . 'options/index.php';
 }
