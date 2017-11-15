@@ -54,7 +54,7 @@ function wpto_meta_box_markup( $object, $metabox ) {
 }
 
 /**
- * Add meta-box.	@ https://www.sitepoint.com/adding-custom-meta-boxes-to-wordpress/
+ * Add meta-box. @ https://www.sitepoint.com/adding-custom-meta-boxes-to-wordpress/
  *
  * @return void "description".
  */
@@ -67,9 +67,9 @@ function add_wpto_meta_box() {
 				if ( ! is_taxonomy_hierarchical( $taxonomy ) && 'post_format' !== $taxonomy ) {
 					$obj   = get_taxonomy( $taxonomy );
 					$label = $obj->label;
-					add_meta_box (
+					add_meta_box(
 						'wpto_meta_box-' . $taxonomy,
-						__( 'Tag Order - ' . $label, 'wp-tag-order' ),
+						__( "'Tag Order - ' . $label", 'wp-tag-order' ),
 						'wpto_meta_box_markup',
 						$screen,
 						'side',
@@ -129,27 +129,27 @@ function save_wpto_meta_box( $post_id, $post, $update ) {
 		return $post_id;
 	}
 
-    if ( ! current_user_can( 'edit_post', $post_id ) ) {
+	if ( ! current_user_can( 'edit_post', $post_id ) ) {
 		return $post_id;
 	}
 
-    if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 		return $post_id;
 	}
 
 	$pt = wto_has_tag_posttype();
-	if( ! in_array( $post->post_type, $pt ) ) {
-	    return $post_id;
+	if ( ! in_array( $post->post_type, $pt ) ) {
+		return $post_id;
 	}
 
 	$taxonomies = get_object_taxonomies( $post->post_type );
-	if( ! empty( $taxonomies ) ) {
+	if ( ! empty( $taxonomies ) ) {
 		foreach ( $taxonomies as $taxonomy ) {
-			if( ! is_taxonomy_hierarchical( $taxonomy ) ) {
+			if ( ! is_taxonomy_hierarchical( $taxonomy ) ) {
 				$meta_box_tags_value = '';
 				$fieldname           = 'wp-tag-order-' . $taxonomy;
-				if ( isset( $_POST[$fieldname] ) ) {
-					$meta_box_tags_value = serialize( $_POST[$fieldname] );
+				if ( isset( $_POST[ $fieldname ] ) ) {
+					$meta_box_tags_value = serialize( $_POST[ $fieldname ] );
 				}
 				update_post_meta( $post_id, $fieldname, $meta_box_tags_value );
 			}
@@ -234,5 +234,5 @@ function register_wpto_settings() {
  * @return void "description".
  */
 function wpto_options_page() {
-	require_once plugin_dir_path( dirname(__FILE__) ) . 'options/index.php';
+	require_once plugin_dir_path( dirname( __FILE__ ) ) . 'options/index.php';
 }
