@@ -25,7 +25,7 @@ if ( ! isset( $tags ) || ! isset( $nonce ) || empty( $nonce ) || ! wp_verify_non
 	exit;
 }
 
-$newtags    = explode( ",", esc_attr( wp_unslash( $tags ) ) );
+$newtags    = explode( ',', esc_attr( wp_unslash( $tags ) ) );
 $newtagsids = array();
 foreach ( $newtags as $newtag ) {
 	$term = term_exists( $newtag, sanitize_text_field( wp_unslash( $taxonomy ) ) );
@@ -49,7 +49,8 @@ if ( $id ) {
 			if ( ! in_array( $val, $basetagsids ) ) {
 				array_push( $basetagsids, $val );
 			} else {
-				if ( ( $key = array_search( $val, $basetagsids ) ) !== false ) {
+				$key = array_search( $val, $basetagsids );
+				if ( false !== $key ) {
 					unset( $basetagsids[ $key ] );
 				}
 			}

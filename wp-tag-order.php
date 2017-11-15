@@ -22,10 +22,10 @@ $wptagorder_minimalrequiredphpversion = '5.3';
 function wptagorder_noticephpversionwrong() {
 	global $wptagorder_minimalrequiredphpversion;
 	echo '<div class="updated fade">' .
-	__( 'Error: plugin "WP Tag Order" requires a newer version of PHP to be running.',  'wp-tag-order' ) .
-	'<br/>' . __('Minimal version of PHP required: ', 'wp-tag-order') . '<strong>' . $wptagorder_minimalrequiredphpversion . '</strong>' .
-	'<br/>' . __('Your server\'s PHP version: ', 'wp-tag-order') . '<strong>' . phpversion() . '</strong>' .
-	'</div>';
+	__( 'Error: plugin "WP Tag Order" requires a newer version of PHP to be running.', 'wp_instagram_json' ) .
+			'<br/>' . __( 'Minimal version of PHP required: ', 'wp-tag-order' ) . '<strong>' . $wptagorder_minimalrequiredphpversion . '</strong>' .
+			'<br/>' . __( 'Your server\'s PHP version: ', 'wp-tag-order' ) . '<strong>' . phpversion() . '</strong>' .
+		'</div>';
 }
 
 /**
@@ -35,7 +35,7 @@ function wptagorder_noticephpversionwrong() {
  */
 function wptagorder_phpversioncheck() {
 	global $wptagorder_minimalrequiredphpversion;
-	if ( version_compare( phpversion(), $wptagorder_minimalrequiredphpversion ) < 0) {
+	if ( version_compare( phpversion(), $wptagorder_minimalrequiredphpversion ) < 0 ) {
 		add_action( 'admin_notices', 'wptagorder_noticephpversionwrong' );
 		return false;
 	}
