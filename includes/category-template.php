@@ -1,7 +1,29 @@
 <?php
-/*==================================================
-	get_the_terms_ordered
-================================================== */
+/**
+ * Template for catogory.
+ *
+ * @link       https://www.ilovesect.com/
+ * @since      1.0.0
+ *
+ * @package    WP_Tag_Order
+ * @subpackage WP_Tag_Order/includes
+ */
+
+/**
+ * Template for catogory.
+ *
+ * @package    WP_Tag_Order
+ * @subpackage WP_Tag_Order/includes
+ */
+
+/**
+ * Get the ordered terms.
+ *
+ * @param string $post_id "description".
+ * @param string $taxonomy "description".
+ *
+ * @return statement "description".
+ */
 function get_the_terms_ordered( $post_id, $taxonomy ) {
 	global $post;
 
@@ -30,24 +52,25 @@ function get_the_terms_ordered( $post_id, $taxonomy ) {
 
 	return apply_filters( 'get_the_tags', $return );
 }
-/*==================================================
-	get_the_tags_ordered
-================================================== */
+
+/**
+ * Get the ordered tags.
+ *
+ * @param string $post_id "description".
+ *
+ * @return array "description".
+ */
 function get_the_tags_ordered( $post_id = '' ) {
 	return get_the_terms_ordered( $post_id, 'post_tag' );
 }
-/*==================================================
-	get_the_tag_list_ordered
-================================================== */
+
 /**
  * Retrieve the tags for a post formatted as a string.
- *
- * @since 2.3.0
  *
  * @param string $before Optional. Before tags.
  * @param string $sep Optional. Between tags.
  * @param string $after Optional. After tags.
- * @param int $id Optional. Post ID. Defaults to the current post.
+ * @param int    $id Optional. Post ID. Defaults to the current post.
  * @return string|false|WP_Error A list of tags on success, false if there are no terms, WP_Error on failure.
  */
 function get_the_tag_list_ordered( $before = '', $sep = '', $after = '', $id = 0 ) {
@@ -65,13 +88,9 @@ function get_the_tag_list_ordered( $before = '', $sep = '', $after = '', $id = 0
 	 */
 	return apply_filters( 'the_tags', get_the_term_list_ordered($id, 'post_tag', $before, $sep, $after), $before, $sep, $after, $id );
 }
-/*==================================================
-	the_tags_ordered
-================================================== */
+
 /**
  * Retrieve the tags for a post.
- *
- * @since 2.3.0
  *
  * @param string $before Optional. Before list.
  * @param string $sep Optional. Separate items using this.
@@ -83,15 +102,10 @@ function the_tags_ordered( $before = null, $sep = ', ', $after = '' ) {
 	echo get_the_tag_list_ordered( $before, $sep, $after );
 }
 
-/*==================================================
-	get_the_term_list_ordered
-================================================== */
 /**
  * Retrieve a post's terms as a list with specified format.
  *
- * @since 2.5.0
- *
- * @param int $id Post ID.
+ * @param int    $id Post ID.
  * @param string $taxonomy Taxonomy name.
  * @param string $before Optional. Before list.
  * @param string $sep Optional. Separate items using this.
@@ -132,15 +146,10 @@ function get_the_term_list_ordered( $id, $taxonomy, $before = '', $sep = '', $af
 	return $before . join( $sep, $term_links ) . $after;
 }
 
-/*==================================================
-	the_terms_ordered
-================================================== */
 /**
  * Display the terms in a list.
  *
- * @since 2.5.0
- *
- * @param int $id Post ID.
+ * @param int    $id Post ID.
  * @param string $taxonomy Taxonomy name.
  * @param string $before Optional. Before list.
  * @param string $sep Optional. Separate items using this.
