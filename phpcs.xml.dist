@@ -4,6 +4,11 @@
 
 	<rule ref="WordPress-Core" />
 	<rule ref="WordPress-Docs" />
+	<rule ref="WordPress.NamingConventions.ValidHookName">
+		<properties>
+			<property name="additionalWordDelimiters" value="-"/>
+		</properties>
+	</rule>
 
 	<!-- Check all PHP files in directory tree by default. -->
 	<arg name="extensions" value="php"/>
