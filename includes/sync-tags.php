@@ -19,7 +19,11 @@
 require '../../../../wp-load.php';
 require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/functions.php';
 
-extract( $_POST, EXTR_SKIP );
+$id       = $_POST['id'];
+$nonce    = $_POST['nonce'];
+$taxonomy = $_POST['taxonomy'];
+$tags     = $_POST['tags'];
+
 if ( ! isset( $tags ) || ! isset( $nonce ) || empty( $nonce ) || ! wp_verify_nonce( $nonce, 'wpto' ) || 'POST' != $_SERVER['REQUEST_METHOD'] ) {
 	wp_safe_redirect( home_url( '/' ), 301 );
 	exit;
