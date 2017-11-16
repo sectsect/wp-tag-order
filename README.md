@@ -23,7 +23,7 @@
 * To apply for the existing post, "`Add and Remove`" once something one tag.  
 Or, if you want to batch apply, Go to `Settings` -> `WP Tag Order` page, and click the `Apply` button.
 * Supports Multisite.
-* Tested on WP v4.7.4
+* Tested on WP v4.9
 
 ## Screenshot
 
@@ -101,6 +101,7 @@ if ($posttags && ! is_wp_error($posttags)) {
 * This Plugin does not hosting on the [wordpress.org](https://wordpress.org/) repo in order to prevent a flood of support requests from wide audience.
 
 ## Change log  
+ * **1.0.5** - Add compatible with WordPress 4.9
  * **1.0.4** - Add PHP Unit Tests
  * **1.0.3** - Fix PHP Notice for Undefined index [#2](https://github.com/sectsect/wp-tag-order/issues/2)
  * **1.0.2** - Fix PHP Notice for has_cap [#1](https://github.com/sectsect/wp-tag-order/issues/1) & Fix incorrect URL Paths for Ajax
