@@ -1,6 +1,6 @@
 # <img src="https://github-sect.s3-ap-northeast-1.amazonaws.com/logo.svg" width="28" height="auto"> WP Tag Order
 
-[![Latest Stable Version](https://poser.pugx.org/sectsect/wp-tag-order/v/stable)](https://packagist.org/packages/sectsect/wp-tag-order) [![Total Downloads](https://poser.pugx.org/sectsect/wp-tag-order/downloads)](https://packagist.org/packages/sectsect/wp-tag-order) [![License](https://poser.pugx.org/sectsect/wp-tag-order/license)](https://packagist.org/packages/sectsect/wp-tag-order) [![PHPPackages Rank](http://phppackages.org/p/sectsect/wp-tag-order/badge/rank.svg)](http://phppackages.org/p/sectsect/wp-tag-order)
+[![Build Status](https://travis-ci.org/sectsect/wp-tag-order.svg?branch=master)](https://travis-ci.org/sectsect/wp-tag-order) [![PHP-Eye](https://php-eye.com/badge/sectsect/wp-tag-order/tested.svg?style=flat)](https://php-eye.com/package/sectsect/wp-tag-order) [![Latest Stable Version](https://poser.pugx.org/sectsect/wp-tag-order/v/stable)](https://packagist.org/packages/sectsect/wp-tag-order) [![License](https://poser.pugx.org/sectsect/wp-tag-order/license)](https://packagist.org/packages/sectsect/wp-tag-order)
 
 ### WP Tag Order plugin will order tags, non-hierarchical custom-taxonomy terms in individual posts with simple Drag and Drop Sortable capability. And supplies some functions to output it.
 
@@ -101,6 +101,7 @@ if ($posttags && ! is_wp_error($posttags)) {
 * This Plugin does not hosting on the [wordpress.org](https://wordpress.org/) repo in order to prevent a flood of support requests from wide audience.
 
 ## Change log  
+ * **1.0.4** - Add PHP Unit Tests
  * **1.0.3** - Fix PHP Notice for Undefined index [#2](https://github.com/sectsect/wp-tag-order/issues/2)
  * **1.0.2** - Fix PHP Notice for has_cap [#1](https://github.com/sectsect/wp-tag-order/issues/1) & Fix incorrect URL Paths for Ajax
  * **1.0.1** - Specification change for Wordpress 4.7
