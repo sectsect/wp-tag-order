@@ -1,5 +1,13 @@
 # Change Log
 
+## [v1.0.4](https://github.com/sectsect/wp-tag-order/tree/v1.0.4) (2017-11-16)
+[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v1.0.3...v1.0.4)
+
+**Closed issues:**
+
+- Undefined index: post in  wp-content/plugins/wp-tag-order/includes/index.php line 121 [\#2](https://github.com/sectsect/wp-tag-order/issues/2)
+-  has\_cap was called with an argument that is deprecated warning [\#1](https://github.com/sectsect/wp-tag-order/issues/1)
+
 ## [v1.0.3](https://github.com/sectsect/wp-tag-order/tree/v1.0.3) (2017-11-14)
 [Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v1.0.2...v1.0.3)
 
