@@ -88,6 +88,7 @@ if ($tags) {
 		}
 	}
 } else {
+	delete_post_meta( sanitize_text_field( wp_unslash( $id ) ), 'wp-tag-order-' . sanitize_text_field( wp_unslash( $taxonomy ) ) );
 	$return = '';
 }
 
