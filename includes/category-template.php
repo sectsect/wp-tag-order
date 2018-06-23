@@ -30,24 +30,28 @@ function get_the_terms_ordered( $post_id, $taxonomy ) {
 	if ( ! $post_id ) {
 		$post_id = $post->ID;
 	}
-	$ids    = get_post_meta( $post_id, 'wp-tag-order-' . $taxonomy, true );
-	$return = array();
-	$ids    = unserialize( $ids );
-	foreach ( $ids as $tagid ) {
-		$tag      = get_term_by( 'id', $tagid, $taxonomy );
-		$return[] = (object) array(
-			'term_id'          => $tag->term_id,
-			'name'             => $tag->name,
-			'slug'             => $tag->slug,
-			'term_group'       => $tag->term_group,
-			'term_taxonomy_id' => $tag->term_taxonomy_id,
-			'taxonomy'         => $tag->taxonomy,
-			'description'      => $tag->description,
-			'parent'           => $tag->parent,
-			'count'            => $tag->count,
-			'filter'           => $tag->filter,
-			'term_order'       => $tag->term_order,
-		);
+	$ids = get_post_meta( $post_id, 'wp-tag-order-' . $taxonomy, true );
+	if ( $ids ) {
+		$return = array();
+		$ids    = unserialize( $ids );
+		foreach ( $ids as $tagid ) {
+			$tag      = get_term_by( 'id', $tagid, $taxonomy );
+			$return[] = (object) array(
+				'term_id'          => $tag->term_id,
+				'name'             => $tag->name,
+				'slug'             => $tag->slug,
+				'term_group'       => $tag->term_group,
+				'term_taxonomy_id' => $tag->term_taxonomy_id,
+				'taxonomy'         => $tag->taxonomy,
+				'description'      => $tag->description,
+				'parent'           => $tag->parent,
+				'count'            => $tag->count,
+				'filter'           => $tag->filter,
+				'term_order'       => $tag->term_order,
+			);
+		}
+	} else {
+		$return = false;
 	}
 
 	return apply_filters( 'get_the_tags', $return );
