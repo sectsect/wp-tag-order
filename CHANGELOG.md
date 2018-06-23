@@ -1,5 +1,17 @@
 # Change Log
 
+## [Unreleased](https://github.com/sectsect/wp-tag-order/tree/HEAD)
+
+[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v1.0.6...HEAD)
+
+**Closed issues:**
+
+- Removing the last tag should clear the custom tag order [\#4](https://github.com/sectsect/wp-tag-order/issues/4)
+- get\_the\_terms\_ordered should check if tag\(s\) and custom order exists [\#3](https://github.com/sectsect/wp-tag-order/issues/3)
+
+## [v1.0.6](https://github.com/sectsect/wp-tag-order/tree/v1.0.6) (2018-06-23)
+[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v1.0.5...v1.0.6)
+
 ## [v1.0.5](https://github.com/sectsect/wp-tag-order/tree/v1.0.5) (2017-11-16)
 [Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v1.0.4...v1.0.5)
 
