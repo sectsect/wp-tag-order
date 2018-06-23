@@ -28,7 +28,7 @@ global $wpdb;
  */
 function wpto_meta_box_markup( $object, $metabox ) {
 	wp_nonce_field( basename( __FILE__ ), 'wpto-meta-box-nonce' );
-?>
+	?>
 <div class="inner">
 	<ul>
 	<?php
@@ -39,18 +39,18 @@ function wpto_meta_box_markup( $object, $metabox ) {
 	if ( ! wto_is_array_empty( $tags ) ) :
 		foreach ( $tags as $tagid ) :
 			$tag = get_term_by( 'id', $tagid, $taxonomy );
-	?>
+			?>
 		<li>
 			<input type="text" readonly="readonly" value="<?php echo $tag->name; ?>">
 			<input type="hidden" name="wp-tag-order-<?php echo $taxonomy; ?>[]" value="<?php echo $tag->term_id; ?>">
 		</li>
-	<?php
+			<?php
 		endforeach;
 	endif;
 	?>
 	</ul>
 </div>
-<?php
+	<?php
 }
 
 /**

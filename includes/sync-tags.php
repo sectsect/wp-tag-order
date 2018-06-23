@@ -29,7 +29,7 @@ if ( ! isset( $nonce ) || empty( $nonce ) || ! wp_verify_nonce( $nonce, 'wpto' )
 	exit;
 }
 
-if ($tags) {
+if ( $tags ) {
 	$newtags    = explode( ',', esc_attr( wp_unslash( $tags ) ) );
 	$newtagsids = array();
 	foreach ( $newtags as $newtag ) {
