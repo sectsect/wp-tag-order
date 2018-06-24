@@ -1,4 +1,4 @@
-jQuery(function(){
+jQuery(function() {
 	var btn = 'jQuery("#wpbody-content form input[name=apply]")';
 	jQuery("#wpbody-content form input[name=apply]").on("click",function(){
 		swal.queue([{
@@ -13,10 +13,11 @@ jQuery(function(){
 			preConfirm: function() {
 				return new Promise(function(resolve) {
 					jQuery.ajax({
-						url       : wto_options_data.plugin_dir_url + "/options/includes/ajax-apply.php",
+						url       : wto_options_data.ajax_url,
 						dataType  : "json",
 						data      : {
-							nonce : wto_options_data.nonce
+							nonce  : wto_options_data.nonce,
+							action : wto_options_data.action,
 						},
 						type      : "post",
 						beforeSend: function() {
@@ -29,14 +30,12 @@ jQuery(function(){
 					}).fail(function(XMLHttpRequest, textStatus, errorThrown) {
 						alert("Load Error. Please Reload...");
 					}).always(function(data) {
-						if(data){
-							$html = '<p><strong>Applied to the ' + data + ' posts.</strong></p>';
-							jQuery('#setting-apply-settings_updated').html($html);
-							// For sweetalert2.js
-							var str = 'Applied to ' + data + ' posts.';
-							swal.insertQueueStep(str);
-							resolve();
-						}
+						$html = '<p><strong>Applied to the ' + data + ' posts.</strong></p>';
+						jQuery('#setting-apply-settings_updated').html($html);
+						// For sweetalert2.js
+						var str = 'Applied to ' + data + ' posts.';
+						swal.insertQueueStep(str);
+						resolve();
 					});
 				});
 			}

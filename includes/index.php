@@ -173,15 +173,143 @@ function load_wpto_admin_script( $hook ) {
 			wp_enqueue_style( 'wto-style', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/css/admin.css', array() );
 			wp_enqueue_script( 'wto-script', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/js/script.js', array() );
 			$post_id = ( isset( $_GET['post'] ) ) ? wp_unslash( $_GET['post'] ) : null;
+			$action_sync   = 'wto_sync_tags';
+			$action_update = 'wto_update_tags';
 			wp_localize_script( 'wto-script', 'wto_data', array(
 				'post_id'        => $post_id,
-				'nonce'          => wp_create_nonce( 'wpto' ),
-				'plugin_dir_url' => plugin_dir_url( dirname( __FILE__ ) ),
+				'nonce_sync'     => wp_create_nonce( $action_sync ),
+				'action_sync'    => $action_sync,
+				'nonce_update'   => wp_create_nonce( $action_update ),
+				'action_update'  => $action_update,
+				'ajax_url'       => admin_url( 'admin-ajax.php' ),
 			) );
 		}
 	}
 }
 add_action( 'admin_enqueue_scripts', 'load_wpto_admin_script', 10, 1 );
+
+/**
+ * Handling for Ajax Request.
+ *
+ * @param string $hook "description".
+ *
+ * @return string "description".
+ */
+function ajax_wto_sync_tags() {
+	$id       = $_POST['id'];
+	$nonce    = $_POST['nonce'];
+	$action   = $_POST['action'];
+	$taxonomy = $_POST['taxonomy'];
+	$tags     = $_POST['tags'];
+
+	if ( ! isset( $nonce ) || empty( $nonce ) || ! wp_verify_nonce( $nonce, $action ) || ! check_ajax_referer( $action, 'nonce', false ) || 'POST' != $_SERVER['REQUEST_METHOD'] ) {
+		wp_safe_redirect( home_url( '/' ), 301 );
+		exit;
+	}
+
+	if ( $tags ) {
+		$newtags    = explode( ',', esc_attr( wp_unslash( $tags ) ) );
+		$newtagsids = array();
+		foreach ( $newtags as $newtag ) {
+			$term = term_exists( $newtag, sanitize_text_field( wp_unslash( $taxonomy ) ) );
+			if ( 0 == $term && null == $term ) {
+				$term_taxonomy_ids = wp_set_object_terms( sanitize_text_field( wp_unslash( $id ) ), $newtag, sanitize_text_field( wp_unslash( $taxonomy ) ), true );
+				if ( is_wp_error( $term_taxonomy_ids ) ) {
+					exit;
+				}
+			}
+			$tag = get_term_by( 'name', $newtag, sanitize_text_field( wp_unslash( $taxonomy ) ) );
+			array_push( $newtagsids, (string) $tag->term_id );
+		}
+
+		if ( $id ) {
+			$savedata = array();
+			$tags_val = get_post_meta( sanitize_text_field( wp_unslash( $id ) ), 'wp-tag-order-' . sanitize_text_field( wp_unslash( $taxonomy ) ), true );
+			if ( ! wto_is_array_empty( $tags_val ) ) {
+				$basetagsids = unserialize( $tags_val );
+				$added       = array_diff_interactive( $newtagsids, $basetagsids );
+				foreach ( $added as $val ) {
+					if ( ! in_array( $val, $basetagsids ) ) {
+						array_push( $basetagsids, $val );
+					} else {
+						$key = array_search( $val, $basetagsids );
+						if ( false !== $key ) {
+							unset( $basetagsids[ $key ] );
+						}
+					}
+				}
+				$savedata = $basetagsids;
+			} else {
+				$savedata = $newtagsids;
+			}
+			// Update the DB in real time (wp_postmeta) !
+			if ( isset( $savedata ) ) {
+				$meta_box_tags_value = serialize( $savedata );
+			}
+			$return = update_post_meta( sanitize_text_field( wp_unslash( $id ) ), 'wp-tag-order-' . sanitize_text_field( wp_unslash( $taxonomy ) ), $meta_box_tags_value );
+
+			// Update the DB in real time (wp_term_relationships) !
+			$newtagsids_int    = array_map( 'intval', $newtagsids ); // Cast string to integer	@ Line: 23 !
+			$term_taxonomy_ids = wp_set_object_terms( sanitize_text_field( wp_unslash( $id ) ), $newtagsids_int, sanitize_text_field( wp_unslash( $taxonomy ) ) );
+			if ( is_wp_error( $term_taxonomy_ids ) ) {
+				exit;
+			}
+		} else {
+			$savedata = $newtagsids;
+		}
+
+		$return = '';
+		if ( ! wto_is_array_empty( $savedata ) ) {
+			foreach ( $savedata as $newtag ) {
+				$tag     = get_term_by( 'id', esc_attr( $newtag ), sanitize_text_field( wp_unslash( $taxonomy ) ) );
+				$return .= '<li><input type="text" readonly="readonly" value="' . esc_attr( $tag->name ) . '"><input type="hidden" name="wp-tag-order-' . esc_attr( wp_unslash( $taxonomy ) ) . '[]" value="' . esc_attr( $tag->term_id ) . '"></li>';
+			}
+		}
+	} else {
+		delete_post_meta( sanitize_text_field( wp_unslash( $id ) ), 'wp-tag-order-' . sanitize_text_field( wp_unslash( $taxonomy ) ) );
+		$return = '';
+	}
+
+	echo json_encode( $return );
+	exit;
+}
+add_action( 'wp_ajax_wto_sync_tags', 'ajax_wto_sync_tags' );
+add_action( 'wp_ajax_nopriv_wto_sync_tags', 'ajax_wto_sync_tags' );
+
+/**
+ * Handling for Ajax Request.
+ *
+ * @param string $hook "description".
+ *
+ * @return boolean "description".
+ */
+function ajax_wto_update_tags() {
+	$id       = $_POST['id'];
+	$nonce    = $_POST['nonce'];
+	$action   = $_POST['action'];
+	$taxonomy = $_POST['taxonomy'];
+	$tags     = $_POST['tags'];
+
+	if ( ! isset( $tags ) || ! isset( $nonce ) || empty( $nonce ) || ! wp_verify_nonce( $nonce, $action ) || ! check_ajax_referer( $action, 'nonce', false ) || 'POST' != $_SERVER['REQUEST_METHOD'] ) {
+		wp_safe_redirect( home_url( '/' ), 301 );
+		exit;
+	}
+
+	if ( $id ) {
+		$newordertags = explode( ',', sanitize_text_field( wp_unslash( $tags ) ) );
+		if ( isset( $newordertags ) ) {
+			$meta_box_tags_value = serialize( $newordertags );
+		}
+		$return = update_post_meta( sanitize_text_field( wp_unslash( $id ) ), 'wp-tag-order-' . sanitize_text_field( wp_unslash( $taxonomy ) ), $meta_box_tags_value );
+	} else {
+		$return = false;
+	}
+
+	echo $return;
+	exit;
+}
+add_action( 'wp_ajax_wto_update_tags', 'ajax_wto_update_tags' );
+add_action( 'wp_ajax_nopriv_wto_update_tags', 'ajax_wto_update_tags' );
 
 /**
  * Add Options Page.
@@ -213,11 +341,78 @@ function wpto_admin_styles() {
 function wpto_admin_scripts() {
 	wp_enqueue_script( 'sweetalert2', '//cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/4.3.3/sweetalert2.min.js', array( 'jquery' ) );
 	wp_enqueue_script( 'wto-options-script', plugin_dir_url( dirname( __FILE__ ) ) . 'options/js/script.js', array( 'sweetalert2' ) );
+	$action = 'wto_options';
 	wp_localize_script( 'wto-options-script', 'wto_options_data', array(
-		'nonce'          => wp_create_nonce( 'wpto-options' ),
-		'plugin_dir_url' => plugin_dir_url( dirname( __FILE__ ) ),
+		'nonce'          => wp_create_nonce( $action ),
+		'action'         => $action,
+		'ajax_url'       => admin_url( 'admin-ajax.php' ),
 	) );
 }
+
+/**
+ * Handling for Ajax Request.
+ *
+ * @param string $hook "description".
+ *
+ * @return boolean "description".
+ */
+function ajax_wto_options() {
+	$nonce  = $_POST['nonce'];
+	$action = $_POST['action'];
+	if( ! isset( $nonce ) || empty( $nonce ) || ! wp_verify_nonce( $nonce, $action ) || ! check_ajax_referer( $action, 'nonce', false ) || "POST" != $_SERVER["REQUEST_METHOD"] ){
+		wp_safe_redirect( home_url('/'), 301 );
+		exit;
+	}
+
+	$count = 0;
+	$pts = wto_has_tag_posttype();
+	foreach ( $pts as $pt ) {
+		global $post;
+		$ids = array();
+		$myQuery = new WP_Query();
+		$param   = array(
+			'post_type'      => $pt,
+			'posts_per_page' => -1,
+			'orderby'        => 'date',
+			'order'          => 'DESC',
+			'post_status'    => array( 'any', 'trash', 'auto-draft' ),
+		);
+		$myQuery->query( $param );
+		if ( $myQuery->have_posts() ) { while( $myQuery->have_posts() ) { $myQuery->the_post();
+			array_push( $ids, $post->ID );
+		}}
+		wp_reset_postdata();
+
+		foreach ( $ids as $postid ) {
+			$taxonomies = get_object_taxonomies( $pt );
+			if ( ! empty( $taxonomies ) ) {
+				foreach( $taxonomies as $taxonomy ) {
+					if ( ! is_taxonomy_hierarchical( $taxonomy ) && $taxonomy !== 'post_format' ) {
+						$terms = get_the_terms( $postid, $taxonomy );
+						$meta  = get_post_meta( $postid, 'wp-tag-order-' . $taxonomy, true );
+						if ( ! empty( $terms ) && ! $meta ) {
+							$term_ids = array();
+							foreach ( $terms as $term ) {
+								array_push( $term_ids, $term->term_id );
+							}
+							$meta_box_tags_value = serialize( $term_ids );
+							$return = update_post_meta( $postid, 'wp-tag-order-' . $taxonomy, $meta_box_tags_value );
+							if ( $return ) {
+								$count++;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	$return = $count;
+
+	echo json_encode( $return );
+	exit;
+}
+add_action( 'wp_ajax_wto_options', 'ajax_wto_options' );
+add_action( 'wp_ajax_nopriv_wto_options', 'ajax_wto_options' );
 
 /**
  * Register settings.
