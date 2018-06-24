@@ -191,9 +191,7 @@ add_action( 'admin_enqueue_scripts', 'load_wpto_admin_script', 10, 1 );
 /**
  * Handling for Ajax Request.
  *
- * @param string $hook "description".
- *
- * @return string "description".
+ * @return void "description".
  */
 function ajax_wto_sync_tags() {
 	$id       = $_POST['id'];
@@ -279,9 +277,7 @@ add_action( 'wp_ajax_nopriv_wto_sync_tags', 'ajax_wto_sync_tags' );
 /**
  * Handling for Ajax Request.
  *
- * @param string $hook "description".
- *
- * @return boolean "description".
+ * @return void "description".
  */
 function ajax_wto_update_tags() {
 	$id       = $_POST['id'];
@@ -352,9 +348,7 @@ function wpto_admin_scripts() {
 /**
  * Handling for Ajax Request.
  *
- * @param string $hook "description".
- *
- * @return boolean "description".
+ * @return void "description".
  */
 function ajax_wto_options() {
 	$nonce  = $_POST['nonce'];
