@@ -10,19 +10,19 @@
   "license": "ISC",
   "devDependencies": {
     "gulp": "^3.9.1",
-    "gulp-autoprefixer": "^3.1.1",
+    "gulp-autoprefixer": "^5.0.0",
     "gulp-csscomb": "^3.0.8",
-    "gulp-cssmin": "^0.1.7",
-    "gulp-iconfont": "^8.0.1",
+    "gulp-cssmin": "^0.2.0",
+    "gulp-iconfont": "^10.0.1",
     "gulp-iconfont-css": "^2.1.0",
-    "gulp-imagemin": "^3.0.3",
-    "gulp-jsbeautifier": "^2.0.3",
+    "gulp-imagemin": "^4.1.0",
+    "gulp-jsbeautifier": "^2.1.2",
     "gulp-merge-media-queries": "^0.2.1",
-    "gulp-notify": "^2.2.0",
-    "gulp-plumber": "^1.1.0",
-    "gulp-sass": "^2.3.2",
-    "gulp-svgmin": "^1.2.2",
-    "imagemin-pngquant": "^5.0.0",
-    "vinyl-buffer": "^1.0.0"
+    "gulp-notify": "^3.2.0",
+    "gulp-plumber": "^1.2.0",
+    "gulp-sass": "^4.0.1",
+    "gulp-svgmin": "^1.2.4",
+    "imagemin-pngquant": "^5.1.0",
+    "vinyl-buffer": "^1.0.1"
   }
 }
