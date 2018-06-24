@@ -172,16 +172,16 @@ function load_wpto_admin_script( $hook ) {
 		if ( in_array( $post->post_type, $pt ) ) {
 			wp_enqueue_style( 'wto-style', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/css/admin.css', array() );
 			wp_enqueue_script( 'wto-script', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/js/script.js', array() );
-			$post_id = ( isset( $_GET['post'] ) ) ? wp_unslash( $_GET['post'] ) : null;
+			$post_id       = ( isset( $_GET['post'] ) ) ? wp_unslash( $_GET['post'] ) : null;
 			$action_sync   = 'wto_sync_tags';
 			$action_update = 'wto_update_tags';
 			wp_localize_script( 'wto-script', 'wto_data', array(
-				'post_id'        => $post_id,
-				'nonce_sync'     => wp_create_nonce( $action_sync ),
-				'action_sync'    => $action_sync,
-				'nonce_update'   => wp_create_nonce( $action_update ),
-				'action_update'  => $action_update,
-				'ajax_url'       => admin_url( 'admin-ajax.php' ),
+				'post_id'       => $post_id,
+				'nonce_sync'    => wp_create_nonce( $action_sync ),
+				'action_sync'   => $action_sync,
+				'nonce_update'  => wp_create_nonce( $action_update ),
+				'action_update' => $action_update,
+				'ajax_url'      => admin_url( 'admin-ajax.php' ),
 			) );
 		}
 	}
@@ -339,9 +339,9 @@ function wpto_admin_scripts() {
 	wp_enqueue_script( 'wto-options-script', plugin_dir_url( dirname( __FILE__ ) ) . 'options/js/script.js', array( 'sweetalert2' ) );
 	$action = 'wto_options';
 	wp_localize_script( 'wto-options-script', 'wto_options_data', array(
-		'nonce'          => wp_create_nonce( $action ),
-		'action'         => $action,
-		'ajax_url'       => admin_url( 'admin-ajax.php' ),
+		'nonce'    => wp_create_nonce( $action ),
+		'action'   => $action,
+		'ajax_url' => admin_url( 'admin-ajax.php' ),
 	) );
 }
 
@@ -353,35 +353,37 @@ function wpto_admin_scripts() {
 function ajax_wto_options() {
 	$nonce  = $_POST['nonce'];
 	$action = $_POST['action'];
-	if( ! isset( $nonce ) || empty( $nonce ) || ! wp_verify_nonce( $nonce, $action ) || ! check_ajax_referer( $action, 'nonce', false ) || "POST" != $_SERVER["REQUEST_METHOD"] ){
-		wp_safe_redirect( home_url('/'), 301 );
+	if ( ! isset( $nonce ) || empty( $nonce ) || ! wp_verify_nonce( $nonce, $action ) || ! check_ajax_referer( $action, 'nonce', false ) || 'POST' != $_SERVER['REQUEST_METHOD'] ) {
+		wp_safe_redirect( home_url( '/' ), 301 );
 		exit;
 	}
 
 	$count = 0;
-	$pts = wto_has_tag_posttype();
+	$pts   = wto_has_tag_posttype();
 	foreach ( $pts as $pt ) {
 		global $post;
-		$ids = array();
-		$myQuery = new WP_Query();
-		$param   = array(
+		$ids      = array();
+		$my_query = new WP_Query();
+		$param    = array(
 			'post_type'      => $pt,
 			'posts_per_page' => -1,
 			'orderby'        => 'date',
 			'order'          => 'DESC',
 			'post_status'    => array( 'any', 'trash', 'auto-draft' ),
 		);
-		$myQuery->query( $param );
-		if ( $myQuery->have_posts() ) { while( $myQuery->have_posts() ) { $myQuery->the_post();
-			array_push( $ids, $post->ID );
-		}}
+		$my_query->query( $param );
+		if ( $my_query->have_posts() ) :
+			while ( $my_query->have_posts() ) :
+				$my_query->the_post();
+				array_push( $ids, $post->ID );
+			endwhile;
+		endif;
 		wp_reset_postdata();
-
 		foreach ( $ids as $postid ) {
 			$taxonomies = get_object_taxonomies( $pt );
 			if ( ! empty( $taxonomies ) ) {
-				foreach( $taxonomies as $taxonomy ) {
-					if ( ! is_taxonomy_hierarchical( $taxonomy ) && $taxonomy !== 'post_format' ) {
+				foreach ( $taxonomies as $taxonomy ) {
+					if ( ! is_taxonomy_hierarchical( $taxonomy ) && 'post_format' !== $taxonomy ) {
 						$terms = get_the_terms( $postid, $taxonomy );
 						$meta  = get_post_meta( $postid, 'wp-tag-order-' . $taxonomy, true );
 						if ( ! empty( $terms ) && ! $meta ) {
@@ -390,7 +392,7 @@ function ajax_wto_options() {
 								array_push( $term_ids, $term->term_id );
 							}
 							$meta_box_tags_value = serialize( $term_ids );
-							$return = update_post_meta( $postid, 'wp-tag-order-' . $taxonomy, $meta_box_tags_value );
+							$return              = update_post_meta( $postid, 'wp-tag-order-' . $taxonomy, $meta_box_tags_value );
 							if ( $return ) {
 								$count++;
 							}
