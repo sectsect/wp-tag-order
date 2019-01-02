@@ -1,5 +1,15 @@
 # Change Log
 
+## [v1.1.1](https://github.com/sectsect/wp-tag-order/tree/v1.1.1) (2019-01-02)
+[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v1.1.0...v1.1.1)
+
+**Closed issues:**
+
+- Existing post apply not working on bedrock based WP installations [\#5](https://github.com/sectsect/wp-tag-order/issues/5)
+
+## [v1.1.0](https://github.com/sectsect/wp-tag-order/tree/v1.1.0) (2018-06-24)
+[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v1.0.7...v1.1.0)
+
 ## [v1.0.7](https://github.com/sectsect/wp-tag-order/tree/v1.0.7) (2018-06-23)
 [Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v1.0.6...v1.0.7)
 
