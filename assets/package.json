@@ -9,21 +9,21 @@
   "author": "SECT",
   "license": "ISC",
   "devDependencies": {
-    "gulp": "^4.0.0",
-    "gulp-autoprefixer": "^6.0.0",
+    "gulp": "^4.0.2",
+    "gulp-autoprefixer": "^6.1.0",
     "gulp-csscomb": "^3.0.8",
     "gulp-cssmin": "^0.2.0",
     "gulp-iconfont": "^10.0.2",
-    "gulp-iconfont-css": "^2.3.0",
+    "gulp-iconfont-css": "^3.0.0",
     "gulp-imagemin": "^5.0.3",
     "gulp-jsbeautifier": "^3.0.0",
     "gulp-merge-media-queries": "^0.2.1",
     "gulp-notify": "^3.2.0",
     "gulp-plumber": "^1.2.1",
     "gulp-sass": "^4.0.2",
-    "gulp-svgmin": "^2.1.0",
-    "gulp-uglify": "^3.0.1",
-    "imagemin-pngquant": "^6.0.1",
+    "gulp-svgmin": "^2.2.0",
+    "gulp-uglify": "^3.0.2",
+    "imagemin-pngquant": "^7.0.0",
     "vinyl-buffer": "^1.0.1"
   }
 }
