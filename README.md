@@ -1,8 +1,10 @@
 # <img src="https://github-sect.s3-ap-northeast-1.amazonaws.com/logo.svg" width="28" height="auto"> WP Tag Order
 
-[![Build Status](https://travis-ci.org/sectsect/wp-tag-order.svg?branch=master)](https://travis-ci.org/sectsect/wp-tag-order) [![PHP-Eye](https://php-eye.com/badge/sectsect/wp-tag-order/tested.svg?style=flat)](https://php-eye.com/package/sectsect/wp-tag-order) [![Latest Stable Version](https://poser.pugx.org/sectsect/wp-tag-order/v/stable)](https://packagist.org/packages/sectsect/wp-tag-order) [![License](https://poser.pugx.org/sectsect/wp-tag-order/license)](https://packagist.org/packages/sectsect/wp-tag-order)
+[![Build Status](https://travis-ci.org/sectsect/wp-tag-order.svg?branch=master)](https://travis-ci.org/sectsect/wp-tag-order) [![Latest Stable Version](https://poser.pugx.org/sectsect/wp-tag-order/v/stable)](https://packagist.org/packages/sectsect/wp-tag-order) [![License](https://poser.pugx.org/sectsect/wp-tag-order/license)](https://packagist.org/packages/sectsect/wp-tag-order)
 
 ### WP Tag Order plugin will order tags, non-hierarchical custom-taxonomy terms in individual posts with simple Drag and Drop Sortable capability. And supplies some functions to output it.
+
+#### :warning: This plugin is NOT compatible with Gutenberg on WordPress 5.x. Consider using [Classic Editor Plugin](https://wordpress.org/plugins/classic-editor/).
 
 ## Requirements
 
@@ -10,10 +12,14 @@
 
 ## Installation
 
- 1. `cd /path-to-your/wp-content/plugins/`
- 2. `git clone git@github.com:sectsect/wp-tag-order.git`
- 3. Activate the plugin through the 'Plugins' menu in WordPress.<br>
- That's it :ok_hand:
+##### 1. Clone this Repo into your `wp-content/plugins` directory.
+```sh
+$ cd /path-to-your/wp-content/plugins/
+$ git clone git@github.com:sectsect/wp-tag-order.git
+```
+
+##### 2. Activate the plugin through the 'Plugins' menu in WordPress.<br>
+That's it:ok_hand:
 
 ## Notes
 
