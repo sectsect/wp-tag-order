@@ -62,7 +62,7 @@ add_action( 'plugins_loaded', 'wptagorder_load_textdomain' );
  * @return statement           "description".
  */
 function my_plugin_row_meta( $plugin_meta, $plugin_file, $plugin_data, $status ) {
-	if ( plugin_basename( __FILE__ ) == $plugin_file ) {
+	if ( plugin_basename( __FILE__ ) === $plugin_file ) {
 		$plugin_meta[] = '<a href="https://github.com/sectsect/wp-tag-order" target="_blank"><span class="dashicons dashicons-randomize"></span> GitHub</a>';
 	}
 	return $plugin_meta;
