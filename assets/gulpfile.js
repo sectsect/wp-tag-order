@@ -12,7 +12,7 @@ const gulp          = require('gulp');
 const cssmin        = require('gulp-cssmin');
 const buffer        = require('vinyl-buffer');
 const sass          = require('gulp-sass');
-const autoprefixer  = require('gulp-autoprefixer');
+const autoprefixer   = require('gulp-autoprefixer');
 const uglify        = require("gulp-uglify");
 const rename        = require('gulp-rename');
 const mmq           = require('gulp-merge-media-queries');
@@ -104,8 +104,7 @@ gulp.task('sass', () => {
   .pipe(sass({outputStyle: 'compressed'}))
   .pipe(csscomb())
   .pipe(autoprefixer({
-    browsers: ["last 2 versions", "ie >= 9", "Android >= 4","ios_saf >= 8"],  // https://github.com/ai/browserslist/blob/master/README.md
-    cascade: false,
+    cascade: false
   }))
   .pipe(mmq())
   .pipe(gulp.dest("./css"))
