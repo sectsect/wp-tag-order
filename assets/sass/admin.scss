@@ -3,35 +3,35 @@
 
 /* spinner */
 @keyframes spin{
-	0% {transform: rotate(0deg);}
-	50% {transform: rotate(180deg);	}
-	100% {transform: rotate(360deg);}
+  0% {transform: rotate(0deg);}
+  50% {transform: rotate(180deg);	}
+  100% {transform: rotate(360deg);}
 }
 
 .postbox.wpto_meta_box_tagsdiv{
-	h2{
-		position: relative;
-		@include spinner(absolute, 10px, 2px, #aaa, ready, hidden);
-		&:before{
-			left: auto;
-			right: 35px;
-			margin-left: 0;
-		}
-	}
+  h2{
+    position: relative;
+    @include spinner(absolute, 10px, 2px, #aaa, ready, hidden);
+    &:before{
+      left: auto;
+      right: 35px;
+      margin-left: 0;
+    }
+  }
 }
 .postbox.wpto_meta_box_panel{
-	h2{
-		position: relative;
-		@include spinner(absolute, 10px, 2px, #aaa, ready, hidden);
-		&:before{
-			left: auto;
-			right: 35px;
-			margin-left: 0;
-		}
-	}
+  h2{
+    position: relative;
+    @include spinner(absolute, 10px, 2px, #aaa, ready, hidden);
+    &:before{
+      left: auto;
+      right: 35px;
+      margin-left: 0;
+    }
+  }
   .inside{
     .inner{
-			position: relative;
+      position: relative;
       ul{
         margin-bottom: 0;
         li{
@@ -42,28 +42,28 @@
           cursor: move;
           position: relative;
           &:before{
-          	content: "";
-          	display: block;
-          	position: absolute;
-          	top: 0;
-          	left: 0;
-          	z-index: 10;
+            content: "";
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 10;
             width: 100%;
             height: 100%;
           }
           &:after{
             content: "";
-          	display: block;
-          	position: absolute;
-          	top: 50%;
-          	right: 6px;
-          	z-index: 5;
+            display: block;
+            position: absolute;
+            top: 50%;
+            right: 6px;
+            z-index: 5;
             width: 14px;
             height: 14px;
             margin-top: -7px;
             background: url(../svg/move.svg) no-repeat 0 0;
             background-size: 100%;
-						@include opacity(0.5);
+            @include opacity(0.5);
           }
           &.ui-sortable-helper{
             &:after{
@@ -75,7 +75,7 @@
             background: none;
             box-shadow: none;
             width: 100%;
-						@include font-size(11);
+            @include font-size(11);
           }
         }
       }
@@ -83,41 +83,41 @@
   }
 }
 .post-new-php{
-	.postbox.wpto_meta_box_panel{
-	  .inside{
-	    .inner{
-				&:before{
-					content: "Be Activated After Save Once";
-					display: block;
-					position: absolute;
-					top: 50%;
-					left: 0;
-					z-index: 55;
-					width: 100%;
-					margin-top: -10px;
-					color: #999;
-					font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-					@include font-size(14);
-					line-height: 1;
-					text-align: center;
-				}
-				&:after{
-					content: "";
-					display: block;
-					position: absolute;
-					top: 0;
-					left: 0;
-					z-index: 50;
-					width: 100%;
-					height: 100%;
-					background: #fff;
-					@include opacity(0.15);
-				}
-				ul{
-					@include opacity(0.18);
-					min-height: 25px;
-				}
-			}
-		}
-	}
+  .postbox.wpto_meta_box_panel{
+    .inside{
+      .inner{
+        &:before{
+          content: "Be Activated After Save Once";
+          display: block;
+          position: absolute;
+          top: 50%;
+          left: 0;
+          z-index: 55;
+          width: 100%;
+          margin-top: -10px;
+          color: #999;
+          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+          @include font-size(14);
+          line-height: 1;
+          text-align: center;
+        }
+        &:after{
+          content: "";
+          display: block;
+          position: absolute;
+          top: 0;
+          left: 0;
+          z-index: 50;
+          width: 100%;
+          height: 100%;
+          background: #fff;
+          @include opacity(0.15);
+        }
+        ul{
+          @include opacity(0.18);
+          min-height: 25px;
+        }
+      }
+    }
+  }
 }

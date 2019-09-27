@@ -1,77 +1,100 @@
-@mixin font-size($size: 24, $base: 16){
-	font-size: $size + px;
-	font-size: ($size / $base) * 1rem;
-}
-@mixin opacity($opacity){
-    opacity: $opacity;
-	@if $opacity == 1 {
-		filter: progid:DXImageTransform.Microsoft.Alpha(enabled=false);
-	} @else {
-	  $opacityIE: $opacity * 100;
-		filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=$opacityIE);
-	}
+@mixin font-size($size: 24, $base: 16) {
+  font-size: $size + px;
+  font-size: ($size / $base) * 1rem;
 }
 
-@mixin arrow($direction: right, $size: 10px, $borderwidth: 2px, $color: #333, $horizontal: right, $margin: 10px){
-	&:after{
-		content: "";
-		display: block;
-		width: $size;
-		height: $size;
-		border-top: $borderwidth solid $color;
-		border-right: $borderwidth solid $color;
-		@if $direction == top {
-			transform: rotate(-45deg);
-		} @else if $direction == bottom {
-			transform: rotate(135deg);
-		} @else if $direction == left {
-			transform: rotate(225deg);
-		} @else {
-			transform: rotate(45deg);
-		}
-		position: absolute;
-		top: 50%;
-		@if $horizontal == left {
-			left: -(round($size / 2) - 1px);
-		} @else {
-			right: $margin + round($size / 5);
-		}
-		margin-top: round(-$size / 2);
-	}
+@mixin opacity($opacity) {
+  opacity: $opacity;
+
+  @if $opacity==1 {
+    filter: progid:DXImageTransform.Microsoft.Alpha(enabled=false);
+  }
+
+  @else {
+    $opacityIE: $opacity * 100;
+    filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=$opacityIE);
+  }
 }
 
-@mixin spinner($position: absolute, $size: 16px, $borderwidth: 2px, $color: #aaa, $parentclass: ready, $defaultdisplay: visible){
-	&:before{
-		content: "";
-		position: $position;
-		top: 50%;
-		left: 50%;
-		z-index: 100;
-		margin: round(-$size / 2) 0 0 round(-$size / 2);
-		width: $size;
-		height: $size;
-		border-radius: 50%;
-		border: $borderwidth solid $color;
-		border-right-color: transparent;
-		@if $defaultdisplay == visible {
-			visibility: visible;
-			@include opacity(1);
-		} @else {
-			visibility: hidden;
-			@include opacity(0);
-		}
-		transition: all .3s linear .3s;
-		animation: spin .7s linear infinite;
-	}
-	&.#{$parentclass}{
-		&:before{
-			@if $defaultdisplay == visible {
-				visibility: hidden;
-				@include opacity(0);
-			} @else {
-				visibility: visible;
-				@include opacity(1);
-			}
-		}
-	}
+@mixin arrow($direction: right, $size: 10px, $borderwidth: 2px, $color: #333, $horizontal: right, $margin: 10px) {
+  &:after {
+    content: "";
+    display: block;
+    width: $size;
+    height: $size;
+    border-top: $borderwidth solid $color;
+    border-right: $borderwidth solid $color;
+
+    @if $direction==top {
+      transform: rotate(-45deg);
+    }
+
+    @else if $direction==bottom {
+      transform: rotate(135deg);
+    }
+
+    @else if $direction==left {
+      transform: rotate(225deg);
+    }
+
+    @else {
+      transform: rotate(45deg);
+    }
+
+    position: absolute;
+    top: 50%;
+
+    @if $horizontal==left {
+      left: -(round($size / 2) - 1px);
+    }
+
+    @else {
+      right: $margin + round($size / 5);
+    }
+
+    margin-top: round(-$size / 2);
+  }
+}
+
+@mixin spinner($position: absolute, $size: 16px, $borderwidth: 2px, $color: #aaa, $parentclass: ready, $defaultdisplay: visible) {
+  &:before {
+    content: "";
+    position: $position;
+    top: 50%;
+    left: 50%;
+    z-index: 100;
+    margin: round(-$size / 2) 0 0 round(-$size / 2);
+    width: $size;
+    height: $size;
+    border-radius: 50%;
+    border: $borderwidth solid $color;
+    border-right-color: transparent;
+
+    @if $defaultdisplay==visible {
+      visibility: visible;
+      @include opacity(1);
+    }
+
+    @else {
+      visibility: hidden;
+      @include opacity(0);
+    }
+
+    transition: all .3s linear .3s;
+    animation: spin .7s linear infinite;
+  }
+
+  &.#{$parentclass} {
+    &:before {
+      @if $defaultdisplay==visible {
+        visibility: hidden;
+        @include opacity(0);
+      }
+
+      @else {
+        visibility: visible;
+        @include opacity(1);
+      }
+    }
+  }
 }
