@@ -106,6 +106,7 @@ if ($posttags && ! is_wp_error($posttags)) {
 * This Plugin does not hosting on the [wordpress.org](https://wordpress.org/) repo in order to prevent a flood of support requests from wide audience.
 
 ## Change log  
+ * **1.1.3** - Update dependencies
  * **1.1.2** - Fix PHPCS errrors / Update README
  * **1.1.1** - Migrate Gulp to v4
  * **1.1.0** - Refactoring for Ajax [#5](https://github.com/sectsect/wp-tag-order/issues/5)
