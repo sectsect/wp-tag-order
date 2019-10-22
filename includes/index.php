@@ -210,11 +210,11 @@ function ajax_wto_sync_tags() {
 	}
 
 	if ( $tags ) {
-		$newtags    = explode( ',', esc_attr( wp_unslash( $tags ) ) );
+		$newtags    = explode( ',', wp_unslash( $tags ) );
 		$newtagsids = array();
 		foreach ( $newtags as $newtag ) {
 			$term = term_exists( $newtag, sanitize_text_field( wp_unslash( $taxonomy ) ) );
-			if ( 0 === $term && null === $term ) {
+			if ( 0 === $term || null === $term ) {
 				$term_taxonomy_ids = wp_set_object_terms( sanitize_text_field( wp_unslash( $id ) ), $newtag, sanitize_text_field( wp_unslash( $taxonomy ) ), true );
 				if ( is_wp_error( $term_taxonomy_ids ) ) {
 					exit;
