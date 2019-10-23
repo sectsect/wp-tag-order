@@ -171,7 +171,8 @@ function load_wpto_admin_script( $hook ) {
 		$pt = wto_has_tag_posttype();
 		if ( in_array( $post->post_type, $pt, true ) ) {
 			wp_enqueue_style( 'wto-style', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/css/admin.css', array() );
-			wp_enqueue_script( 'wto-script', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/js/script.js', array() );
+			wp_enqueue_script( 'wto-commons', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/js/commons.js', array( 'jquery' ), null, true );
+			wp_enqueue_script( 'wto-script', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/js/post.js', array( 'wto-commons' ), null, true );
 			$post_id       = ( isset( $_GET['post'] ) ) ? wp_unslash( $_GET['post'] ) : null;
 			$action_sync   = 'wto_sync_tags';
 			$action_update = 'wto_update_tags';
@@ -339,8 +340,9 @@ function wpto_admin_styles() {
  * @return void "description".
  */
 function wpto_admin_scripts() {
-	wp_enqueue_script( 'sweetalert2', '//cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/4.3.3/sweetalert2.min.js', array( 'jquery' ) );
-	wp_enqueue_script( 'wto-options-script', plugin_dir_url( dirname( __FILE__ ) ) . 'options/js/script.js', array( 'sweetalert2' ) );
+	wp_enqueue_script( 'sweetalert2', '//cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/4.3.3/sweetalert2.min.js', array( 'jquery' ), null, true  );
+	wp_enqueue_script( 'wto-commons', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/js/commons.js', array( 'sweetalert2' ), null, true );
+	wp_enqueue_script( 'wto-options-script', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/js/options.js', array( 'wto-commons' ), null, true  );
 	$action = 'wto_options';
 	wp_localize_script(
 		'wto-options-script',
