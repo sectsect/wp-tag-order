@@ -159,6 +159,16 @@ function save_wpto_meta_box( $post_id, $post, $update ) {
 add_action( 'save_post', 'save_wpto_meta_box', 10, 3 );
 
 /**
+ * Get the Plugin data.
+ *
+ * @return array "description".
+ */
+function wpto_get_plugin_data() {
+	$plugin_data = get_plugin_data( plugin_dir_path( dirname( __FILE__ ) ) . 'wp-tag-order.php' );
+	return $plugin_data;
+}
+
+/**
  * Load admin scripts.
  *
  * @param string $hook "description".
@@ -166,13 +176,15 @@ add_action( 'save_post', 'save_wpto_meta_box', 10, 3 );
  * @return void "description".
  */
 function load_wpto_admin_script( $hook ) {
+	$plugin_data    = wpto_get_plugin_data();
+	$plugin_version = $plugin_data['Version'];
 	global $post;
 	if ( 'post-new.php' === $hook || 'post.php' === $hook ) {
 		$pt = wto_has_tag_posttype();
 		if ( in_array( $post->post_type, $pt, true ) ) {
-			wp_enqueue_style( 'wto-style', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/css/admin.css', array() );
-			wp_enqueue_script( 'wto-commons', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/js/commons.js', array( 'jquery' ), null, true );
-			wp_enqueue_script( 'wto-script', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/js/post.js', array( 'wto-commons' ), null, true );
+			wp_enqueue_style( 'wto-style', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/css/admin.css?v=' . $plugin_version, array() );
+			wp_enqueue_script( 'wto-commons', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/js/commons.js?v=' . $plugin_version, array( 'jquery' ), null, true );
+			wp_enqueue_script( 'wto-script', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/js/post.js?v=' . $plugin_version, array( 'wto-commons' ), null, true );
 			$post_id       = ( isset( $_GET['post'] ) ) ? wp_unslash( $_GET['post'] ) : null;
 			$action_sync   = 'wto_sync_tags';
 			$action_update = 'wto_update_tags';
@@ -340,8 +352,10 @@ function wpto_admin_styles() {
  * @return void "description".
  */
 function wpto_admin_scripts() {
-	wp_enqueue_script( 'wto-commons', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/js/commons.js', array( 'jquery' ), null, true );
-	wp_enqueue_script( 'wto-options-script', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/js/options.js', array( 'wto-commons' ), null, true );
+	$plugin_data    = wpto_get_plugin_data();
+	$plugin_version = $plugin_data['Version'];
+	wp_enqueue_script( 'wto-commons', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/js/commons.js?v=' . $plugin_version, array( 'jquery' ), null, true );
+	wp_enqueue_script( 'wto-options-script', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/js/options.js?v=' . $plugin_version, array( 'wto-commons' ), null, true );
 	$action = 'wto_options';
 	wp_localize_script(
 		'wto-options-script',
