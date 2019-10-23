@@ -341,7 +341,7 @@ function wpto_admin_styles() {
  */
 function wpto_admin_scripts() {
 	wp_enqueue_script( 'wto-commons', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/js/commons.js', array( 'jquery' ), null, true );
-	wp_enqueue_script( 'wto-options-script', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/js/options.js', array( 'wto-commons' ), null, true  );
+	wp_enqueue_script( 'wto-options-script', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/js/options.js', array( 'wto-commons' ), null, true );
 	$action = 'wto_options';
 	wp_localize_script(
 		'wto-options-script',
