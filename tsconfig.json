@@ -1,0 +1,14 @@
+{
+  "extends": "@spotify/tsconfig/tsconfig.app.json",
+  "compilerOptions": {
+    "noImplicitThis": false
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "dist",
+    "node_modules",
+    "**/*.spec.ts"
+  ]
+}
