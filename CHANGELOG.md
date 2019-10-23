@@ -1,5 +1,25 @@
 # Change Log
 
+## [v1.2.0](https://github.com/sectsect/wp-tag-order/tree/v1.2.0) (2019-10-23)
+[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v1.1.4...v1.2.0)
+
+**Closed issues:**
+
+- Minor issue with single quotation marks [\#7](https://github.com/sectsect/wp-tag-order/issues/7)
+
+## [v1.1.4](https://github.com/sectsect/wp-tag-order/tree/v1.1.4) (2019-10-22)
+[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v1.1.3...v1.1.4)
+
+## [v1.1.3](https://github.com/sectsect/wp-tag-order/tree/v1.1.3) (2019-09-27)
+[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v1.1.2...v1.1.3)
+
+## [v1.1.2](https://github.com/sectsect/wp-tag-order/tree/v1.1.2) (2019-06-23)
+[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v1.1.1...v1.1.2)
+
+**Closed issues:**
+
+- WordPress 5.0+ [\#6](https://github.com/sectsect/wp-tag-order/issues/6)
+
 ## [v1.1.1](https://github.com/sectsect/wp-tag-order/tree/v1.1.1) (2019-01-02)
 [Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v1.1.0...v1.1.1)
 
