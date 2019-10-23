@@ -1,10 +1,11 @@
+import Swal from 'sweetalert2';
+
 declare let jQuery: any;
-declare let swal: any;
 declare let wto_options_data: any; // eslint-disable-line @typescript-eslint/camelcase
 
 export const options = (): void => {
   jQuery('#wpbody-content form input[name=apply]').on('click', () => {
-    swal.queue([
+    Swal.queue([
       {
         title: 'Are you sure?',
         text: "You won't be able to revert this!",
@@ -15,7 +16,7 @@ export const options = (): void => {
         confirmButtonText: 'Yes, apply!',
         showLoaderOnConfirm: true,
         preConfirm(): any {
-          return new Promise<string>((resolve: any | null): any => {
+          return new Promise<string>((resolve: any | null): void => {
             jQuery
               .ajax({
                 url: wto_options_data.ajax_url,
@@ -27,9 +28,9 @@ export const options = (): void => {
                 type: 'post',
                 beforeSend() {
                   jQuery('#wpbody-content form input[name=apply]').prop('disabled', true);
-                  const $html = '<p><strong class="processing">Processing.</strong></p>';
+                  const h = '<p><strong class="processing">Processing.</strong></p>';
                   jQuery('#setting-apply-settings_updated')
-                    .html($html)
+                    .html(h)
                     .fadeIn();
                 },
               })
@@ -37,12 +38,12 @@ export const options = (): void => {
               .fail(() => {
                 alert('Load Error. Please Reload...');
               })
-              .always((data: any) => {
-                const $html = `<p><strong>Applied to the ${data} posts.</strong></p>`;
-                jQuery('#setting-apply-settings_updated').html($html);
+              .always((data: number) => {
+                const h = `<p><strong>Applied to the ${data} posts.</strong></p>`;
+                jQuery('#setting-apply-settings_updated').html(h);
                 // For sweetalert2.js
-                const str = `Applied to ${data} posts.`;
-                swal.insertQueueStep(str);
+                const str: any = `Applied to ${data} posts.`;
+                Swal.insertQueueStep(str);
                 resolve();
               });
           });
