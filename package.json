@@ -22,7 +22,7 @@
     "@babel/plugin-transform-runtime": "^7.6.2",
     "@babel/preset-env": "^7.6.3",
     "@babel/preset-typescript": "^7.6.0",
-    "@sect/webpack-sweet-entry": "^2.0.1",
+    "@sect/webpack-sweet-entry": "^2.0.2",
     "@spotify/prettier-config": "^3.0.0",
     "@spotify/tsconfig": "^3.0.0",
     "@types/node": "^12.11.7",
