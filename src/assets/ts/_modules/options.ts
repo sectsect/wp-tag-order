@@ -4,7 +4,7 @@ declare let jQuery: any;
 declare let wto_options_data: any; // eslint-disable-line @typescript-eslint/camelcase
 
 export const options = (): void => {
-  jQuery('#wpbody-content form input[name=apply]').on('click', () => {
+  jQuery('#wpbody-content form input[name=apply]').on('click', (): boolean => {
     Swal.queue([
       {
         title: 'Are you sure?',
@@ -34,11 +34,11 @@ export const options = (): void => {
                     .fadeIn();
                 },
               })
-              .done(() => {})
-              .fail(() => {
+              .done((): void => {})
+              .fail((): void => {
                 alert('Load Error. Please Reload...');
               })
-              .always((data: number) => {
+              .always((data: number): void => {
                 const h = `<p><strong>Applied to the ${data} posts.</strong></p>`;
                 jQuery('#setting-apply-settings_updated').html(h);
                 // For sweetalert2.js

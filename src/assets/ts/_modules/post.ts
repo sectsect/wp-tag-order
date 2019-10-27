@@ -14,20 +14,20 @@ export const post = (): void => {
   setTimeout(() => {
     jQuery("[id^='tagsdiv-']")
       .find('.tagchecklist')
-      .on('DOMSubtreeModified propertychange', function() {
+      .on('DOMSubtreeModified propertychange', function(): void {
         setTimeout(
-          jQuery.proxy(function() {
-            const cont = jQuery(this).html();
+          jQuery.proxy(function(): void {
+            const cont: string = jQuery(this).html();
             if (cont === flag && cont !== '') {
               return; // prevent multiple simultaneous triggers
             }
             flag = cont;
 
-            const postboxid = jQuery(this)
+            const postboxid: string = jQuery(this)
               .closest('.postbox')
               .attr('id');
-            const t = postboxid.replace('tagsdiv-', '');
-            const s = jQuery(this)
+            const t: string = postboxid.replace('tagsdiv-', '');
+            const s: string = jQuery(this)
               .siblings()
               .find('textarea.the-tags')
               .val();
@@ -43,17 +43,17 @@ export const post = (): void => {
                   tags: s,
                 },
                 type: 'post',
-                beforeSend() {
+                beforeSend(): void {
                   jQuery(`#tagsdiv-${t} h2, #wpto_meta_box-${t} h2`).addClass('ready');
                 },
               })
-              .done((data: HTMLElement) => {
+              .done((data: HTMLElement): void => {
                 jQuery(`#wpto_meta_box-${t} .inside .inner ul`).html(data);
               })
-              .fail(() => {
+              .fail((): void => {
                 alert('Load Error. Please Reload...');
               })
-              .always(() => {
+              .always((): void => {
                 setTimeout(() => {
                   jQuery(`#tagsdiv-${t} h2, #wpto_meta_box-${t} h2`).removeClass('ready');
                 }, 300);
@@ -68,18 +68,18 @@ export const post = (): void => {
   ================================================== */
   jQuery('.wpto_meta_box_panel .inside .inner ul').sortable({
     update() {
-      const postboxid = jQuery(this)
+      const postboxid: string = jQuery(this)
         .closest('.postbox')
         .attr('id');
-      const t = postboxid.replace('wpto_meta_box-', '');
+      const t: string = postboxid.replace('wpto_meta_box-', '');
       const ary: string[] = [];
       jQuery(this)
         .find('input[type="hidden"]')
-        .each(function() {
-          const tag = jQuery(this).val();
+        .each(function(): void {
+          const tag: string = jQuery(this).val();
           ary.push(tag);
         });
-      const s = ary.join();
+      const s: string = ary.join();
       jQuery
         .ajax({
           url: wto_data.ajax_url,
@@ -92,15 +92,15 @@ export const post = (): void => {
             taxonomy: t,
             tags: s,
           },
-          beforeSend() {
+          beforeSend(): void {
             jQuery(`#wpto_meta_box-${t} h2`).addClass('ready');
           },
         })
-        .done(() => {})
-        .fail(() => {
+        .done((): void => {})
+        .fail((): void => {
           alert('Load Error. Please Reload...');
         })
-        .always(() => {
+        .always((): void => {
           setTimeout(() => {
             jQuery(`#wpto_meta_box-${t} h2`).removeClass('ready');
           }, 300);
