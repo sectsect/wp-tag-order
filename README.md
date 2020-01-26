@@ -106,6 +106,8 @@ if ($posttags && ! is_wp_error($posttags)) {
 * This Plugin does not hosting on the [wordpress.org](https://wordpress.org/) repo in order to prevent a flood of support requests from wide audience.
 
 ## Change log  
+ * **1.2.2** - Fix wrong options for sweetalert2 / Improve code for TypeScript / Update dependencies
+ * **1.2.1** - Update dependencies
  * **1.2.0** - Refactoring and Rewrite using modern JS
  * **1.1.4** - Fix a Minor bug [#7](https://github.com/sectsect/wp-tag-order/issues/7)
  * **1.1.3** - Update dependencies
