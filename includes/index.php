@@ -343,7 +343,9 @@ add_action( 'admin_menu', 'wpto_menu' );
  * @return void "description".
  */
 function wpto_admin_styles() {
-	wp_enqueue_style( 'sweetalert2', '//cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.min.css', array() );
+	$plugin_data    = wpto_get_plugin_data();
+	$plugin_version = $plugin_data['Version'];
+	wp_enqueue_style( 'sweetalert2', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/css/options.css?v=' . $plugin_version, array() );
 }
 
 /**
