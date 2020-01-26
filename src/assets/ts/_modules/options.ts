@@ -9,7 +9,7 @@ export const options = (): void => {
       {
         title: 'Are you sure?',
         text: "You won't be able to revert this!",
-        type: 'warning',
+        icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
@@ -41,9 +41,10 @@ export const options = (): void => {
               .always((data: number): void => {
                 const h = `<p><strong>Applied to the ${data} posts.</strong></p>`;
                 jQuery('#setting-apply-settings_updated').html(h);
-                // For sweetalert2.js
-                const str: any = `Applied to ${data} posts.`;
-                Swal.insertQueueStep(str);
+                Swal.insertQueueStep({
+                  icon: 'success',
+                  title: `Applied to ${data} posts.`,
+                });
                 resolve();
               });
           });
