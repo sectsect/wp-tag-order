@@ -25,8 +25,8 @@ export const options = (): void => {
         cancelButtonColor: '#d33',
         confirmButtonText: 'Yes, apply!',
         showLoaderOnConfirm: true,
-        preConfirm(): any {
-          return new Promise<string>((resolve: any | null): void => {
+        preConfirm(): Promise<string> {
+          return new Promise<string>((resolve): void => {
             jQuery
               .ajax({
                 url: window.wto_options_data.ajax_url,
