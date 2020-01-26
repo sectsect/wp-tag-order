@@ -1,5 +1,18 @@
+declare global {
+  interface Window {
+    wto_data: WtoData;
+  }
+}
 declare let jQuery: any;
-declare let wto_data: any; // eslint-disable-line @typescript-eslint/camelcase
+
+export interface WtoData {
+  post_id: string;
+  nonce_sync: string;
+  action_sync: string;
+  nonce_update: string;
+  action_update: string;
+  ajax_url: string;
+}
 
 export const post = (): void => {
   // const removeElements = (text, selector) => {
@@ -14,9 +27,9 @@ export const post = (): void => {
   setTimeout(() => {
     jQuery("[id^='tagsdiv-']")
       .find('.tagchecklist')
-      .on('DOMSubtreeModified propertychange', function(): void {
+      .on('DOMSubtreeModified propertychange', function(this: HTMLElement): void {
         setTimeout(
-          jQuery.proxy(function(): void {
+          jQuery.proxy(function(this: HTMLElement): void {
             const cont: string = jQuery(this).html();
             if (cont === flag && cont !== '') {
               return; // prevent multiple simultaneous triggers
@@ -33,12 +46,12 @@ export const post = (): void => {
               .val();
             jQuery
               .ajax({
-                url: wto_data.ajax_url,
+                url: window.wto_data.ajax_url,
                 dataType: 'json',
                 data: {
-                  id: wto_data.post_id,
-                  nonce: wto_data.nonce_sync,
-                  action: wto_data.action_sync,
+                  id: window.wto_data.post_id,
+                  nonce: window.wto_data.nonce_sync,
+                  action: window.wto_data.action_sync,
                   taxonomy: t,
                   tags: s,
                 },
@@ -75,20 +88,20 @@ export const post = (): void => {
       const ary: string[] = [];
       jQuery(this)
         .find('input[type="hidden"]')
-        .each(function(): void {
+        .each(function(this: HTMLElement): void {
           const tag: string = jQuery(this).val();
           ary.push(tag);
         });
       const s: string = ary.join();
       jQuery
         .ajax({
-          url: wto_data.ajax_url,
+          url: window.wto_data.ajax_url,
           type: 'post',
           dataType: 'json',
           data: {
-            id: wto_data.post_id,
-            nonce: wto_data.nonce_update,
-            action: wto_data.action_update,
+            id: window.wto_data.post_id,
+            nonce: window.wto_data.nonce_update,
+            action: window.wto_data.action_update,
             taxonomy: t,
             tags: s,
           },

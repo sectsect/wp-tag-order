@@ -1,7 +1,17 @@
 import Swal from 'sweetalert2';
 
+declare global {
+  interface Window {
+    wto_options_data: WtoOptionsData;
+  }
+}
 declare let jQuery: any;
-declare let wto_options_data: any; // eslint-disable-line @typescript-eslint/camelcase
+
+export interface WtoOptionsData {
+  nonce: string;
+  action: string;
+  ajax_url: string;
+}
 
 export const options = (): void => {
   jQuery('#wpbody-content form input[name=apply]').on('click', (): boolean => {
@@ -19,11 +29,11 @@ export const options = (): void => {
           return new Promise<string>((resolve: any | null): void => {
             jQuery
               .ajax({
-                url: wto_options_data.ajax_url,
+                url: window.wto_options_data.ajax_url,
                 dataType: 'json',
                 data: {
-                  nonce: wto_options_data.nonce,
-                  action: wto_options_data.action,
+                  nonce: window.wto_options_data.nonce,
+                  action: window.wto_options_data.action,
                 },
                 type: 'post',
                 beforeSend() {
