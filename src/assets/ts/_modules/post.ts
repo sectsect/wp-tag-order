@@ -5,7 +5,7 @@ declare global {
 }
 declare let jQuery: any;
 
-export interface WtoData {
+interface WtoData {
   post_id: string;
   nonce_sync: string;
   action_sync: string;

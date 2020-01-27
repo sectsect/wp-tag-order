@@ -7,7 +7,7 @@ declare global {
 }
 declare let jQuery: any;
 
-export interface WtoOptionsData {
+interface WtoOptionsData {
   nonce: string;
   action: string;
   ajax_url: string;
