@@ -39,9 +39,7 @@ export const options = (): void => {
                 beforeSend() {
                   jQuery('#wpbody-content form input[name=apply]').prop('disabled', true);
                   const h = '<p><strong class="processing">Processing.</strong></p>';
-                  jQuery('#setting-apply-settings_updated')
-                    .html(h)
-                    .fadeIn();
+                  jQuery('#setting-apply-settings_updated').html(h).fadeIn();
                 },
               })
               .done((): void => {})
