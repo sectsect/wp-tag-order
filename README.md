@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/sectsect/wp-tag-order.svg?branch=master)](https://travis-ci.org/sectsect/wp-tag-order) [![Latest Stable Version](https://poser.pugx.org/sectsect/wp-tag-order/v/stable)](https://packagist.org/packages/sectsect/wp-tag-order) [![License](https://poser.pugx.org/sectsect/wp-tag-order/license)](https://packagist.org/packages/sectsect/wp-tag-order)
 
-### WP Tag Order plugin will order tags, non-hierarchical custom-taxonomy terms in individual posts with simple Drag and Drop Sortable capability. And supplies some functions to output it.
+### WP Tag Order plugin uses a simple Drag-and-Drop ⬍ sortable feature to order tags, non-hierarchical custom taxonomies within individual posts.
 
 #### :warning: This plugin is NOT compatible with Gutenberg on WordPress 5.x. Consider using [Classic Editor Plugin](https://wordpress.org/plugins/classic-editor/).
 
@@ -23,13 +23,13 @@ That's it:ok_hand:
 
 ## Notes
 
-* Supports `post_tag` and `non-hierarchical taxonomy`.
-* Supports multiple `non-hierarchical taxonomies` in a post-type.
+* Support `post_tag` and `non-hierarchical taxonomy`.
+* Support multiple `non-hierarchical taxonomies` in a post-type.
 * In the case of creating a new post, you need to save the post once to activate this feature.
 * To apply for the existing post, "`Add and Remove`" once something one tag.  
 Or, if you want to batch apply, Go to `Settings` -> `WP Tag Order` page, and click the `Apply` button.
-* Supports Multisite.
-* Tested on WP v4.9
+* Support Multisite.
+* Tested on WordPress v4.9.
 
 ## Screencast
 
@@ -52,8 +52,8 @@ Or, if you want to batch apply, Go to `Settings` -> `WP Tag Order` page, and cli
 <h2>get_the_tags_ordered()</h2>
 <?php
 $posttags = get_the_tags_ordered();
-if ($posttags && ! is_wp_error($posttags)) {
-    foreach ($posttags as $tag) {
+if ( $posttags && ! is_wp_error( $posttags ) ) {
+    foreach ( $posttags as $tag ) {
         echo $tag->name . ' ';
     }
 }
@@ -61,9 +61,9 @@ if ($posttags && ! is_wp_error($posttags)) {
 
 <h2>get_the_terms_ordered()</h2>
 <?php
-$posttags = get_the_terms_ordered($post->ID, 'post_tag');
-if ($posttags && ! is_wp_error($posttags)) {
-    foreach ($posttags as $tag) {
+$posttags = get_the_terms_ordered( $post->ID, 'post_tag' );
+if ( $posttags && ! is_wp_error( $posttags ) ) {
+    foreach ( $posttags as $tag ) {
         echo $tag->name . ' ';
     }
 }
@@ -73,13 +73,13 @@ if ($posttags && ! is_wp_error($posttags)) {
 <?php echo get_the_tag_list_ordered(); ?>
 
 <h2>get_the_term_list_ordered()</h2>
-<?php echo get_the_term_list_ordered($post->ID, 'post_tag'); ?>
+<?php echo get_the_term_list_ordered( $post->ID, 'post_tag' ); ?>
 
 <h2>the_tags_ordered()</h2>
 <?php the_tags_ordered(); ?>
 
 <h2>the_terms_ordered()</h2>
-<?php the_terms_ordered($post->ID, 'post_tag'); ?>
+<?php the_terms_ordered( $post->ID, 'post_tag' ); ?>
 ```
 
 ## NOTES for Developer
@@ -106,12 +106,15 @@ if ($posttags && ! is_wp_error($posttags)) {
 * This Plugin does not hosting on the [wordpress.org](https://wordpress.org/) repo in order to prevent a flood of support requests from wide audience.
 
 ## Change log  
- * **1.2.2** - Fix wrong options for sweetalert2 / Improve code for TypeScript / Update dependencies
- * **1.2.1** - Update dependencies
+ * **1.2.5** - [chore] Update dependencies
+ * **1.2.4** - Fix security vulnerabilities
+ * **1.2.3** - [chore] Update dependencies
+ * **1.2.2** - Fix wrong options for sweetalert2 / Improve code for TypeScript / [chore] Update dependencies
+ * **1.2.1** - [chore] Update dependencies
  * **1.2.0** - Refactoring and Rewrite using modern JS
  * **1.1.4** - Fix a Minor bug [#7](https://github.com/sectsect/wp-tag-order/issues/7)
- * **1.1.3** - Update dependencies
- * **1.1.2** - Fix PHPCS errrors / Update README
+ * **1.1.3** - [chore] Update dependencies
+ * **1.1.2** - Fix PHPCS errors / Update README
  * **1.1.1** - Migrate Gulp to v4
  * **1.1.0** - Refactoring for Ajax [#5](https://github.com/sectsect/wp-tag-order/issues/5)
  * **1.0.7** - Improve script
