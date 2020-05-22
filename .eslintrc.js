@@ -40,6 +40,7 @@ module.exports = {
     "no-shadow": 0,
     "no-undef": 0,
     "no-unused-vars": 0,
+    "@typescript-eslint/camelcase": 0,
     "@typescript-eslint/explicit-function-return-type": 0,
     "@typescript-eslint/no-explicit-any": 0,
     "@typescript-eslint/prefer-nullish-coalescing": "error",
