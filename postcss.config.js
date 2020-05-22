@@ -4,9 +4,7 @@ const pxtorem = require('postcss-pxtorem')({
 });
 const postcssHexrgba = require('postcss-hexrgba');
 const postcssFlexbugsFixes = require('postcss-flexbugs-fixes');
-const cssMqpacker = require('css-mqpacker')({
-  sort: true,
-});
+const postcssSortMediaQueries = require('postcss-sort-media-queries');
 const autoprefixer = require('autoprefixer')({
   grid: 'autoplace',
 });
@@ -24,7 +22,7 @@ module.exports = {
     pxtorem,
     postcssHexrgba,
     postcssFlexbugsFixes,
-    cssMqpacker,
+    postcssSortMediaQueries,
     autoprefixer,
     postcssSorting,
     validator,
