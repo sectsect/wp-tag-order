@@ -2,7 +2,8 @@ module.exports = {
   "env": {
     "es6": true,
     "browser": true,
-    "node": true
+    "node": true,
+    "jquery": true
   },
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -20,7 +21,6 @@ module.exports = {
     "@typescript-eslint"
   ],
   "rules": {
-    "indent": [2, 2],
     "func-names": 0,
     "import/extensions": 0,
     // "import/extensions": ["error", "always", {
@@ -35,24 +35,15 @@ module.exports = {
     }],
     "import/prefer-default-export": "off",
     "import/no-default-export": "error",
-    "max-len": [2, {
-      "code": 200,
-      "tabWidth": 2,
-      "ignoreUrls": true,
-      "ignoreComments": true,
-      "ignoreTrailingComments": true,
-      "ignoreStrings": true
-    }],
     "no-alert": 0,
     "no-console": 0,
-    "no-new": 0,
     "no-shadow": 0,
-    "no-tabs": 0,
     "no-undef": 0,
-    "no-underscore-dangle": 0,
     "no-unused-vars": 0,
-    "no-use-before-define": 0,
+    "@typescript-eslint/explicit-function-return-type": 0,
     "@typescript-eslint/no-explicit-any": 0,
+    "@typescript-eslint/prefer-nullish-coalescing": "error",
+    "@typescript-eslint/prefer-optional-chain": "error",
     "prettier/prettier": "error"
   },
   "settings": {
