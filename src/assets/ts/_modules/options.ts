@@ -5,7 +5,6 @@ declare global {
     wto_options_data: WtoOptionsData;
   }
 }
-declare let jQuery: any;
 
 interface WtoOptionsData {
   nonce: string;
@@ -13,8 +12,8 @@ interface WtoOptionsData {
   ajax_url: string;
 }
 
-export const options = (): void => {
-  jQuery('#wpbody-content form input[name=apply]').on('click', (): boolean => {
+export const options = () => {
+  jQuery('#wpbody-content form input[name=apply]').on('click', () => {
     Swal.queue([
       {
         title: 'Are you sure?',
@@ -26,7 +25,7 @@ export const options = (): void => {
         confirmButtonText: 'Yes, apply!',
         showLoaderOnConfirm: true,
         preConfirm(): Promise<string> {
-          return new Promise<string>((resolve): void => {
+          return new Promise<string>(resolve => {
             jQuery
               .ajax({
                 url: window.wto_options_data.ajax_url,
@@ -42,11 +41,11 @@ export const options = (): void => {
                   jQuery('#setting-apply-settings_updated').html(h).fadeIn();
                 },
               })
-              .done((): void => {})
-              .fail((): void => {
+              .done(() => {})
+              .fail(() => {
                 alert('Load Error. Please Reload...');
               })
-              .always((data: number): void => {
+              .always(data => {
                 const h = `<p><strong>Applied to the ${data} posts.</strong></p>`;
                 jQuery('#setting-apply-settings_updated').html(h);
                 Swal.insertQueueStep({

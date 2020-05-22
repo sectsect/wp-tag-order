@@ -3,7 +3,6 @@ declare global {
     wto_data: WtoData;
   }
 }
-declare let jQuery: any;
 
 interface WtoData {
   post_id: string;
@@ -14,7 +13,7 @@ interface WtoData {
   ajax_url: string;
 }
 
-export const post = (): void => {
+export const post = () => {
   // const removeElements = (text, selector) => {
   //   const wrapped = jQuery(`<div>${text}</div>`);
   //   wrapped.find(selector).remove();
@@ -27,17 +26,17 @@ export const post = (): void => {
   setTimeout(() => {
     jQuery("[id^='tagsdiv-']")
       .find('.tagchecklist')
-      .on('DOMSubtreeModified propertychange', function (this: HTMLElement): void {
+      .on('DOMSubtreeModified propertychange', function (this: HTMLElement) {
         setTimeout(() => {
-          const cont: string = jQuery(this).html();
+          const cont = jQuery(this).html();
           if (cont === flag && cont !== '') {
             return; // prevent multiple simultaneous triggers
           }
           flag = cont;
 
-          const postboxid: string = jQuery(this).closest('.postbox').attr('id');
-          const t: string = postboxid.replace('tagsdiv-', '');
-          const s: string = jQuery(this).siblings().find('textarea.the-tags').val();
+          const postboxid = jQuery(this).closest('.postbox').attr('id') ?? '';
+          const t = postboxid.replace('tagsdiv-', '');
+          const s = jQuery(this).siblings().find('textarea.the-tags').val() as string;
           jQuery
             .ajax({
               url: window.wto_data.ajax_url,
@@ -50,17 +49,17 @@ export const post = (): void => {
                 tags: s,
               },
               type: 'post',
-              beforeSend(): void {
+              beforeSend() {
                 jQuery(`#tagsdiv-${t} h2, #wpto_meta_box-${t} h2`).addClass('ready');
               },
             })
-            .done((data: HTMLElement): void => {
+            .done((data: HTMLElement) => {
               jQuery(`#wpto_meta_box-${t} .inside .inner ul`).html(data);
             })
-            .fail((): void => {
+            .fail(() => {
               alert('Load Error. Please Reload...');
             })
-            .always((): void => {
+            .always(() => {
               setTimeout(() => {
                 jQuery(`#tagsdiv-${t} h2, #wpto_meta_box-${t} h2`).removeClass('ready');
               }, 300);
@@ -73,16 +72,16 @@ export const post = (): void => {
   ================================================== */
   jQuery('.wpto_meta_box_panel .inside .inner ul').sortable({
     update() {
-      const postboxid: string = jQuery(this).closest('.postbox').attr('id');
-      const t: string = postboxid.replace('wpto_meta_box-', '');
+      const postboxid = jQuery(this).closest('.postbox').attr('id') ?? '';
+      const t = postboxid.replace('wpto_meta_box-', '');
       const ary: string[] = [];
       jQuery(this)
         .find('input[type="hidden"]')
-        .each(function (this: HTMLElement): void {
-          const tag: string = jQuery(this).val();
+        .each(function (this: HTMLElement) {
+          const tag = jQuery(this).val() as string;
           ary.push(tag);
         });
-      const s: string = ary.join();
+      const s = ary.join();
       jQuery
         .ajax({
           url: window.wto_data.ajax_url,
@@ -95,15 +94,15 @@ export const post = (): void => {
             taxonomy: t,
             tags: s,
           },
-          beforeSend(): void {
+          beforeSend() {
             jQuery(`#wpto_meta_box-${t} h2`).addClass('ready');
           },
         })
-        .done((): void => {})
-        .fail((): void => {
+        .done(() => {})
+        .fail(() => {
           alert('Load Error. Please Reload...');
         })
-        .always((): void => {
+        .always(() => {
           setTimeout(() => {
             jQuery(`#wpto_meta_box-${t} h2`).removeClass('ready');
           }, 300);
