@@ -47,6 +47,7 @@
     "node-sass": "^4.14.1",
     "optimize-css-assets-webpack-plugin": "^5.0.3",
     "postcss-clearfix": "^2.0.1",
+    "postcss-combine-duplicated-selectors": "^8.1.0",
     "postcss-flexbugs-fixes": "^4.2.1",
     "postcss-hexrgba": "^2.0.0",
     "postcss-import": "^12.0.1",
