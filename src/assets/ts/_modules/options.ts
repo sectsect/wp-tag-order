@@ -12,7 +12,7 @@ interface WtoOptionsData {
   ajax_url: string;
 }
 
-export const options = () => {
+export const options = (): void => {
   jQuery('#wpbody-content form input[name=apply]').on('click', () => {
     Swal.queue([
       {

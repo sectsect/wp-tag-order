@@ -13,7 +13,7 @@ interface WtoData {
   ajax_url: string;
 }
 
-export const post = () => {
+export const post = (): void => {
   // const removeElements = (text, selector) => {
   //   const wrapped = jQuery(`<div>${text}</div>`);
   //   wrapped.find(selector).remove();
