@@ -1,5 +1,17 @@
 # Changelog
 
+## [v1.2.6](https://github.com/sectsect/wp-tag-order/tree/v1.2.6) (2020-05-23)
+
+[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v1.2.5...v1.2.6)
+
+## [v1.2.5](https://github.com/sectsect/wp-tag-order/tree/v1.2.5) (2020-05-20)
+
+[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v1.2.4...v1.2.5)
+
+**Merged pull requests:**
+
+- Bump jquery from 3.4.1 to 3.5.0 [\#9](https://github.com/sectsect/wp-tag-order/pull/9) ([dependabot[bot]](https://github.com/apps/dependabot))
+
 ## [v1.2.4](https://github.com/sectsect/wp-tag-order/tree/v1.2.4) (2020-04-07)
 
 [Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v1.2.3...v1.2.4)
