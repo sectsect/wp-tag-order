@@ -33,7 +33,6 @@
     "babel-loader": "^8.1.0",
     "css-loader": "^3.6.0",
     "eslint": "^7.3.0",
-    "eslint-config-airbnb": "^18.2.0",
     "eslint-config-airbnb-typescript": "^8.0.2",
     "eslint-config-prettier": "^6.11.0",
     "eslint-import-resolver-webpack": "^0.12.2",
