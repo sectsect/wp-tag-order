@@ -106,6 +106,7 @@ if ( $posttags && ! is_wp_error( $posttags ) ) {
 * This Plugin does not hosting on the [wordpress.org](https://wordpress.org/) repo in order to prevent a flood of support requests from wide audience.
 
 ## Change log  
+ * **1.2.8** - [chore] Update dependencies
  * **1.2.7** - [chore] Update dependencies
  * **1.2.6** - Tweak message / Improve code for TypeScript / [chore] Update dependencies
  * **1.2.5** - [chore] Update dependencies
