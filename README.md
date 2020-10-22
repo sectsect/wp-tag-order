@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/sectsect/wp-tag-order.svg?branch=master)](https://travis-ci.org/sectsect/wp-tag-order) [![Latest Stable Version](https://poser.pugx.org/sectsect/wp-tag-order/v/stable)](https://packagist.org/packages/sectsect/wp-tag-order) [![License](https://poser.pugx.org/sectsect/wp-tag-order/license)](https://packagist.org/packages/sectsect/wp-tag-order)
 
-### WP Tag Order plugin uses a simple Drag-and-Drop ⬍ sortable feature to order tags, non-hierarchical custom taxonomies within individual posts.
+### Order tags (Non-hierarchical custom taxonomies) within individual posts with simple Drag-and-Drop ↕︎ sortable feature.
 
 #### :warning: This plugin is NOT compatible with Gutenberg on WordPress 5.x. Consider using [Classic Editor Plugin](https://wordpress.org/plugins/classic-editor/).
 
@@ -13,12 +13,12 @@
 ## Installation
 
 ##### 1. Clone this Repo into your `wp-content/plugins` directory.
-```sh
+```bash
 $ cd /path-to-your/wp-content/plugins/
 $ git clone git@github.com:sectsect/wp-tag-order.git
 ```
 
-##### 2. Activate the plugin through the 'Plugins' menu in WordPress.<br>
+##### 2. Activate the plugin through the "Plugins" menu in WordPress.<br>
 That's it:ok_hand:
 
 ## Notes
