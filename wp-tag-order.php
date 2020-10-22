@@ -2,7 +2,7 @@
 /**
  * Plugin Name:     WP Tag Order
  * Plugin URI:      https://github.com/sectsect/wp-tag-order
- * Description:     WP Tag Order plugin will order tags, non-hierarchical custom-taxonomy terms in individual posts with simple Drag and Drop Sortable capability. And supplies some functions to output it.
+ * Description:     📦 ↕︎ Order tags (Non-hierarchical custom taxonomies) within individual posts with simple Drag-and-Drop sortable feature.
  * Author:          SECT INTERACTIVE AGENCY
  * Author URI:      https://www.ilovesect.com/
  * Text Domain:     wp-tag-order
