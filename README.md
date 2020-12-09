@@ -133,3 +133,8 @@ if ( $posttags && ! is_wp_error( $posttags ) ) {
 ## License
 
 See [LICENSE](https://github.com/sectsect/wp-tag-order/blob/master/LICENSE) file.
+
+<p align="center">✌️</p>
+<p align="center">
+<sub><sup>A little project by <a href="https://github.com/sectsect">@sectsect</a></sup></sub>
+</p>
