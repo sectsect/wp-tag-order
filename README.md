@@ -35,7 +35,7 @@ Or, if you want to batch apply, Go to `Settings` -> `WP Tag Order` page, and cli
 
  <img src="https://github-sect.s3-ap-northeast-1.amazonaws.com/wp-tag-order/wp-tag-order.gif" width="314" height="auto">
 
-## functions
+## Functions
 
 | Function | Description |
 | ------ | ----------- |
@@ -103,7 +103,7 @@ if ( $posttags && ! is_wp_error( $posttags ) ) {
   <td><code style="word-break: break-all;">s:91:"a:7:{i:0;s:1:"7";i:1;s:1:"5";i:2;s:2:"10";i:3;s:1:"4";i:4;s:1:"6";i:5;s:1:"8";i:6;s:1:"9";}";</code></td>
   </tr></tbody></table>
 
-* This Plugin does not hosting on the [wordpress.org](https://wordpress.org/) repo in order to prevent a flood of support requests from wide audience.
+* This Plugin does not hosting on the [wordpress.org](https://wordpress.org/) repo in order to prevent a flood of support requests from wide audience. Your feedback is welcome.
 
 ## Change log  
  * **1.2.9** - [chore] Update dependencies
