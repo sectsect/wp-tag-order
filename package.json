@@ -84,7 +84,7 @@
     "@types/modernizr": "^3.5.3",
     "core-js": "^3.6.5",
     "jquery": "^3.5.1",
-    "node-notifier": "^8.0.0",
+    "node-notifier": "^8.0.1",
     "regenerator-runtime": "^0.13.7",
     "sweetalert2": "^10.1.0"
   }
