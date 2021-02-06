@@ -35,7 +35,7 @@ Or, if you want to batch apply, Go to `Settings` -> `WP Tag Order` page, and cli
 
  <img src="https://github-sect.s3-ap-northeast-1.amazonaws.com/wp-tag-order/wp-tag-order.gif" width="314" height="auto">
 
-## Functions
+## APIs
 
 | Function | Description |
 | ------ | ----------- |
