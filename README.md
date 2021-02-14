@@ -21,7 +21,7 @@ $ git clone git@github.com:sectsect/wp-tag-order.git
 ##### 2. Activate the plugin through the "Plugins" menu in WordPress.<br>
 That's it:ok_hand:
 
-## Notes
+## Feature
 
 * Support `post_tag` and `non-hierarchical taxonomy`.
 * Support multiple `non-hierarchical taxonomies` in a post-type.
