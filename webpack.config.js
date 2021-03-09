@@ -261,7 +261,7 @@ module.exports = env => [
     },
   },
   {
-    entry: WebpackSweetEntry(path.resolve(sourcePath, 'assets/css/**/*.css'), 'css', 'css'),
+    entry: WebpackSweetEntry(path.resolve(sourcePath, 'assets/scss/**/*.scss'), 'scss', 'scss'),
     output: {
       path: path.resolve(buildPath, 'assets/css'),
       // filename: '[name].css',
@@ -276,7 +276,7 @@ module.exports = env => [
     module: {
       rules: [
         {
-          test: /\.css$/,
+          test: /\.(sass|scss)$/,
           use: [
             MiniCssExtractPlugin.loader,
             {
@@ -286,6 +286,7 @@ module.exports = env => [
               },
             },
             { loader: 'postcss-loader' },
+            { loader: 'sass-loader' },
           ],
         },
       ],
