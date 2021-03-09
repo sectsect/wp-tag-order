@@ -106,29 +106,8 @@ if ( $posttags && ! is_wp_error( $posttags ) ) {
 * This Plugin does not hosting on the [wordpress.org](https://wordpress.org/) repo in order to prevent a flood of support requests from wide audience. Your feedback is welcome.
 
 ## Change log  
- * **1.2.9** - [chore] Update dependencies
- * **1.2.8** - [chore] Update dependencies
- * **1.2.7** - [chore] Update dependencies
- * **1.2.6** - Tweak message / Improve code for TypeScript / [chore] Update dependencies
- * **1.2.5** - [chore] Update dependencies
- * **1.2.4** - Fix security vulnerabilities
- * **1.2.3** - [chore] Update dependencies
- * **1.2.2** - Fix wrong options for sweetalert2 / Improve code for TypeScript / [chore] Update dependencies
- * **1.2.1** - [chore] Update dependencies
- * **1.2.0** - Refactoring and Rewrite using modern JS
- * **1.1.4** - Fix a Minor bug [#7](https://github.com/sectsect/wp-tag-order/issues/7)
- * **1.1.3** - [chore] Update dependencies
- * **1.1.2** - Fix PHPCS errors / Update README
- * **1.1.1** - Migrate Gulp to v4
- * **1.1.0** - Refactoring for Ajax [#5](https://github.com/sectsect/wp-tag-order/issues/5)
- * **1.0.7** - Improve script
- * **1.0.6** - Fix some Minor bugs [#3](https://github.com/sectsect/wp-tag-order/issues/3) [#4](https://github.com/sectsect/wp-tag-order/issues/4)
- * **1.0.5** - Add compatible with WordPress 4.9
- * **1.0.4** - Add PHP Unit Tests
- * **1.0.3** - Fix PHP Notice for Undefined index [#2](https://github.com/sectsect/wp-tag-order/issues/2)
- * **1.0.2** - Fix PHP Notice for has_cap [#1](https://github.com/sectsect/wp-tag-order/issues/1) & Fix incorrect URL Paths for Ajax
- * **1.0.1** - Specification change for WordPress 4.7
- * **1.0.0** - Initial Release
+
+See [CHANGELOG](https://github.com/sectsect/wp-tag-order/blob/master/CHANGELOG.md) file.
 
 ## License
 
