@@ -52,7 +52,7 @@ export const options = (): void => {
                   icon: 'success',
                   title: `Applied to ${data} posts.`,
                 });
-                resolve();
+                resolve('resolved');
               });
           });
         },

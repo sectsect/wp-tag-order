@@ -1,14 +1,24 @@
 {
   "extends": "@spotify/tsconfig",
   "compilerOptions": {
-    "allowJs": true,
-    "allowSyntheticDefaultImports": true,
     "lib": ["dom", "dom.iterable", "esnext"],
     // "noImplicitThis": false,
-    "target": "esnext"
+    "target": "esnext",
+    "incremental": true,
+    "tsBuildInfoFile": "./.tsbuildinfo",
+    "skipLibCheck": true,
+    // "baseUrl": "src/@types",
+    "baseUrl": ".",
+    "paths": {
+      // "*": ["*"],
+      "*": ["node_modules/*", "src/@types/*"]
+    }
+
   },
   "include": [
-    "src/**/*"
+    "src/**/*",
+    "webpack.config.js",
+    ".eslintrc.js"
   ],
   "exclude": [
     "dist",
