@@ -18,9 +18,6 @@ const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const sourcePath = path.join(__dirname, 'src');
 const buildPath = path.join(__dirname, '');
 
-// For dotenv
-// console.log(process.env.AWS_ACCESS_KEY_ID);
-
 // For Detection Environment  @ https://webpack.js.org/api/cli/#environment-options
 const isProd = env => env?.production;
 const isDev = env => env?.development;
@@ -217,7 +214,7 @@ module.exports = env => [
       ],
     },
     externals: {
-      // jquery: 'jQuery',
+      jquery: 'jQuery',
     },
     // Modernizr
     resolve: {
