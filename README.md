@@ -21,7 +21,7 @@ $ git clone git@github.com:sectsect/wp-tag-order.git
 ##### 2. Activate the plugin through the "Plugins" menu in WordPress.<br>
 That's it:ok_hand:
 
-## Feature
+## Features
 
 * Support `post_tag` and `non-hierarchical taxonomy`.
 * Support multiple `non-hierarchical taxonomies` in a post-type.
@@ -82,7 +82,7 @@ if ( $posttags && ! is_wp_error( $posttags ) ) {
 <?php the_terms_ordered( $post->ID, 'post_tag' ); ?>
 ```
 
-## NOTES for Developer
+## Notes for Developers
 
 * The sorted tags will be saved in `wp_postmeta` table with an array of tag id that has been serialized as custom field.
 
