@@ -1,5 +1,13 @@
 # Changelog
 
+## [v1.3.1](https://github.com/sectsect/wp-tag-order/tree/v1.3.1) (2021-07-26)
+
+[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v1.3.0...v1.3.1)
+
+**Closed issues:**
+
+- Order list is empty until taxonomy is clicked. [\#15](https://github.com/sectsect/wp-tag-order/issues/15)
+
 ## [v1.3.0](https://github.com/sectsect/wp-tag-order/tree/v1.3.0) (2021-03-09)
 
 [Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v1.2.9...v1.3.0)
@@ -8,7 +16,6 @@
 
 - Bump node-notifier from 8.0.0 to 8.0.1 [\#13](https://github.com/sectsect/wp-tag-order/pull/13) ([dependabot[bot]](https://github.com/apps/dependabot))
 - Bump ini from 1.3.5 to 1.3.8 [\#12](https://github.com/sectsect/wp-tag-order/pull/12) ([dependabot[bot]](https://github.com/apps/dependabot))
-- Bump elliptic from 6.5.2 to 6.5.3 [\#11](https://github.com/sectsect/wp-tag-order/pull/11) ([dependabot[bot]](https://github.com/apps/dependabot))
 
 ## [v1.2.9](https://github.com/sectsect/wp-tag-order/tree/v1.2.9) (2020-09-17)
 
@@ -20,6 +27,7 @@
 
 **Merged pull requests:**
 
+- Bump elliptic from 6.5.2 to 6.5.3 [\#11](https://github.com/sectsect/wp-tag-order/pull/11) ([dependabot[bot]](https://github.com/apps/dependabot))
 - Bump lodash from 4.17.15 to 4.17.19 [\#10](https://github.com/sectsect/wp-tag-order/pull/10) ([dependabot[bot]](https://github.com/apps/dependabot))
 
 ## [v1.2.7](https://github.com/sectsect/wp-tag-order/tree/v1.2.7) (2020-06-21)
