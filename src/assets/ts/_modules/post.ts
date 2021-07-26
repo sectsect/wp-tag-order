@@ -1,3 +1,4 @@
+/* eslint-disable func-names */
 declare global {
   interface Window {
     wto_data: WtoData;
