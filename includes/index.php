@@ -427,7 +427,7 @@ function ajax_wto_options() {
 			}
 		}
 	}
-	$return = $count;
+	$return = array( 'count' => $count );
 
 	echo json_encode( $return );
 	exit;
