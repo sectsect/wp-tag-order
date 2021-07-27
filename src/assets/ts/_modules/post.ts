@@ -1,4 +1,3 @@
-/* eslint-disable func-names */
 declare global {
   interface Window {
     wto_data: WtoData;
@@ -27,17 +26,17 @@ export const post = (): void => {
   setTimeout(() => {
     jQuery("[id^='tagsdiv-']")
       .find('.tagchecklist')
-      .on('DOMSubtreeModified propertychange', function (this: HTMLElement) {
+      .on('DOMSubtreeModified propertychange', e => {
         setTimeout(() => {
-          const cont = jQuery(this).html();
+          const cont = jQuery(e.currentTarget).html();
           if (cont === flag && cont !== '') {
             return; // prevent multiple simultaneous triggers
           }
           flag = cont;
 
-          const postboxid = jQuery(this).closest('.postbox').attr('id') ?? '';
+          const postboxid = jQuery(e.currentTarget).closest('.postbox').attr('id') ?? '';
           const t = postboxid.replace('tagsdiv-', '');
-          const s = jQuery(this).siblings().find('textarea.the-tags').val() as string;
+          const s = jQuery(e.currentTarget).siblings().find('textarea.the-tags').val() as string;
           jQuery
             .ajax({
               url: window.wto_data.ajax_url,
@@ -71,15 +70,15 @@ export const post = (): void => {
   /*= =================================================
   jQuery UI Sortable
   ================================================== */
-  jQuery('.wpto_meta_box_panel .inside .inner ul').sortable({
+  (jQuery('.wpto_meta_box_panel .inside .inner ul') as any).sortable({
     update() {
       const postboxid = jQuery(this).closest('.postbox').attr('id') ?? '';
       const t = postboxid.replace('wpto_meta_box-', '');
       const ary: string[] = [];
       jQuery(this)
         .find('input[type="hidden"]')
-        .each(function (this: HTMLElement) {
-          const tag = jQuery(this).val() as string;
+        .each((_i, el) => {
+          const tag = jQuery(el).val() as string;
           ary.push(tag);
         });
       const s = ary.join();
