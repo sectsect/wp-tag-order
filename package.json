@@ -86,9 +86,10 @@
     "@types/jqueryui": "^1.12.16",
     "@types/modernizr": "^3.5.3",
     "core-js": "^3.15.2",
+    "es6-promise": "^4.2.8",
     "jquery": "^3.6.0",
     "node-notifier": "^10.0.0",
     "regenerator-runtime": "^0.13.9",
-    "sweetalert2": "^10.15.5"
+    "sweetalert2": "^11.0.20"
   }
 }
