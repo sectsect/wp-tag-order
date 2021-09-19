@@ -79,8 +79,6 @@
     "webpack-spritesmith": "^1.1.0"
   },
   "dependencies": {
-    "@babel/polyfill": "^7.11.5",
-    "@babel/runtime": "^7.15.4",
     "@babel/runtime-corejs3": "^7.15.4",
     "@types/ismobilejs": "^1.0.1",
     "@types/jquery": "^3.5.6",
