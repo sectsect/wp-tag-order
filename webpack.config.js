@@ -3,14 +3,14 @@ const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const FixStyleOnlyEntriesPlugin = require('webpack-fix-style-only-entries');
 const TerserPlugin = require('terser-webpack-plugin');
-const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const ForkTsCheckerNotifierWebpackPlugin = require('fork-ts-checker-notifier-webpack-plugin');
 // const SVGSpritemapPlugin = require('svg-spritemap-webpack-plugin');
 const { WebpackSweetEntry } = require('@sect/webpack-sweet-entry');
 const SizePlugin = require('size-plugin');
-const NotifierPlugin = require('friendly-errors-webpack-plugin');
+const NotifierPlugin = require('@soda/friendly-errors-webpack-plugin');
 const notifier = require('node-notifier');
 const StyleLintPlugin = require('stylelint-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
@@ -137,13 +137,6 @@ const getCSSPlugins = env => {
     }),
   );
   if (isProd(env)) {
-    plugins.push(
-      new OptimizeCssAssetsPlugin({
-        cssProcessorPluginOptions: {
-          preset: ['default', { discardComments: { removeAll: true } }],
-        },
-      }),
-    );
     plugins.push(
       new SizePlugin({
         writeFile: false,
@@ -291,6 +284,22 @@ module.exports = env => [
     externals: {},
     resolve: {
       modules: ['node_modules'],
+    },
+    optimization: {
+      minimizer: [
+        new CssMinimizerPlugin({
+          minimizerOptions: {
+            preset: [
+              'default',
+              {
+                discardComments: {
+                  removeAll: true,
+                },
+              },
+            ],
+          },
+        }),
+      ],
     },
     plugins: getCSSPlugins(env),
     devtool: isProd(env) ? false : 'inline-cheap-source-map',
