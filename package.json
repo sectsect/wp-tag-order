@@ -48,7 +48,7 @@
     "fork-ts-checker-notifier-webpack-plugin": "^4.0.0",
     "fork-ts-checker-webpack-plugin": "^6.3.3",
     "mini-css-extract-plugin": "^2.3.0",
-    "node-sass": "^6.0.1",
+    "node-sass": "^7.0.0",
     "postcss": "^8.3.6",
     "postcss-combine-duplicated-selectors": "^10.0.3",
     "postcss-flexbugs-fixes": "^5.0.2",
