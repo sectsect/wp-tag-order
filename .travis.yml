@@ -49,11 +49,11 @@ before_script:
     if [[ ! -z "$WP_VERSION" ]] ; then
       bash bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION
       composer global require "phpunit/phpunit=4.8.*|5.7.*"
+      composer global require yoast/phpunit-polyfills
     fi
   - |
     if [[ "$WP_TRAVISCI" == "phpcs" ]] ; then
       composer global require wp-coding-standards/wpcs
-      composer global require --dev yoast/phpunit-polyfills
       composer global require phpcompatibility/php-compatibility
       composer global require phpcompatibility/phpcompatibility-paragonie
       composer global require phpcompatibility/phpcompatibility-wp
