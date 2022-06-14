@@ -53,6 +53,7 @@ before_script:
   - |
     if [[ "$WP_TRAVISCI" == "phpcs" ]] ; then
       composer global require wp-coding-standards/wpcs
+      composer global require --dev yoast/phpunit-polyfills
       composer global require phpcompatibility/php-compatibility
       composer global require phpcompatibility/phpcompatibility-paragonie
       composer global require phpcompatibility/phpcompatibility-wp
