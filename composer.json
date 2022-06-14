@@ -6,6 +6,9 @@
   "require": {
     "php": ">=5.3"
   },
+  "require-dev":{
+    "yoast/phpunit-polyfills" : "1.0.3"
+  },
   "license": "GPL-3.0+",
   "authors": [{
     "name": "SECT WEB INTERACTIVE",
