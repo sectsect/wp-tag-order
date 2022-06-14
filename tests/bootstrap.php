@@ -5,7 +5,7 @@
  * @package My_Plugin
  */
 
-require 'vendor/autoload.php';
+require dirname( dirname( __FILE__ ) ) . '/vendor/autoload.php';
 
 $_tests_dir = getenv( 'WP_TESTS_DIR' );
 
