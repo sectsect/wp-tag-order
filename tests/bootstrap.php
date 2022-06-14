@@ -5,8 +5,7 @@
  * @package My_Plugin
  */
 
-// define( 'WP_TESTS_PHPUNIT_POLYFILLS_PATH', getenv( 'WP_TESTS_PHPUNIT_POLYFILLS_PATH' ) );
-define( 'WP_TESTS_PHPUNIT_POLYFILLS_PATH', __DIR__ . '/../../vendor/yoast/phpunit-polyfills/phpunitpolyfills-autoload.php' );
+require_once dirname( dirname( __FILE__ ) ) . '/vendor/autoload.php';
 
 $_tests_dir = getenv( 'WP_TESTS_DIR' );
 
