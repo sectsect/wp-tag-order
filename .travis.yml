@@ -54,6 +54,7 @@ before_script:
   - |
     if [[ "$WP_TRAVISCI" == "phpcs" ]] ; then
       composer global require wp-coding-standards/wpcs
+      composer global require "squizlabs/php_codesniffer=*"
       composer global require phpcompatibility/php-compatibility
       composer global require phpcompatibility/phpcompatibility-paragonie
       composer global require phpcompatibility/phpcompatibility-wp
