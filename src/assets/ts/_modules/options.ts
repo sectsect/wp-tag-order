@@ -1,4 +1,3 @@
-import 'es6-promise/auto';
 import Swal from 'sweetalert2';
 
 declare global {
