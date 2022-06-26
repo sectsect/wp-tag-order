@@ -49,6 +49,7 @@ export const post = (): void => {
                 tags: s,
               },
               type: 'post',
+              // eslint-disable-next-line prefer-arrow/prefer-arrow-functions
               beforeSend() {
                 jQuery(`#tagsdiv-${t} h2, #wpto_meta_box-${t} h2`).addClass('ready');
               },
@@ -94,6 +95,7 @@ export const post = (): void => {
             taxonomy: t,
             tags: s,
           },
+          // eslint-disable-next-line prefer-arrow/prefer-arrow-functions
           beforeSend() {
             jQuery(`#wpto_meta_box-${t} h2`).addClass('ready');
           },

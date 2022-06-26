@@ -1,52 +1,97 @@
 @charset "UTF-8";
-@import 'mixin';
 
-/* spinner */
+@import '_base/settings.css';
+
 @keyframes spin {
   0% {
     transform: rotate(0deg);
   }
+
   50% {
     transform: rotate(180deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
 }
 
 .postbox.wpto_meta_box_tagsdiv {
-  h2 {
+  & h2 {
     position: relative;
-    @include spinner(absolute, 10px, 2px, #aaa, ready, hidden);
+
     &::before {
+      position: absolute;
+      top: 50%;
       right: 35px;
+      left: 50%;
       left: auto;
-      margin-left: 0;
+      z-index: 100;
+      width: 10px;
+      height: 10px;
+      margin: -5px 0 0;
+      visibility: hidden;
+      content: '';
+      border: 2px solid #aaa;
+      border-right-color: transparent;
+      border-radius: 50%;
+      opacity: 0;
+      transition: all 0.3s linear 0.3s;
+      animation: spin 0.7s linear infinite;
+    }
+
+    &.ready::before {
+      visibility: visible;
+      opacity: 1;
     }
   }
 }
+
 .postbox.wpto_meta_box_panel {
-  h2 {
+  & h2 {
     position: relative;
-    @include spinner(absolute, 10px, 2px, #aaa, ready, hidden);
+
     &::before {
+      position: absolute;
+      top: 50%;
       right: 35px;
+      left: 50%;
       left: auto;
-      margin-left: 0;
+      z-index: 100;
+      width: 10px;
+      height: 10px;
+      margin: -5px 0 0;
+      visibility: hidden;
+      content: '';
+      border: 2px solid #aaa;
+      border-right-color: transparent;
+      border-radius: 50%;
+      opacity: 0;
+      transition: all 0.3s linear 0.3s;
+      animation: spin 0.7s linear infinite;
+    }
+
+    &.ready::before {
+      visibility: visible;
+      opacity: 1;
     }
   }
-  .inside {
-    .inner {
+
+  & .inside {
+    & .inner {
       position: relative;
-      ul {
+
+      & ul {
         margin-bottom: 0;
-        li {
+
+        & li {
           position: relative;
           margin-bottom: 3px;
           cursor: move;
           background: #f5f5f5;
           border: 1px solid #dfdfdf;
           border-radius: 2px;
+
           &::before {
             position: absolute;
             top: 0;
@@ -57,6 +102,7 @@
             height: 100%;
             content: '';
           }
+
           &::after {
             position: absolute;
             top: 50%;
@@ -67,16 +113,18 @@
             height: 14px;
             margin-top: -7px;
             content: '';
-            background: url(../svg/move.svg) no-repeat 0 0;
+            background: url('../svg/move.svg') no-repeat 0 0;
             background-size: 100%;
             opacity: 0.5;
           }
+
           &.ui-sortable-helper {
             &::after {
               opacity: 1;
             }
           }
-          input {
+
+          & input {
             width: 100%;
             font-size: 11px;
             background: none;
@@ -88,10 +136,11 @@
     }
   }
 }
+
 .post-new-php {
-  .postbox.wpto_meta_box_panel {
-    .inside {
-      .inner {
+  & .postbox.wpto_meta_box_panel {
+    & .inside {
+      & .inner {
         &::before {
           position: absolute;
           top: 50%;
@@ -108,6 +157,7 @@
           text-align: center;
           content: 'Save once to activate';
         }
+
         &::after {
           position: absolute;
           top: 0;
@@ -120,7 +170,8 @@
           background: #fff;
           opacity: 0.15;
         }
-        ul {
+
+        & ul {
           min-height: 25px;
           opacity: 0.18;
         }
