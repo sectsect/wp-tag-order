@@ -34,9 +34,13 @@ export const post = (): void => {
           }
           flag = cont;
 
-          const postboxid = jQuery(e.currentTarget).closest('.postbox').attr('id') ?? '';
+          const postboxid =
+            jQuery(e.currentTarget).closest('.postbox').attr('id') ?? '';
           const t = postboxid.replace('tagsdiv-', '');
-          const s = jQuery(e.currentTarget).siblings().find('textarea.the-tags').val() as string;
+          const s = jQuery(e.currentTarget)
+            .siblings()
+            .find('textarea.the-tags')
+            .val() as string;
           jQuery
             .ajax({
               url: window.wto_data.ajax_url,
@@ -51,7 +55,9 @@ export const post = (): void => {
               type: 'post',
               // eslint-disable-next-line prefer-arrow/prefer-arrow-functions
               beforeSend() {
-                jQuery(`#tagsdiv-${t} h2, #wpto_meta_box-${t} h2`).addClass('ready');
+                jQuery(`#tagsdiv-${t} h2, #wpto_meta_box-${t} h2`).addClass(
+                  'ready',
+                );
               },
             })
             .done((data: HTMLElement) => {
@@ -62,7 +68,9 @@ export const post = (): void => {
             })
             .always(() => {
               setTimeout(() => {
-                jQuery(`#tagsdiv-${t} h2, #wpto_meta_box-${t} h2`).removeClass('ready');
+                jQuery(`#tagsdiv-${t} h2, #wpto_meta_box-${t} h2`).removeClass(
+                  'ready',
+                );
               }, 300);
             });
         }, 20);
