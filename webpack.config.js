@@ -223,7 +223,7 @@ module.exports = env => [
       ],
     },
     externals: {
-      // jquery: 'jQuery',
+      jquery: 'jQuery',
     },
     // Modernizr
     resolve: {
