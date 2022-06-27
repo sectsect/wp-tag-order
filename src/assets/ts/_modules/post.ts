@@ -13,12 +13,16 @@ interface WtoData {
   ajax_url: string;
 }
 
-export const post = (): void => {
-  // const removeElements = (text, selector) => {
-  //   const wrapped = jQuery(`<div>${text}</div>`);
-  //   wrapped.find(selector).remove();
-  //   return wrapped.html();
-  // };
+const {
+  ajax_url: url,
+  post_id: id,
+  nonce_sync: nonceSync,
+  action_sync: actionSync,
+  nonce_update: nonceUpdate,
+  action_update: actionUpdate,
+} = window.wto_data;
+
+export const post = () => {
   /*= =================================================
   Sync Tags to "#tagsdiv-post_tag" box
   ================================================== */
@@ -43,12 +47,12 @@ export const post = (): void => {
             .val() as string;
           jQuery
             .ajax({
-              url: window.wto_data.ajax_url,
+              url,
               dataType: 'json',
               data: {
-                id: window.wto_data.post_id,
-                nonce: window.wto_data.nonce_sync,
-                action: window.wto_data.action_sync,
+                id,
+                nonce: nonceSync,
+                action: actionSync,
                 taxonomy: t,
                 tags: s,
               },
@@ -79,7 +83,7 @@ export const post = (): void => {
   /*= =================================================
   jQuery UI Sortable
   ================================================== */
-  (jQuery('.wpto_meta_box_panel .inside .inner ul') as any).sortable({
+  jQuery('.wpto_meta_box_panel .inside .inner ul').sortable({
     update() {
       const postboxid = jQuery(this).closest('.postbox').attr('id') ?? '';
       const t = postboxid.replace('wpto_meta_box-', '');
@@ -93,13 +97,13 @@ export const post = (): void => {
       const s = ary.join();
       jQuery
         .ajax({
-          url: window.wto_data.ajax_url,
+          url,
           type: 'post',
           dataType: 'json',
           data: {
-            id: window.wto_data.post_id,
-            nonce: window.wto_data.nonce_update,
-            action: window.wto_data.action_update,
+            id,
+            nonce: nonceUpdate,
+            action: actionUpdate,
             taxonomy: t,
             tags: s,
           },
