@@ -7,7 +7,7 @@
  * Author URI:      https://www.ilovesect.com/
  * Text Domain:     wp-tag-order
  * Domain Path:     /languages
- * Version:         1.4.2
+ * Version:         1.4.3
  *
  * @package         WP_Tag_Order
  */
