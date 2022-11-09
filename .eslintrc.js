@@ -125,7 +125,7 @@ module.exports = {
   },
   settings: {
     react: {
-      version: 'detect',
+      version: '18.2.0',
     },
     'import/extensions': ['.js', '.jsx', '.json', '.ts', '.tsx'],
     'import/resolver': {
