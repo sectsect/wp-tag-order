@@ -26,8 +26,9 @@ That's it:ok_hand:
 * Support `post_tag` and `non-hierarchical taxonomy`.
 * Support multiple `non-hierarchical taxonomies` in a post-type.
 * In the case of creating a new post, you need to save the post once to activate this feature.
-* To apply for the existing post, **"Add and Remove"** any one tag once.  
-Or, if you want to batch apply, Go to `Settings` -> `WP Tag Order` page, and click the `Apply` button.
+* To apply for the existing post, **"Add and Remove"** any tag once.  
+Or, if you want to batch apply to multiple posts,  
+Go to `Settings` -> `WP Tag Order` page, and click the `Apply` button.
 * Support Multisite.
 * Tested on WordPress v4.9.
 
