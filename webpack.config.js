@@ -180,7 +180,11 @@ const getCSSPlugins = env => {
 
 module.exports = env => [
   {
-    entry: WebpackSweetEntry(path.resolve(sourcePath, 'assets/ts/**/*.ts*'), 'ts', 'ts'),
+    entry: WebpackSweetEntry(
+      path.resolve(sourcePath, 'assets/ts/**/*.ts*'),
+      'ts',
+      'ts',
+    ),
     output: {
       path: path.resolve(buildPath, 'assets/js'),
       filename: '[name].js',
@@ -203,7 +207,7 @@ module.exports = env => [
           // exclude: /node_modules\/(?!(rambda|quicklink)\/).*/,
           use: [
             {
-              loader: 'babel-loader',
+              loader: 'swc-loader',
               options: {
                 cacheDirectory: true,
               },
@@ -267,7 +271,11 @@ module.exports = env => [
     },
   },
   {
-    entry: WebpackSweetEntry(path.resolve(sourcePath, 'assets/css/**/*.css'), 'css', 'css'),
+    entry: WebpackSweetEntry(
+      path.resolve(sourcePath, 'assets/css/**/*.css'),
+      'css',
+      'css',
+    ),
     output: {
       path: path.resolve(buildPath, 'assets/css'),
       // filename: '[name].css',
