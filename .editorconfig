@@ -19,6 +19,6 @@ trim_trailing_whitespace = false
 indent_style = space
 indent_size = 2
 
-[{Movefile,.eslintrc}]
+[{Movefile,.eslintrc,.swcrc}]
 indent_style = space
 indent_size = 2
