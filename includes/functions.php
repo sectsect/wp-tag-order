@@ -80,3 +80,40 @@ function wto_has_tag_posttype() {
 
 	return $hastagposttypes;
 }
+
+/**
+ * Using an array as needles in strpos for replace_script_tag().
+ *
+ * @param  mixed $haystack
+ * @param  mixed $needle
+ * @param  mixed $offset
+ * @return false
+ */
+function wto_strposa( $haystack, $needle, $offset = 0 ) {
+	if ( ! is_array( $needle ) ) {
+		$needle = array( $needle );
+	}
+	foreach ( $needle as $query ) {
+		if ( strpos( $haystack, $query, $offset ) !== false ) {
+			return true; // stop on first true result
+		}
+	}
+	return false;
+}
+
+/**
+ * Add `type="module"` to <script> on wp_enqueue_script().
+ *
+ * @param  mixed $tag
+ * @return $tag
+ */
+function wto_replace_script_tag( $tag ) {
+	$module = array( 'wp-tag-order/assets/js/' );
+	if ( wto_strposa( $tag, $module ) ) {
+		$tag = str_replace( " type='text/javascript'", '', $tag );
+		$tag = str_replace( '<script src=', '<script type="module" src=', $tag );
+	}
+
+	return $tag;
+}
+add_filter( 'script_loader_tag', 'wto_replace_script_tag', 10, 1 );
