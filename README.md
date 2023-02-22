@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/sectsect/wp-tag-order.svg?branch=master)](https://travis-ci.org/sectsect/wp-tag-order) [![Latest Stable Version](https://poser.pugx.org/sectsect/wp-tag-order/v)](//packagist.org/packages/sectsect/wp-tag-order) [![composer.lock](https://poser.pugx.org/sectsect/wp-tag-order/composerlock)](//packagist.org/packages/sectsect/wp-tag-order) [![Total Downloads](https://poser.pugx.org/sectsect/wp-tag-order/downloads)](//packagist.org/packages/sectsect/wp-tag-order) [![Latest Unstable Version](https://poser.pugx.org/sectsect/wp-tag-order/v/unstable)](//packagist.org/packages/sectsect/wp-tag-order) [![License](https://poser.pugx.org/sectsect/wp-tag-order/license)](//packagist.org/packages/sectsect/wp-tag-order)
 
-### Order tags (Non-hierarchical custom taxonomies) within individual posts with simple Drag-and-Drop ↕︎ sortable feature.
+### Order tags independently in each posts (not site-globally) on WordPress with simple Drag-and-Drop ↕︎ sortable feature.
 
 #### :warning: This plugin is NOT compatible with Gutenberg on WordPress 5.x. Consider using [Classic Editor Plugin](https://wordpress.org/plugins/classic-editor/).
 
@@ -25,11 +25,14 @@ That's it:ok_hand:
 
 * Support `post_tag` and `non-hierarchical taxonomy`.
 * Support multiple `non-hierarchical taxonomies` in a post-type.
+* Support Multisite.
+
+## Notes
+
 * In the case of creating a new post, you need to save the post once to activate this feature.
 * To apply for the existing post, **"Add and Remove"** any tag once.  
 Or, if you want to batch apply to multiple posts,  
 Go to `Settings` -> `WP Tag Order` page, and click the `Apply` button.
-* Support Multisite.
 * Tested on WordPress v4.9.
 
 ## Screencast
@@ -49,43 +52,73 @@ Go to `Settings` -> `WP Tag Order` page, and click the `Apply` button.
 
 ## Usage Example
 
+### `get_the_tags_ordered()`
+
 ``` php
-<h2>get_the_tags_ordered()</h2>
 <?php
-$posttags = get_the_tags_ordered();
-if ( $posttags && ! is_wp_error( $posttags ) ) {
-    foreach ( $posttags as $tag ) {
-        echo $tag->name . ' ';
-    }
-}
+$terms = get_the_tags_ordered();
+if ( $terms && ! is_wp_error( $terms ) ) :
 ?>
+<ul>
+    <?php foreach ( $terms as $term ) : ?>
+        <li>
+            <a href="<?php echo get_term_link( $term->slug ); ?>">
+                <?php echo $term->name; ?>
+            </a>
+        </li>
+    <?php endforeach; ?>
+</ul>
+endif;
+?>
+```
 
-<h2>get_the_terms_ordered()</h2>
+### `get_the_terms_ordered()`
+
+``` php
 <?php
-$posttags = get_the_terms_ordered( $post->ID, 'post_tag' );
-if ( $posttags && ! is_wp_error( $posttags ) ) {
-    foreach ( $posttags as $tag ) {
-        echo $tag->name . ' ';
-    }
-}
+$terms = get_the_terms_ordered( $post->ID, 'post_tag' );
+if ( $terms && ! is_wp_error( $terms ) ) :
 ?>
+<ul>
+    <?php foreach ( $terms as $term ) : ?>
+        <li>
+            <a href="<?php echo get_term_link( $term->slug ); ?>">
+                <?php echo $term->name; ?>
+            </a>
+        </li>
+    <?php endforeach; ?>
+</ul>
+endif;
+?>
+```
 
-<h2>get_the_tag_list_ordered()</h2>
+### `get_the_tag_list_ordered()`
+
+```php
 <?php echo get_the_tag_list_ordered(); ?>
+```
 
-<h2>get_the_term_list_ordered()</h2>
+### `get_the_term_list_ordered()`
+
+```php
 <?php echo get_the_term_list_ordered( $post->ID, 'post_tag' ); ?>
+```
 
-<h2>the_tags_ordered()</h2>
+### `the_tags_ordered()`
+
+```php
 <?php the_tags_ordered(); ?>
+```
 
-<h2>the_terms_ordered()</h2>
+### `the_terms_ordered()`
+
+```php
 <?php the_terms_ordered( $post->ID, 'post_tag' ); ?>
 ```
 
 ## Notes for Developers
 
-* The sorted tags will be saved in `wp_postmeta` table with an array of tag id that has been serialized as custom field.
+* The ordered array of tags is serialized and stored in the `wp_postmeta` table.
 
   <table>
   <thead>
