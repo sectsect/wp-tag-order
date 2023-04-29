@@ -19,6 +19,6 @@
   "isModule": true,
   "env": {
     "mode": "usage",
-    "coreJs": "3.28.0"
+    "coreJs": "3.30.1"
   }
 }

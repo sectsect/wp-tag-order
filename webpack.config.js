@@ -2,7 +2,7 @@ const webpack = require('webpack');
 const path = require('path');
 const ESLintPlugin = require('eslint-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-const ForkTsCheckerNotifierWebpackPlugin = require('fork-ts-checker-notifier-webpack-plugin');
+// const ForkTsCheckerNotifierWebpackPlugin = require('fork-ts-checker-notifier-webpack-plugin');
 const { WebpackSweetEntry } = require('@sect/webpack-sweet-entry');
 const NotifierPlugin = require('@soda/friendly-errors-webpack-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
@@ -101,12 +101,12 @@ const getJSPlugins = env => {
   }
   if (isDev(env)) {
     plugins.push(new ForkTsCheckerWebpackPlugin());
-    plugins.push(
-      new ForkTsCheckerNotifierWebpackPlugin({
-        skipSuccessful: true,
-        title: 'TypeScript',
-      }),
-    );
+    // plugins.push(
+    //   new ForkTsCheckerNotifierWebpackPlugin({
+    //     skipSuccessful: true,
+    //     title: 'TypeScript',
+    //   }),
+    // );
     plugins.push(
       new BundleAnalyzerPlugin({
         // analyzerMode: 'static',
