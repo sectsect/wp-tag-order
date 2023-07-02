@@ -52,7 +52,7 @@ Go to `Settings` -> `WP Tag Order` page, and click the `Apply` button.
 
 ## Usage Example
 
-### `get_the_tags_ordered()`
+#### `get_the_tags_ordered()`
 
 ``` php
 <?php
@@ -72,7 +72,7 @@ endif;
 ?>
 ```
 
-### `get_the_terms_ordered()`
+#### `get_the_terms_ordered()`
 
 ``` php
 <?php
@@ -92,25 +92,25 @@ endif;
 ?>
 ```
 
-### `get_the_tag_list_ordered()`
+#### `get_the_tag_list_ordered()`
 
 ```php
 <?php echo get_the_tag_list_ordered(); ?>
 ```
 
-### `get_the_term_list_ordered()`
+#### `get_the_term_list_ordered()`
 
 ```php
 <?php echo get_the_term_list_ordered( $post->ID, 'post_tag' ); ?>
 ```
 
-### `the_tags_ordered()`
+#### `the_tags_ordered()`
 
 ```php
 <?php the_tags_ordered(); ?>
 ```
 
-### `the_terms_ordered()`
+#### `the_terms_ordered()`
 
 ```php
 <?php the_terms_ordered( $post->ID, 'post_tag' ); ?>
