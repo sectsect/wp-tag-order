@@ -78,7 +78,7 @@
     "prettier": "^2.8.8",
     "secretlint": "^7.0.0",
     "size-plugin": "^3.0.0",
-    "stylelint": "^15.9.0",
+    "stylelint": "^15.10.1",
     "stylelint-config-recess-order": "^4.2.0",
     "stylelint-config-standard": "^33.0.0",
     "stylelint-prettier": "^3.0.0",
