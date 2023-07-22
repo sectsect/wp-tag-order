@@ -10,7 +10,6 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const notifier = require('node-notifier');
 const SizePlugin = require('size-plugin');
 const StyleLintPlugin = require('stylelint-webpack-plugin');
-// const SVGSpritemapPlugin = require('svg-spritemap-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const RemoveEmptyScriptsPlugin = require('webpack-remove-empty-scripts');
@@ -44,54 +43,6 @@ const getJSPlugins = env => {
       lintDirtyModulesOnly: true,
     }),
   );
-  // plugins.push(
-  //   new SVGSpritemapPlugin(path.resolve(sourcePath, 'assets/images/svg/raw/**/*.svg'), {
-  //     output: {
-  //       filename: '../images/svg/symbol.svg',
-  //       svg: {
-  //         attributes: {
-  //           class: 'svg-icon-lib',
-  //         },
-  //       },
-  //       svgo: {
-  //         plugins: [
-  //           // {
-  //           //   name: 'addClassesToSVGElement',
-  //           //   params: {
-  //           //     classNames: ['svg-icon-lib'],
-  //           //   },
-  //           // },
-  //           {
-  //             name: 'removeTitle',
-  //             active: false,
-  //           },
-  //           // {
-  //           //   name: 'removeAttrs',
-  //           //   params: {
-  //           //     attrs: 'fill',
-  //           //   },
-  //           // },
-  //           {
-  //             name: 'convertStyleToAttrs',
-  //             active: true,
-  //           },
-  //           // {
-  //           //   name: 'removeStyleElement',
-  //           // },
-  //           {
-  //             name: 'inlineStyles',
-  //           },
-  //           {
-  //             name: 'cleanupEnableBackground',
-  //           },
-  //         ],
-  //       },
-  //     },
-  //     sprite: {
-  //       prefix: 'icon-',
-  //     },
-  //   }),
-  // );
   if (isProd(env)) {
     plugins.push(
       new SizePlugin({
