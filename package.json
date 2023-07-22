@@ -37,8 +37,6 @@
     "@spotify/prettier-config": "^15.0.0",
     "@spotify/tsconfig": "^15.0.0",
     "@swc/core": "^1.3.67",
-    "@types/is-url": "^1.2.30",
-    "@types/is-uuid": "^1.0.0",
     "@types/node": "^20.3.3",
     "@typescript-eslint/eslint-plugin": "^5.60.1",
     "@typescript-eslint/parser": "^5.60.1",
