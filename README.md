@@ -12,14 +12,13 @@
 
 ## Installation
 
-##### 1. Clone this Repo into your `wp-content/plugins` directory.
-```bash
-$ cd /path-to-your/wp-content/plugins/
-$ git clone git@github.com:sectsect/wp-tag-order.git
-```
-
-##### 2. Activate the plugin through the "Plugins" menu in WordPress.<br>
-That's it:ok_hand:
+1. Clone this Repo into your `wp-content/plugins` directory.
+  ```bash
+  $ cd /path-to-your/wp-content/plugins/
+  $ git clone git@github.com:sectsect/wp-tag-order.git
+  ```
+2. Activate the plugin through the `Plugins` menu in WordPress.
+3. Go to `Settings` -> `WP Tag Order` page, and select the taxonomies you want to enable.
 
 ## Features
 
@@ -32,7 +31,7 @@ That's it:ok_hand:
 * In the case of creating a new post, you need to save the post once to activate this feature.
 * To apply for the existing post, **"Add and Remove"** any tag once.  
 Or, if you want to batch apply to multiple posts,  
-Go to `Settings` -> `WP Tag Order` page, and click the `Apply` button.
+Go to `Settings` -> `WP Tag Order` page, and click the `Apply` button in `Advance Settings` section.
 * Tested on WordPress v4.9.
 
 ## Screencast

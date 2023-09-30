@@ -61,7 +61,7 @@ function wpto_meta_box_markup( $object, $metabox ) {
 function add_wpto_meta_box() {
 	$screens = wto_has_tag_posttype();
 	foreach ( $screens as $screen ) {
-		$taxonomies = get_object_taxonomies( $screen );
+		$taxonomies = wto_get_enabled_taxonomies();
 		if ( ! empty( $taxonomies ) ) {
 			foreach ( $taxonomies as $taxonomy ) {
 				if ( ! is_taxonomy_hierarchical( $taxonomy ) && 'post_format' !== $taxonomy ) {
@@ -145,7 +145,7 @@ function save_wpto_meta_box( $post_id, $post, $update ) {
 	$taxonomies = get_object_taxonomies( $post->post_type );
 	if ( ! empty( $taxonomies ) ) {
 		foreach ( $taxonomies as $taxonomy ) {
-			if ( ! is_taxonomy_hierarchical( $taxonomy ) ) {
+			if ( ! is_taxonomy_hierarchical( $taxonomy ) && wto_is_enabled_taxonomy( $taxonomy ) ) {
 				$meta_box_tags_value = '';
 				$fieldname           = 'wp-tag-order-' . $taxonomy;
 				if ( isset( $_POST[ $fieldname ] ) ) {
@@ -180,8 +180,9 @@ function load_wpto_admin_script( $hook ) {
 	$plugin_version = $plugin_data['Version'];
 	global $post;
 	if ( 'post-new.php' === $hook || 'post.php' === $hook ) {
-		$pt = wto_has_tag_posttype();
-		if ( in_array( $post->post_type, $pt, true ) ) {
+		$pt                  = wto_has_tag_posttype();
+		$taxonomies_attached = get_object_taxonomies( $post->post_type );
+		if ( in_array( $post->post_type, $pt, true ) && wto_has_enabled_taxonomy( $taxonomies_attached ) ) {
 			wp_enqueue_style( 'wto-style', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/css/admin.css?v=' . $plugin_version, array() );
 			wp_enqueue_script( 'wto-commons', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/js/commons.js?v=' . $plugin_version, array( 'jquery' ), null, true );
 			wp_enqueue_script( 'wto-script', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/js/post.js?v=' . $plugin_version, array( 'wto-commons' ), null, true );
@@ -404,11 +405,12 @@ function ajax_wto_options() {
 			endwhile;
 		endif;
 		wp_reset_postdata();
-		foreach ( $ids as $postid ) {
-			$taxonomies = get_object_taxonomies( $pt );
-			if ( ! empty( $taxonomies ) ) {
+
+		$taxonomies = get_object_taxonomies( $pt );
+		if ( ! empty( $taxonomies ) ) {
+			foreach ( $ids as $postid ) {
 				foreach ( $taxonomies as $taxonomy ) {
-					if ( ! is_taxonomy_hierarchical( $taxonomy ) && 'post_format' !== $taxonomy ) {
+					if ( ! is_taxonomy_hierarchical( $taxonomy ) && 'post_format' !== $taxonomy && wto_has_enabled_taxonomy( $taxonomies ) ) {
 						$terms = get_the_terms( $postid, $taxonomy );
 						$meta  = get_post_meta( $postid, 'wp-tag-order-' . $taxonomy, true );
 						if ( ! empty( $terms ) && ! $meta ) {
@@ -441,7 +443,7 @@ add_action( 'wp_ajax_nopriv_wto_options', 'ajax_wto_options' );
  * @return void "description".
  */
 function register_wpto_settings() {
-
+	register_setting( 'wpto-settings-group', 'wpto_enabled_taxonomies' );
 }
 
 /**
