@@ -10,7 +10,7 @@
 
 - WordPress 4.7+
 
-## Installation
+## Get Started
 
 1. Clone this Repo into your `wp-content/plugins` directory.
   ```bash
