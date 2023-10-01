@@ -1,5 +1,37 @@
 # Changelog
 
+## [Unreleased](https://github.com/sectsect/wp-tag-order/tree/HEAD)
+
+[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v2.0.0...HEAD)
+
+**Closed issues:**
+
+- Feature Request: Select Taxonomies to make sortable [\#14](https://github.com/sectsect/wp-tag-order/issues/14)
+
+## [v2.0.0](https://github.com/sectsect/wp-tag-order/tree/v2.0.0) (2023-10-01)
+
+[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v1.5.6...v2.0.0)
+
+## [v1.5.6](https://github.com/sectsect/wp-tag-order/tree/v1.5.6) (2023-07-02)
+
+[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v1.5.5...v1.5.6)
+
+## [v1.5.5](https://github.com/sectsect/wp-tag-order/tree/v1.5.5) (2023-04-29)
+
+[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v1.5.4...v1.5.5)
+
+## [v1.5.4](https://github.com/sectsect/wp-tag-order/tree/v1.5.4) (2023-03-20)
+
+[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v1.5.3...v1.5.4)
+
+## [v1.5.3](https://github.com/sectsect/wp-tag-order/tree/v1.5.3) (2023-02-17)
+
+[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v1.5.2...v1.5.3)
+
+**Merged pull requests:**
+
+- Bump qs from 6.5.2 to 6.5.3 [\#26](https://github.com/sectsect/wp-tag-order/pull/26) ([dependabot[bot]](https://github.com/apps/dependabot))
+
 ## [v1.5.2](https://github.com/sectsect/wp-tag-order/tree/v1.5.2) (2022-11-18)
 
 [Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v1.5.1...v1.5.2)
