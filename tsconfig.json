@@ -18,7 +18,9 @@
   "include": [
     "src/**/*",
     "webpack.config.js",
-    ".eslintrc.js"
+    ".eslintrc.js",
+    "prettier.config.js",
+    "postcss.config.js"
   ],
   "exclude": [
     "dist",

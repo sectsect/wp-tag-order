@@ -1,7 +1,12 @@
+/* eslint-disable import/order */
+/* eslint-disable @typescript-eslint/no-var-requires */
 const postcssImport = require('postcss-import');
+const postcssGlobalData = require('@csstools/postcss-global-data')({
+  files: ['src/assets/css/_base/settings.css'],
+});
+
 const postcssPresetEnv = require('postcss-preset-env')({
   stage: 1, // Default: stage: 2   @ https://cssdb.org/#staging-process
-  importFrom: 'src/assets/css/_base/settings.css',
   autoprefixer: {
     grid: 'autoplace',
   },
@@ -28,6 +33,7 @@ const postcssReporter = require('postcss-reporter')({
 module.exports = {
   plugins: [
     postcssImport,
+    postcssGlobalData,
     postcssPresetEnv,
     postcssSortMediaQueries,
     postcssCombineSelectors,

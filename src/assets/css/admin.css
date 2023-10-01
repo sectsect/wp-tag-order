@@ -1,7 +1,5 @@
 @charset "UTF-8";
 
-@import url('_base/settings.css');
-
 @keyframes spin {
   0% {
     transform: rotate(0deg);
@@ -17,7 +15,7 @@
 }
 
 .postbox.wpto_meta_box_tagsdiv {
-  & h2 {
+  h2 {
     position: relative;
 
     &::before {
@@ -48,7 +46,7 @@
 }
 
 .postbox.wpto_meta_box_panel {
-  & h2 {
+  h2 {
     position: relative;
 
     &::before {
@@ -77,14 +75,14 @@
     }
   }
 
-  & .inside {
-    & .inner {
+  .inside {
+    .inner {
       position: relative;
 
-      & ul {
+      ul {
         margin-bottom: 0;
 
-        & li {
+        li {
           position: relative;
           margin-bottom: 3px;
           cursor: move;
@@ -124,7 +122,7 @@
             }
           }
 
-          & input {
+          input {
             width: 100%;
             font-size: 11px;
             background: none;
@@ -138,9 +136,9 @@
 }
 
 .post-new-php {
-  & .postbox.wpto_meta_box_panel {
-    & .inside {
-      & .inner {
+  .postbox.wpto_meta_box_panel {
+    .inside {
+      .inner {
         &::before {
           position: absolute;
           top: 50%;
@@ -172,7 +170,7 @@
           opacity: 0.15;
         }
 
-        & ul {
+        ul {
           min-height: 25px;
           opacity: 0.18;
         }

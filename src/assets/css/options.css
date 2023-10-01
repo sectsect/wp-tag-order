@@ -1,5 +1,3 @@
 @charset "UTF-8";
 
-@import url('_base/settings.css');
-
 @import url('../../../node_modules/sweetalert2/dist/sweetalert2.min.css');
