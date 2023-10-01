@@ -5,7 +5,7 @@
       "syntax": "typescript",
       "tsx": false
     },
-    "target": "es2020",
+    // "target": "es2020",
     "loose": false,
     "minify": {
       "compress": false,
@@ -19,6 +19,7 @@
   "isModule": true,
   "env": {
     "mode": "usage",
-    "coreJs": "3.30.1"
+    "targets": "defaults and supports es6-module",
+    "coreJs": "3.32.2"
   }
 }
