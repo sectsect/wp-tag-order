@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WP Tag Order\n"
 "POT-Creation-Date: 2017-11-17 01:54+0900\n"
-"PO-Revision-Date: 2017-11-17 01:55+0900\n"
+"PO-Revision-Date: 2023-09-30 21:23+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_US\n"
@@ -29,6 +29,18 @@ msgstr ""
 msgid "Tag Order - "
 msgstr ""
 
+#: options/index.php:7
+msgid "General Settings"
+msgstr ""
+
+#: options/index.php:14
+msgid "Enable for these taxonomies"
+msgstr ""
+
+#: options/index.php:43
+msgid "Advance Settings"
+msgstr ""
+
 #: wp-tag-order.php:25
 msgid ""
 "Error: plugin \"WP Tag Order\" requires a newer version of PHP to be running."
@@ -52,15 +64,14 @@ msgstr ""
 
 #. Description of the plugin/theme
 msgid ""
-"WP Tag Order plugin will order tags, non-hierarchical custom-taxonomy terms "
-"in individual posts with simple Drag and Drop Sortable capability. And "
-"supplies some functions to output it."
+"📦 ↕︎ Order tags (Non-hierarchical custom taxonomies) within individual posts "
+"with simple Drag-and-Drop sortable feature."
 msgstr ""
 
 #. Author of the plugin/theme
-msgid "SECT INTERACTIVE AGENCY"
+msgid "sect"
 msgstr ""
 
 #. Author URI of the plugin/theme
-msgid "https://www.ilovesect.com/"
+msgid "https://github.com/sectsect"
 msgstr ""
