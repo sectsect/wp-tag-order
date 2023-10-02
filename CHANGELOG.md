@@ -1,8 +1,8 @@
 # Changelog
 
-## [Unreleased](https://github.com/sectsect/wp-tag-order/tree/HEAD)
+## [v2.1.0](https://github.com/sectsect/wp-tag-order/tree/v2.1.0) (2023-10-02)
 
-[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v2.0.0...HEAD)
+[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v2.0.0...v2.1.0)
 
 **Closed issues:**
 
