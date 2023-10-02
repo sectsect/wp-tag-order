@@ -21,7 +21,7 @@
     &::before {
       position: absolute;
       top: 50%;
-      right: 35px;
+      right: 12px;
       left: 50%;
       left: auto;
       z-index: 100;
@@ -36,6 +36,10 @@
       opacity: 0;
       transition: all 0.3s linear 0.3s;
       animation: spin 0.7s linear infinite;
+
+      .wpto_meta_box_no_reorder_controller & {
+        right: 35px;
+      }
     }
 
     &.ready::before {
@@ -52,7 +56,7 @@
     &::before {
       position: absolute;
       top: 50%;
-      right: 35px;
+      right: 12px;
       left: 50%;
       left: auto;
       z-index: 100;
@@ -67,6 +71,10 @@
       opacity: 0;
       transition: all 0.3s linear 0.3s;
       animation: spin 0.7s linear infinite;
+
+      .wpto_meta_box_no_reorder_controller & {
+        right: 35px;
+      }
     }
 
     &.ready::before {

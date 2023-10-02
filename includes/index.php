@@ -97,6 +97,10 @@ add_action( 'add_meta_boxes', 'add_wpto_meta_box' );
 function add_metabox_classes_tagsdiv( $classes ) {
 	$classes[] = 'wpto_meta_box';
 	$classes[] = 'wpto_meta_box_tagsdiv';
+	// add support for controller in metaboxes on WordPress 5.5 or higher.
+	if ( ! wto_has_reorder_controller_in_metaboxes() ) {
+		$classes[] = 'wpto_meta_box_no_reorder_controller';
+	}
 
 	return $classes;
 }
@@ -111,6 +115,10 @@ function add_metabox_classes_tagsdiv( $classes ) {
 function add_metabox_classes_panel( $classes ) {
 	$classes[] = 'wpto_meta_box';
 	$classes[] = 'wpto_meta_box_panel';
+	// add support for controller in metaboxes on WordPress 5.5 or higher.
+	if ( ! wto_has_reorder_controller_in_metaboxes() ) {
+		$classes[] = 'wpto_meta_box_no_reorder_controller';
+	}
 
 	return $classes;
 }

@@ -211,3 +211,13 @@ function wto_replace_script_tag( $tag ) {
 	return $tag;
 }
 add_filter( 'script_loader_tag', 'wto_replace_script_tag', 10, 1 );
+
+/**
+ * Checks if the WordPress version is 5.5 or higher.
+ *
+ * @see https://make.wordpress.org/core/2020/08/06/allow-post-boxes-and-metaboxes-to-be-reordered-by-using-the-keyboard/
+ * @return boolean result of the comparison between the WordPress version and '5.5'.
+ */
+function wto_has_reorder_controller_in_metaboxes() {
+	return version_compare( get_bloginfo( 'version' ), '5.5', '>=' );
+}
