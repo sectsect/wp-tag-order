@@ -7,7 +7,7 @@
  * Author URI:      https://github.com/sectsect
  * Text Domain:     wp-tag-order
  * Domain Path:     /languages
- * Version:         2.1.0
+ * Version:         2.1.1
  *
  * @package         WP_Tag_Order
  */
