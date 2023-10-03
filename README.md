@@ -65,8 +65,7 @@ if ( $terms && ! is_wp_error( $terms ) ) :
         </li>
     <?php endforeach; ?>
 </ul>
-endif;
-?>
+<?php endif; ?>
 ```
 
 #### `get_the_terms_ordered()`
@@ -85,8 +84,7 @@ if ( $terms && ! is_wp_error( $terms ) ) :
         </li>
     <?php endforeach; ?>
 </ul>
-endif;
-?>
+<?php endif; ?>
 ```
 
 #### `get_the_tag_list_ordered()`
