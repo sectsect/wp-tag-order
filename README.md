@@ -4,11 +4,9 @@
 
 ### Order tags independently in each posts (not site-globally) on WordPress with simple Drag-and-Drop ↕︎ sortable feature.
 
+<img src="https://github-sect.s3-ap-northeast-1.amazonaws.com/wp-tag-order/wp-tag-order.gif" width="314" height="auto">
+
 #### :warning: This plugin is NOT compatible with Gutenberg on WordPress 5.x. Consider using [Classic Editor Plugin](https://wordpress.org/plugins/classic-editor/).
-
-## Requirements
-
-- WordPress 4.7+
 
 ## Get Started
 
@@ -32,11 +30,11 @@
 * To apply for the existing post, **"Add and Remove"** any tag once.  
 Or, if you want to batch apply to multiple posts,  
 Go to `Settings` -> `WP Tag Order` page, and click the `Apply` button in `Advance Settings` section.
-* Tested on WordPress v4.9.
+* Tested on WordPress v6.3.1.
 
-## Screencast
+## Requirements
 
- <img src="https://github-sect.s3-ap-northeast-1.amazonaws.com/wp-tag-order/wp-tag-order.gif" width="314" height="auto">
+- WordPress 4.7+
 
 ## APIs
 
