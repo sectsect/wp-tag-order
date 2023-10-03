@@ -20,9 +20,6 @@
 					$enabled_taxonomies = wto_get_enabled_taxonomies();
 
 					foreach ( $taxonomies as $taxonomy ) :
-						if ( in_array( $taxonomy->name, $exclude, true ) ) {
-							continue;
-						}
 						$is_checked = in_array( $taxonomy->name, $enabled_taxonomies, true );
 						?>
 					<div style="margin-top: 5px;">
