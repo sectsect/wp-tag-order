@@ -20,7 +20,7 @@
 					$enabled_taxonomies = wto_get_enabled_taxonomies();
 
 					foreach ( $taxonomies as $taxonomy ) :
-						$is_checked = in_array( $taxonomy->name, $enabled_taxonomies, true );
+						$is_checked = in_array( $taxonomy->name, (array) $enabled_taxonomies, true );
 						?>
 					<div style="margin-top: 5px;">
 						<input type="checkbox" id="<?php echo $taxonomy->name; ?>" name="wpto_enabled_taxonomies[]" value="<?php echo $taxonomy->name; ?>" <?php if ( $is_checked ) : ?>checked<?php endif; ?> />
