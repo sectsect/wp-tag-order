@@ -1,0 +1,40 @@
+{
+  "editor.tabSize": 2,
+  "editor.detectIndentation": false,
+  "search.exclude": {
+    "package-lock.json": true
+  },
+  "editor.formatOnSave": false,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "eslint.format.enable": true,
+  "editor.codeActionsOnSave": {
+    "source.addMissingImports": true,
+    // "source.fixAll.eslint": true,
+    "source.fixAll": true
+  },
+  "[javascript][javascriptreact][typescript][typescriptreact]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "[json][jsonc]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  // "[css][scss]": {
+  //   "editor.formatOnSave": false,
+  //   "editor.defaultFormatter": "esbenp.prettier-vscode"
+  // },
+  "css.validate": false,
+  "scss.validate": false,
+  // Add support for nested project structure.
+  "eslint.nodePath": "nextjs/node_modules",
+  "eslint.workingDirectories": ["./nextjs", "./static"],
+  "vitest.enable": true,
+  "phpsab.executablePathCS": "./vendor/squizlabs/php_codesniffer/bin/phpcs",
+  "phpsab.executablePathCBF": "./vendor/squizlabs/php_codesniffer/bin/phpcbf",
+  "phpsab.autoRulesetSearch": true,
+  // "phpsab.standard": "WordPress-Core",
+  "phpsab.standard": "./phpcs.xml",
+  "phpsab.snifferArguments": [
+    "--ignore=*/wp-admin/*,*/wp-includes/*,,*/composer/*"
+  ]
+}

@@ -8,11 +8,17 @@
   },
   "require-dev":{
     "yoast/phpunit-polyfills" : "1.0.3",
-    "squizlabs/php_codesniffer": "3.*"
+    "squizlabs/php_codesniffer": "^3.7",
+    "wp-coding-standards/wpcs": "^3.0"
   },
   "license": "GPL-3.0+",
   "authors": [{
     "name": "SECT WEB INTERACTIVE",
     "homepage": "https://www.ilovesect.com/"
-  }]
+  }],
+  "config": {
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true
+    }
+  }
 }
