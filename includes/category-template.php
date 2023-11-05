@@ -2,7 +2,6 @@
 /**
  * Template for catogory.
  *
- * @link       https://www.ilovesect.com/
  * @since      1.0.0
  *
  * @package    WP_Tag_Order

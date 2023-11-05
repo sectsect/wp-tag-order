@@ -2,7 +2,6 @@
 /**
  * For Options Page.
  *
- * @link       https://www.ilovesect.com/
  * @since      1.0.0
  *
  * @package    WP_Tag_Order
@@ -21,19 +20,19 @@ global $wpdb;
 /**
  * Add meta-box. @ https://www.sitepoint.com/adding-custom-meta-boxes-to-wordpress/
  *
- * @param  array $object "description".
+ * @param  array $obj "description".
  * @param  array $metabox "description".
  *
  * @return void "description".
  */
-function wpto_meta_box_markup( $object, $metabox ) {
+function wpto_meta_box_markup( $obj, $metabox ) {
 	wp_nonce_field( basename( __FILE__ ), 'wpto-meta-box-nonce' );
 	?>
 <div class="inner">
 	<ul>
 	<?php
 	$taxonomy   = $metabox['args']['taxonomy'];
-	$tags_value = get_post_meta( $object->ID, 'wp-tag-order-' . $taxonomy, true );
+	$tags_value = get_post_meta( $obj->ID, 'wp-tag-order-' . $taxonomy, true );
 	$tags       = array();
 	$tags       = unserialize( $tags_value );
 	if ( ! wto_is_array_empty( $tags ) ) :
@@ -172,7 +171,7 @@ add_action( 'save_post', 'save_wpto_meta_box', 10, 3 );
  * @return array "description".
  */
 function wpto_get_plugin_data() {
-	$plugin_data = get_plugin_data( plugin_dir_path( dirname( __FILE__ ) ) . 'wp-tag-order.php' );
+	$plugin_data = get_plugin_data( plugin_dir_path( __DIR__ ) . 'wp-tag-order.php' );
 	return $plugin_data;
 }
 
@@ -191,9 +190,9 @@ function load_wpto_admin_script( $hook ) {
 		$pt                  = wto_has_tag_posttype();
 		$taxonomies_attached = get_object_taxonomies( $post->post_type );
 		if ( in_array( $post->post_type, $pt, true ) && wto_has_enabled_taxonomy( $taxonomies_attached ) ) {
-			wp_enqueue_style( 'wto-style', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/css/admin.css?v=' . $plugin_version, array() );
-			wp_enqueue_script( 'wto-commons', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/js/commons.js?v=' . $plugin_version, array( 'jquery' ), null, true );
-			wp_enqueue_script( 'wto-script', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/js/post.js?v=' . $plugin_version, array( 'wto-commons' ), null, true );
+			wp_enqueue_style( 'wto-style', plugin_dir_url( __DIR__ ) . 'assets/css/admin.css?v=' . $plugin_version, array() );
+			wp_enqueue_script( 'wto-commons', plugin_dir_url( __DIR__ ) . 'assets/js/commons.js?v=' . $plugin_version, array( 'jquery' ), null, true );
+			wp_enqueue_script( 'wto-script', plugin_dir_url( __DIR__ ) . 'assets/js/post.js?v=' . $plugin_version, array( 'wto-commons' ), null, true );
 			$post_id       = ( isset( $_GET['post'] ) ) ? wp_unslash( $_GET['post'] ) : null;
 			$action_sync   = 'wto_sync_tags';
 			$action_update = 'wto_update_tags';
@@ -273,7 +272,7 @@ function ajax_wto_sync_tags() {
 			$return = update_post_meta( sanitize_text_field( wp_unslash( $id ) ), 'wp-tag-order-' . sanitize_text_field( wp_unslash( $taxonomy ) ), $meta_box_tags_value );
 
 			// Update the DB in real time (wp_term_relationships) !
-			$newtagsids_int    = array_map( 'intval', $newtagsids ); // Cast string to integer	@ Line: 23 !
+			$newtagsids_int    = array_map( 'intval', $newtagsids ); // Cast string to integer  @ Line: 23 !
 			$term_taxonomy_ids = wp_set_object_terms( sanitize_text_field( wp_unslash( $id ) ), $newtagsids_int, sanitize_text_field( wp_unslash( $taxonomy ) ) );
 			if ( is_wp_error( $term_taxonomy_ids ) ) {
 				exit;
@@ -354,7 +353,7 @@ add_action( 'admin_menu', 'wpto_menu' );
 function wpto_admin_styles() {
 	$plugin_data    = wpto_get_plugin_data();
 	$plugin_version = $plugin_data['Version'];
-	wp_enqueue_style( 'sweetalert2', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/css/options.css?v=' . $plugin_version, array() );
+	wp_enqueue_style( 'sweetalert2', plugin_dir_url( __DIR__ ) . 'assets/css/options.css?v=' . $plugin_version, array() );
 }
 
 /**
@@ -365,8 +364,8 @@ function wpto_admin_styles() {
 function wpto_admin_scripts() {
 	$plugin_data    = wpto_get_plugin_data();
 	$plugin_version = $plugin_data['Version'];
-	wp_enqueue_script( 'wto-commons', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/js/commons.js?v=' . $plugin_version, array( 'jquery' ), null, true );
-	wp_enqueue_script( 'wto-options-script', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/js/options.js?v=' . $plugin_version, array( 'wto-commons' ), null, true );
+	wp_enqueue_script( 'wto-commons', plugin_dir_url( __DIR__ ) . 'assets/js/commons.js?v=' . $plugin_version, array( 'jquery' ), null, true );
+	wp_enqueue_script( 'wto-options-script', plugin_dir_url( __DIR__ ) . 'assets/js/options.js?v=' . $plugin_version, array( 'wto-commons' ), null, true );
 	$action = 'wto_options';
 	wp_localize_script(
 		'wto-options-script',
@@ -429,7 +428,7 @@ function ajax_wto_options() {
 							$meta_box_tags_value = serialize( $term_ids );
 							$return              = update_post_meta( $postid, 'wp-tag-order-' . $taxonomy, $meta_box_tags_value );
 							if ( $return ) {
-								$count++;
+								++$count;
 							}
 						}
 					}
@@ -460,5 +459,5 @@ function register_wpto_settings() {
  * @return void "description".
  */
 function wpto_options_page() {
-	require_once plugin_dir_path( dirname( __FILE__ ) ) . 'options/index.php';
+	require_once plugin_dir_path( __DIR__ ) . 'options/index.php';
 }

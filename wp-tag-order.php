@@ -48,7 +48,7 @@ function wptagorder_phpversioncheck() {
  * @return void "description".
  */
 function wptagorder_load_textdomain() {
-	load_plugin_textdomain( 'wp-tag-order', false, plugin_basename( dirname( __FILE__ ) ) . '/languages' );
+	load_plugin_textdomain( 'wp-tag-order', false, plugin_basename( __DIR__ ) . '/languages' );
 }
 add_action( 'plugins_loaded', 'wptagorder_load_textdomain' );
 

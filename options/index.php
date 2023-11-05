@@ -1,3 +1,21 @@
+<?php
+/**
+ * General functions.
+ *
+ * @since      1.0.0
+ *
+ * @package    WP_Tag_Order
+ * @subpackage WP_Tag_Order/includes
+ */
+
+/**
+ * Template for catogory.
+ *
+ * @package    WP_Tag_Order
+ * @subpackage WP_Tag_Order/includes
+ */
+?>
+
 <div class="wrap">
 	<h1>WP Tag Order</h1>
 	<div id="setting-apply-settings_updated" class="updated settings-error notice is-dismissible" style="display: none;"></div>
