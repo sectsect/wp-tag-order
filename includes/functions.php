@@ -2,7 +2,6 @@
 /**
  * General functions.
  *
- * @link       https://www.ilovesect.com/
  * @since      1.0.0
  *
  * @package    WP_Tag_Order
@@ -19,13 +18,13 @@
 /**
  * Detect empty array.
  *
- * @param  array $array "description".
+ * @param  array $arr "description".
  *
  * @return boolean "description".
  */
-function wto_is_array_empty( $array ) {
-	$array = array_filter( (array) $array );
-	if ( empty( $array ) ) {
+function wto_is_array_empty( $arr ) {
+	$array = array_filter( (array) $arr );
+	if ( empty( $arr ) ) {
 		return true;
 	} else {
 		return false;
@@ -66,8 +65,8 @@ function wto_get_non_hierarchical_taxonomies() {
 	// Drop post_format taxonomy from the array.
 	$taxonomies_builtin = array_filter(
 		$taxonomies_builtin,
-		function( $taxonomies_builtin ) {
-			return $taxonomies_builtin->name !== 'post_format';
+		function ( $taxonomies_builtin ) {
+			return 'post_format' !== $taxonomies_builtin->name;
 		}
 	);
 
@@ -97,7 +96,7 @@ function wto_get_enabled_taxonomies() {
 /**
  * Checks if a given taxonomy is enabled taxonomy or not.
  *
- * @param taxonomy The parameter "taxonomy" is a string that represents the name of a taxonomy.
+ * @param string $taxonomy The parameter "taxonomy" is a string that represents the name of a taxonomy.
  *
  * @return boolean boolean value. It returns true if the given taxonomy is enabled, and false otherwise.
  */
@@ -110,10 +109,10 @@ function wto_is_enabled_taxonomy( $taxonomy ) {
 }
 
 /**
- * checks if any of the elements in the "needles" array are present in the "haystack" array.
+ * Checks if any of the elements in the "needles" array are present in the "haystack" array.
  *
- * @param needles An array of values that we want to check if they exist in the haystack array.
- * @param haystack The haystack parameter is an array in which we want to search for the needles.
+ * @param array $needles An array of values that we want to check if they exist in the haystack array.
+ * @param array $haystack The haystack parameter is an array in which we want to search for the needles.
  *
  * @see https://stackoverflow.com/a/11040612/4542456
  *
@@ -125,9 +124,9 @@ function wto_in_array_any( $needles, $haystack ) {
 }
 
 /**
- * Cchecks if any of the given taxonomies are enabled.
+ * Checks if any of the given taxonomies are enabled.
  *
- * @param taxonomies An array of taxonomy names.
+ * @param array $taxonomies An array of taxonomy names.
  *
  * @return array result of the wto_in_array_any() function, which checks if any of the taxonomies in the
  *  array are present in the  array.
@@ -137,6 +136,15 @@ function wto_has_enabled_taxonomy( $taxonomies ) {
 	return wto_in_array_any( $taxonomies_enabled, $taxonomies );
 }
 
+/**
+ * Returns an array of post types associated with a given taxonomy.
+ *
+ * @param string $tax The "tax" parameter is the taxonomy for which you want to retrieve the associated post
+ * types. By default, it is set to "category", but you can pass any valid taxonomy slug as the
+ * parameter value.
+ *
+ * @return array array of post types associated with a given taxonomy.
+ */
 function wto_get_post_types_by_taxonomy( $tax = 'category' ) {
 	global $wp_taxonomies;
 	return ( isset( $wp_taxonomies[ $tax ] ) ) ? $wp_taxonomies[ $tax ]->object_type : array();
@@ -178,10 +186,15 @@ function wto_has_tag_posttype() {
 /**
  * Using an array as needles in strpos for replace_script_tag().
  *
- * @param  mixed $haystack
- * @param  mixed $needle
- * @param  mixed $offset
- * @return false
+ * @param string       $haystack The "haystack" parameter is the string in which you want to search for the needle(s).
+ * @param string|array $needle The "needle" parameter is the string or array of strings that you want to search for
+ * within the "haystack" string.
+ * @param int          $offset The offset parameter is used to specify the starting position for the search within
+ * the haystack string. By default, it is set to 0, which means the search will start from the
+ * beginning of the haystack string.
+ *
+ * @return boolean boolean value. It returns true if any of the needles are found in the haystack, and false
+ * otherwise.
  */
 function wto_strposa( $haystack, $needle, $offset = 0 ) {
 	if ( ! is_array( $needle ) ) {
@@ -189,7 +202,7 @@ function wto_strposa( $haystack, $needle, $offset = 0 ) {
 	}
 	foreach ( $needle as $query ) {
 		if ( strpos( $haystack, $query, $offset ) !== false ) {
-			return true; // stop on first true result
+			return true; // stop on first true result.
 		}
 	}
 	return false;
@@ -198,8 +211,9 @@ function wto_strposa( $haystack, $needle, $offset = 0 ) {
 /**
  * Add `type="module"` to <script> on wp_enqueue_script().
  *
- * @param  mixed $tag
- * @return $tag
+ * @param string $tag The "tag" parameter is a string that represents an HTML script tag.
+ *
+ * @return string The modified `` value is being returned.
  */
 function wto_replace_script_tag( $tag ) {
 	$module = array( 'wp-tag-order/assets/js/' );
