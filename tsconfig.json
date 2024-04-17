@@ -13,7 +13,6 @@
       // "*": ["*"],
       "*": ["node_modules/*", "src/@types/*"]
     }
-
   },
   "include": [
     "src/**/*",
@@ -22,9 +21,5 @@
     "prettier.config.js",
     "postcss.config.js"
   ],
-  "exclude": [
-    "dist",
-    "node_modules",
-    "**/*.spec.ts"
-  ]
+  "exclude": ["dist", "node_modules", "**/*.spec.ts"]
 }

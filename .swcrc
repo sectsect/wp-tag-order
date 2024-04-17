@@ -20,6 +20,6 @@
   "env": {
     "mode": "usage",
     "targets": "defaults and supports es6-module",
-    "coreJs": "3.32.2"
+    "coreJs": "3.37.0"
   }
 }

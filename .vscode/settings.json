@@ -8,9 +8,8 @@
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "eslint.format.enable": true,
   "editor.codeActionsOnSave": {
-    "source.addMissingImports": true,
-    // "source.fixAll.eslint": true,
-    "source.fixAll": true
+    "source.addMissingImports": "explicit",
+    "source.fixAll": "explicit"
   },
   "[javascript][javascriptreact][typescript][typescriptreact]": {
     "editor.defaultFormatter": "dbaeumer.vscode-eslint"

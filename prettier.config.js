@@ -1,5 +1,21 @@
 module.exports = {
-  // eslint-disable-next-line global-require
-  ...require('@spotify/prettier-config'),
-  // your overrides here
+  // eslint-disable-next-line global-require, import/no-extraneous-dependencies
+  // ...require('@spotify/prettier-config'),
+  // printWidth: 80,
+  // tabWidth: 2,
+  // useTabs: false,
+  // semi: true,
+  singleQuote: true,
+  // jsxSingleQuote: false,
+  trailingComma: 'all',
+  // bracketSpacing: true,
+  // jsxBracketSameLine: false,
+  arrowParens: 'avoid',
+  // rangeStart: 0,
+  // rangeEnd: Infinity,
+  // requirePragma: false,
+  // insertPragma: false,
+  // proseWrap: 'preserve',
+  // htmlWhitespaceSensitivity: 'css',
+  // endOfLine: 'auto',
 };
