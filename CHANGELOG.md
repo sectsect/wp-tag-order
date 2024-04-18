@@ -1,5 +1,9 @@
 # Changelog
 
+## [v2.2.2](https://github.com/sectsect/wp-tag-order/tree/v2.2.2) (2024-04-18)
+
+[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v2.2.1...v2.2.2)
+
 ## [v2.2.1](https://github.com/sectsect/wp-tag-order/tree/v2.2.1) (2023-11-11)
 
 [Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v2.2.0...v2.2.1)
