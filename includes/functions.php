@@ -44,9 +44,12 @@ function wto_get_non_hierarchical_taxonomies() {
 		'hierarchical' => false,
 	);
 	$taxonomies_builtin = get_taxonomies( $args, 'objects', 'and' );
+	// Drop post_format taxonomy from the array.
 	$taxonomies_builtin = array_filter(
 		$taxonomies_builtin,
-		fn( $taxonomy ) => 'post_format' !== $taxonomy->name
+		function ( $taxonomies_builtin ) {
+			return 'post_format' !== $taxonomies_builtin->name;
+		}
 	);
 
 	$args              = array(
