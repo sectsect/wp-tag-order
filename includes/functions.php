@@ -126,7 +126,6 @@ function wto_has_tag_posttype() {
 		foreach ( $taxonomies as $taxonomy ) {
 			if ( ! is_taxonomy_hierarchical( $taxonomy ) ) {
 				$hastagposttypes[] = $posttype;
-				break;
 			}
 		}
 	}
