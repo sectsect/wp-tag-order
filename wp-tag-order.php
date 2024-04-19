@@ -15,23 +15,23 @@
 $wptagorder_minimalrequiredphpversion = '5.3';
 
 /**
- * Check the PHP version and give a useful error message if the user's version is less than the required version.
+ * Displays an admin notice if the PHP version is less than the required version.
  *
- * @return void "description".
+ * @return void
  */
 function wptagorder_noticephpversionwrong() {
 	global $wptagorder_minimalrequiredphpversion;
 	echo '<div class="updated fade">' .
 	__( 'Error: plugin "WP Tag Order" requires a newer version of PHP to be running.', 'wp_instagram_json' ) .
-			'<br/>' . __( 'Minimal version of PHP required: ', 'wp-tag-order' ) . '<strong>' . $wptagorder_minimalrequiredphpversion . '</strong>' .
-			'<br/>' . __( 'Your server\'s PHP version: ', 'wp-tag-order' ) . '<strong>' . phpversion() . '</strong>' .
-		'</div>';
+		'<br/>' . __( 'Minimal version of PHP required: ', 'wp-tag-order' ) . '<strong>' . $wptagorder_minimalrequiredphpversion . '</strong>' .
+		'<br/>' . __( 'Your server\'s PHP version: ', 'wp-tag-order' ) . '<strong>' . phpversion() . '</strong>' .
+	'</div>';
 }
 
 /**
- * Check the PHP version and give a useful error message if the user's version is less than the required version.
+ * Checks if the PHP version meets the minimum required version.
  *
- * @return boolean "description".
+ * @return bool True if the PHP version is sufficient, false otherwise.
  */
 function wptagorder_phpversioncheck() {
 	global $wptagorder_minimalrequiredphpversion;
@@ -43,9 +43,9 @@ function wptagorder_phpversioncheck() {
 }
 
 /**
- * Load the textdomain.
+ * Loads the plugin's text domain for localization.
  *
- * @return void "description".
+ * @return void
  */
 function wptagorder_load_textdomain() {
 	load_plugin_textdomain( 'wp-tag-order', false, plugin_basename( __DIR__ ) . '/languages' );
@@ -53,13 +53,14 @@ function wptagorder_load_textdomain() {
 add_action( 'plugins_loaded', 'wptagorder_load_textdomain' );
 
 /**
- * Add my meta data to row.
+ * Adds custom meta data to the plugin's row in the plugins list table.
  *
- * @param  array  $plugin_meta "description".
- * @param  string $plugin_file "description".
- * @param  string $plugin_data "description".
- * @param  string $status      "description".
- * @return statement           "description".
+ * @param array  $plugin_meta An array of the plugin's metadata.
+ * @param string $plugin_file Path to the plugin file relative to the plugins directory.
+ * @param array  $plugin_data An array of plugin data.
+ * @param string $status      Status of the plugin.
+ *
+ * @return array The modified plugin metadata array.
  */
 function my_plugin_row_meta( $plugin_meta, $plugin_file, $plugin_data, $status ) {
 	if ( plugin_basename( __FILE__ ) === $plugin_file ) {

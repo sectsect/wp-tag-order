@@ -1,27 +1,20 @@
 <?php
 /**
- * Template for catogory.
+ * Template for category.
  *
- * @since      1.0.0
+ * @since 1.0.0
  *
- * @package    WP_Tag_Order
+ * @package WP_Tag_Order
  * @subpackage WP_Tag_Order/includes
  */
 
 /**
- * Template for catogory.
+ * Retrieves the ordered terms for a given post and taxonomy.
  *
- * @package    WP_Tag_Order
- * @subpackage WP_Tag_Order/includes
- */
-
-/**
- * Get the ordered terms.
+ * @param int    $post_id  The ID of the post.
+ * @param string $taxonomy The taxonomy name.
  *
- * @param string $post_id "description".
- * @param string $taxonomy "description".
- *
- * @return statement "description".
+ * @return array|false An array of term objects on success, false if no terms are found.
  */
 function get_the_terms_ordered( $post_id, $taxonomy ) {
 	global $post;
@@ -57,23 +50,24 @@ function get_the_terms_ordered( $post_id, $taxonomy ) {
 }
 
 /**
- * Get the ordered tags.
+ * Retrieves the ordered tags for a given post.
  *
- * @param string $post_id "description".
+ * @param int $post_id The ID of the post.
  *
- * @return array "description".
+ * @return array|false An array of tag objects on success, false if no tags are found.
  */
 function get_the_tags_ordered( $post_id = '' ) {
 	return get_the_terms_ordered( $post_id, 'post_tag' );
 }
 
 /**
- * Retrieve the tags for a post formatted as a string.
+ * Retrieves the tags for a post formatted as a string.
  *
- * @param string $before Optional. Before tags.
- * @param string $sep Optional. Between tags.
- * @param string $after Optional. After tags.
- * @param int    $id Optional. Post ID. Defaults to the current post.
+ * @param string $before Optional. String to use before the tags.
+ * @param string $sep    Optional. String to use between the tags.
+ * @param string $after  Optional. String to use after the tags.
+ * @param int    $id     Optional. The ID of the post. Defaults to the current post.
+ *
  * @return string|false|WP_Error A list of tags on success, false if there are no terms, WP_Error on failure.
  */
 function get_the_tag_list_ordered( $before = '', $sep = '', $after = '', $id = 0 ) {
@@ -93,11 +87,13 @@ function get_the_tag_list_ordered( $before = '', $sep = '', $after = '', $id = 0
 }
 
 /**
- * Retrieve the tags for a post.
+ * Displays the tags for a post.
  *
- * @param string $before Optional. Before list.
- * @param string $sep Optional. Separate items using this.
- * @param string $after Optional. After list.
+ * @param string $before Optional. String to use before the tags.
+ * @param string $sep    Optional. String to use between the tags.
+ * @param string $after  Optional. String to use after the tags.
+ *
+ * @return void
  */
 function the_tags_ordered( $before = null, $sep = ', ', $after = '' ) {
 	if ( null === $before ) {
@@ -107,13 +103,14 @@ function the_tags_ordered( $before = null, $sep = ', ', $after = '' ) {
 }
 
 /**
- * Retrieve a post's terms as a list with specified format.
+ * Retrieves a post's terms as a list with specified format.
  *
- * @param int    $id Post ID.
- * @param string $taxonomy Taxonomy name.
- * @param string $before Optional. Before list.
- * @param string $sep Optional. Separate items using this.
- * @param string $after Optional. After list.
+ * @param int    $id       The ID of the post.
+ * @param string $taxonomy The taxonomy name.
+ * @param string $before   Optional. String to use before the term list.
+ * @param string $sep      Optional. String to use between the terms.
+ * @param string $after    Optional. String to use after the term list.
+ *
  * @return string|false|WP_Error A list of terms on success, false if there are no terms, WP_Error on failure.
  */
 function get_the_term_list_ordered( $id, $taxonomy, $before = '', $sep = '', $after = '' ) {
@@ -153,14 +150,15 @@ function get_the_term_list_ordered( $id, $taxonomy, $before = '', $sep = '', $af
 }
 
 /**
- * Display the terms in a list.
+ * Displays the terms for a given post and taxonomy.
  *
- * @param int    $id Post ID.
- * @param string $taxonomy Taxonomy name.
- * @param string $before Optional. Before list.
- * @param string $sep Optional. Separate items using this.
- * @param string $after Optional. After list.
- * @return false|void False on WordPress error.
+ * @param int    $id       The ID of the post.
+ * @param string $taxonomy The taxonomy name.
+ * @param string $before   Optional. String to use before the term list.
+ * @param string $sep      Optional. String to use between the terms.
+ * @param string $after    Optional. String to use after the term list.
+ *
+ * @return void|false
  */
 function the_terms_ordered( $id, $taxonomy, $before = '', $sep = ', ', $after = '' ) {
 	$term_list = get_the_term_list_ordered( $id, $taxonomy, $before, $sep, $after );

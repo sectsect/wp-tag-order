@@ -1,19 +1,13 @@
 <?php
 /**
- * General functions.
+ * Renders the template for the category settings page.
  *
- * @since      1.0.0
+ * @since 1.0.0
  *
- * @package    WP_Tag_Order
+ * @package WP_Tag_Order
  * @subpackage WP_Tag_Order/includes
  */
 
-/**
- * Template for catogory.
- *
- * @package    WP_Tag_Order
- * @subpackage WP_Tag_Order/includes
- */
 ?>
 
 <div class="wrap">

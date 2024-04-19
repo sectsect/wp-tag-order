@@ -2,28 +2,28 @@
 /**
  * For Options Page.
  *
- * @since      1.0.0
+ * @since 1.0.0
  *
- * @package    WP_Tag_Order
+ * @package WP_Tag_Order
  * @subpackage WP_Tag_Order/includes
  */
 
 /**
- * Template for catogory.
+ * Template for category.
  *
- * @package    WP_Tag_Order
+ * @package WP_Tag_Order
  * @subpackage WP_Tag_Order/includes
  */
-
 global $wpdb;
 
 /**
- * Add meta-box. @ https://www.sitepoint.com/adding-custom-meta-boxes-to-wordpress/
+ * Adds a meta box for tag ordering.
+ * @ https://www.sitepoint.com/adding-custom-meta-boxes-to-wordpress/
  *
- * @param  array $obj "description".
- * @param  array $metabox "description".
+ * @param WP_Post $obj     The post object.
+ * @param array   $metabox The meta box arguments.
  *
- * @return void "description".
+ * @return void
  */
 function wpto_meta_box_markup( $obj, $metabox ) {
 	wp_nonce_field( basename( __FILE__ ), 'wpto-meta-box-nonce' );
@@ -53,9 +53,10 @@ function wpto_meta_box_markup( $obj, $metabox ) {
 }
 
 /**
- * Add meta-box. @ https://www.sitepoint.com/adding-custom-meta-boxes-to-wordpress/
+ * Adds meta boxes for tag ordering to post edit screens.
+ * @ https://www.sitepoint.com/adding-custom-meta-boxes-to-wordpress/
  *
- * @return void "description".
+ * @return void
  */
 function add_wpto_meta_box() {
 	$screens = wto_has_tag_posttype();
@@ -87,11 +88,11 @@ function add_wpto_meta_box() {
 add_action( 'add_meta_boxes', 'add_wpto_meta_box' );
 
 /**
- * Add classes to meta-box.
+ * Adds CSS classes to the tags meta box.
  *
- * @param array $classes "description".
+ * @param array $classes The existing CSS classes.
  *
- * @return array "description".
+ * @return array The modified CSS classes.
  */
 function add_metabox_classes_tagsdiv( $classes ) {
 	$classes[] = 'wpto_meta_box';
@@ -105,11 +106,11 @@ function add_metabox_classes_tagsdiv( $classes ) {
 }
 
 /**
- * Add classes to meta-box.
+ * Adds CSS classes to the tag order meta box.
  *
- * @param array $classes "description".
+ * @param array $classes The existing CSS classes.
  *
- * @return array "description".
+ * @return array The modified CSS classes.
  */
 function add_metabox_classes_panel( $classes ) {
 	$classes[] = 'wpto_meta_box';
@@ -123,13 +124,13 @@ function add_metabox_classes_panel( $classes ) {
 }
 
 /**
- * Save meta box.
+ * Saves the tag order meta box data.
  *
- * @param string $post_id "description".
- * @param int    $post "description".
- * @param string $update Optional. After tags.
+ * @param int     $post_id The post ID.
+ * @param WP_Post $post    The post object.
+ * @param bool    $update  Whether this is an existing post being updated.
  *
- * @return statement "description".
+ * @return int|void The post ID if the save was successful, or void if not.
  */
 function save_wpto_meta_box( $post_id, $post, $update ) {
 	if ( ! isset( $_POST['wpto-meta-box-nonce'] ) || ! wp_verify_nonce( $_POST['wpto-meta-box-nonce'], basename( __FILE__ ) ) ) {
@@ -166,9 +167,9 @@ function save_wpto_meta_box( $post_id, $post, $update ) {
 add_action( 'save_post', 'save_wpto_meta_box', 10, 3 );
 
 /**
- * Get the Plugin data.
+ * Retrieves the plugin data.
  *
- * @return array "description".
+ * @return array The plugin data.
  */
 function wpto_get_plugin_data() {
 	$plugin_data = get_plugin_data( plugin_dir_path( __DIR__ ) . 'wp-tag-order.php' );
@@ -176,11 +177,11 @@ function wpto_get_plugin_data() {
 }
 
 /**
- * Load admin scripts.
+ * Loads the admin scripts for the plugin.
  *
- * @param string $hook "description".
+ * @param string $hook The current admin page.
  *
- * @return void "description".
+ * @return void
  */
 function load_wpto_admin_script( $hook ) {
 	$plugin_data    = wpto_get_plugin_data();
@@ -214,9 +215,9 @@ function load_wpto_admin_script( $hook ) {
 add_action( 'admin_enqueue_scripts', 'load_wpto_admin_script', 10, 1 );
 
 /**
- * Handling for Ajax Request.
+ * Handles the AJAX request for syncing tags.
  *
- * @return void "description".
+ * @return void
  */
 function ajax_wto_sync_tags() {
 	$id       = $_POST['id'];
@@ -300,9 +301,9 @@ add_action( 'wp_ajax_wto_sync_tags', 'ajax_wto_sync_tags' );
 add_action( 'wp_ajax_nopriv_wto_sync_tags', 'ajax_wto_sync_tags' );
 
 /**
- * Handling for Ajax Request.
+ * Handles the AJAX request for updating tags.
  *
- * @return void "description".
+ * @return void
  */
 function ajax_wto_update_tags() {
 	$id       = $_POST['id'];
@@ -333,9 +334,9 @@ add_action( 'wp_ajax_wto_update_tags', 'ajax_wto_update_tags' );
 add_action( 'wp_ajax_nopriv_wto_update_tags', 'ajax_wto_update_tags' );
 
 /**
- * Add Options Page.
+ * Adds the plugin options page to the WordPress admin menu.
  *
- * @return void "description".
+ * @return void
  */
 function wpto_menu() {
 	$page_hook_suffix = add_options_page( 'WP Tag Order', 'WP Tag Order', 'manage_options', 'wpto_menu', 'wpto_options_page' );
@@ -346,9 +347,9 @@ function wpto_menu() {
 add_action( 'admin_menu', 'wpto_menu' );
 
 /**
- * Load admin styles.
+ * Enqueues the admin styles for the plugin options page.
  *
- * @return void "description".
+ * @return void
  */
 function wpto_admin_styles() {
 	$plugin_data    = wpto_get_plugin_data();
@@ -357,9 +358,9 @@ function wpto_admin_styles() {
 }
 
 /**
- * Load admin scripts.
+ * Enqueues the admin scripts for the plugin options page.
  *
- * @return void "description".
+ * @return void
  */
 function wpto_admin_scripts() {
 	$plugin_data    = wpto_get_plugin_data();
@@ -379,9 +380,9 @@ function wpto_admin_scripts() {
 }
 
 /**
- * Handling for Ajax Request.
+ * Handles the AJAX request for updating tag order options.
  *
- * @return void "description".
+ * @return void
  */
 function ajax_wto_options() {
 	$nonce  = $_POST['nonce'];
@@ -445,18 +446,18 @@ add_action( 'wp_ajax_wto_options', 'ajax_wto_options' );
 add_action( 'wp_ajax_nopriv_wto_options', 'ajax_wto_options' );
 
 /**
- * Register settings.
+ * Registers the plugin settings.
  *
- * @return void "description".
+ * @return void
  */
 function register_wpto_settings() {
 	register_setting( 'wpto-settings-group', 'wpto_enabled_taxonomies' );
 }
 
 /**
- * Load file for Options Page.
+ * Loads the options page template.
  *
- * @return void "description".
+ * @return void
  */
 function wpto_options_page() {
 	require_once plugin_dir_path( __DIR__ ) . 'options/index.php';

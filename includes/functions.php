@@ -2,25 +2,18 @@
 /**
  * General functions.
  *
- * @since      1.0.0
+ * @since 1.0.0
  *
- * @package    WP_Tag_Order
+ * @package WP_Tag_Order
  * @subpackage WP_Tag_Order/includes
  */
 
 /**
- * Template for catogory.
+ * Checks if an array is empty.
  *
- * @package    WP_Tag_Order
- * @subpackage WP_Tag_Order/includes
- */
-
-/**
- * Detect empty array.
+ * @param array $arr The array to check.
  *
- * @param  array $arr "description".
- *
- * @return boolean "description".
+ * @return bool True if the array is empty, false otherwise.
  */
 function wto_is_array_empty( $arr ) {
 	$array = array_filter( (array) $arr );
@@ -32,12 +25,12 @@ function wto_is_array_empty( $arr ) {
 }
 
 /**
- * Diff the arrays.
+ * Computes the difference between two arrays.
  *
- * @param  array $array_1 "description".
- * @param  array $array_2 "description".
+ * @param array $array_1 The first array.
+ * @param array $array_2 The second array.
  *
- * @return array "description".
+ * @return array The difference between the two arrays.
  */
 function array_diff_interactive( $array_1, $array_2 ) {
 	$compare_1_to_2   = array_diff( $array_1, $array_2 );
@@ -48,9 +41,9 @@ function array_diff_interactive( $array_1, $array_2 ) {
 }
 
 /**
- * Get all non-hierarchical taxonomies in WordPress, excluding the built-in `post_format` taxonomy.
+ * Retrieves all non-hierarchical taxonomies in WordPress, excluding the built-in `post_format` taxonomy.
  *
- * @return array array of non-hierarchical taxonomies.
+ * @return array An array of non-hierarchical taxonomies.
  */
 function wto_get_non_hierarchical_taxonomies() {
 	$args               = array(
@@ -85,20 +78,20 @@ function wto_get_non_hierarchical_taxonomies() {
 }
 
 /**
- * Get the value of the "wpto_enabled_taxonomies" option.
+ * Retrieves the value of the "wpto_enabled_taxonomies" option.
  *
- * @return string the value of the option 'wpto_enabled_taxonomies'.
+ * @return array The value of the "wpto_enabled_taxonomies" option.
  */
 function wto_get_enabled_taxonomies() {
 	return get_option( 'wpto_enabled_taxonomies' );
 }
 
 /**
- * Checks if a given taxonomy is enabled taxonomy or not.
+ * Checks if a given taxonomy is enabled.
  *
- * @param string $taxonomy The parameter "taxonomy" is a string that represents the name of a taxonomy.
+ * @param string $taxonomy The taxonomy to check.
  *
- * @return boolean boolean value. It returns true if the given taxonomy is enabled, and false otherwise.
+ * @return bool True if the taxonomy is enabled, false otherwise.
  */
 function wto_is_enabled_taxonomy( $taxonomy ) {
 	$enabled_taxonomies = wto_get_enabled_taxonomies();
@@ -111,13 +104,12 @@ function wto_is_enabled_taxonomy( $taxonomy ) {
 /**
  * Checks if any of the elements in the "needles" array are present in the "haystack" array.
  *
- * @param array $needles An array of values that we want to check if they exist in the haystack array.
- * @param array $haystack The haystack parameter is an array in which we want to search for the needles.
+ * @param array $needles The array of values to search for.
+ * @param array $haystack The array to search in.
+ *
+ * @return bool True if any of the needles are found in the haystack, false otherwise.
  *
  * @see https://stackoverflow.com/a/11040612/4542456
- *
- * @return boolean boolean value. It will return true if there is any intersection between the  array
- * and the  array, and false otherwise.
  */
 function wto_in_array_any( $needles, $haystack ) {
 	return ! empty( array_intersect( $needles, $haystack ) );
@@ -126,10 +118,9 @@ function wto_in_array_any( $needles, $haystack ) {
 /**
  * Checks if any of the given taxonomies are enabled.
  *
- * @param array $taxonomies An array of taxonomy names.
+ * @param array $taxonomies The taxonomies to check.
  *
- * @return array result of the wto_in_array_any() function, which checks if any of the taxonomies in the
- *  array are present in the  array.
+ * @return bool True if any of the taxonomies are enabled, false otherwise.
  */
 function wto_has_enabled_taxonomy( $taxonomies ) {
 	$taxonomies_enabled = wto_get_enabled_taxonomies();
@@ -139,11 +130,9 @@ function wto_has_enabled_taxonomy( $taxonomies ) {
 /**
  * Returns an array of post types associated with a given taxonomy.
  *
- * @param string $tax The "tax" parameter is the taxonomy for which you want to retrieve the associated post
- * types. By default, it is set to "category", but you can pass any valid taxonomy slug as the
- * parameter value.
+ * @param string $tax The taxonomy slug. Default is 'category'.
  *
- * @return array array of post types associated with a given taxonomy.
+ * @return array An array of post types associated with the given taxonomy.
  */
 function wto_get_post_types_by_taxonomy( $tax = 'category' ) {
 	global $wp_taxonomies;
@@ -151,9 +140,9 @@ function wto_get_post_types_by_taxonomy( $tax = 'category' ) {
 }
 
 /**
- * Get All Post-types that holds the non-hierarchical taxonomies.
+ * Retrieves all post types that have non-hierarchical taxonomies.
  *
- * @return array "description".
+ * @return array An array of post types that have non-hierarchical taxonomies.
  */
 function wto_has_tag_posttype() {
 	$args      = array(
@@ -184,17 +173,13 @@ function wto_has_tag_posttype() {
 }
 
 /**
- * Using an array as needles in strpos for replace_script_tag().
+ * Checks if any of the needles are found in the haystack string.
  *
- * @param string       $haystack The "haystack" parameter is the string in which you want to search for the needle(s).
- * @param string|array $needle The "needle" parameter is the string or array of strings that you want to search for
- * within the "haystack" string.
- * @param int          $offset The offset parameter is used to specify the starting position for the search within
- * the haystack string. By default, it is set to 0, which means the search will start from the
- * beginning of the haystack string.
+ * @param string       $haystack The string to search in.
+ * @param string|array $needle   The string or array of strings to search for.
+ * @param int          $offset   The starting position for the search. Default is 0.
  *
- * @return boolean boolean value. It returns true if any of the needles are found in the haystack, and false
- * otherwise.
+ * @return bool True if any of the needles are found in the haystack, false otherwise.
  */
 function wto_strposa( $haystack, $needle, $offset = 0 ) {
 	if ( ! is_array( $needle ) ) {
@@ -209,11 +194,11 @@ function wto_strposa( $haystack, $needle, $offset = 0 ) {
 }
 
 /**
- * Add `type="module"` to <script> on wp_enqueue_script().
+ * Adds the `type="module"` attribute to script tags for specific scripts.
  *
- * @param string $tag The "tag" parameter is a string that represents an HTML script tag.
+ * @param string $tag The HTML script tag.
  *
- * @return string The modified `` value is being returned.
+ * @return string The modified HTML script tag.
  */
 function wto_replace_script_tag( $tag ) {
 	$module = array( 'wp-tag-order/assets/js/' );
