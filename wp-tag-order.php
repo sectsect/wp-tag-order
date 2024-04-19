@@ -12,7 +12,7 @@
  * @package         WP_Tag_Order
  */
 
-$wptagorder_minimalrequiredphpversion = '5.3';
+$wptagorder_minimalrequiredphpversion = '8.0';
 
 /**
  * Displays an admin notice if the PHP version is less than the required version.
