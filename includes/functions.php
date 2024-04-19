@@ -16,12 +16,7 @@
  * @return bool True if the array is empty, false otherwise.
  */
 function wto_is_array_empty( $arr ) {
-	$array = array_filter( (array) $arr );
-	if ( empty( $arr ) ) {
-		return true;
-	} else {
-		return false;
-	}
+	return empty( array_filter( (array) $arr ) );
 }
 
 /**
@@ -32,12 +27,8 @@ function wto_is_array_empty( $arr ) {
  *
  * @return array The difference between the two arrays.
  */
-function array_diff_interactive( $array_1, $array_2 ) {
-	$compare_1_to_2   = array_diff( $array_1, $array_2 );
-	$compare_2_to_1   = array_diff( $array_2, $array_1 );
-	$difference_array = array_merge( $compare_1_to_2, $compare_2_to_1 );
-
-	return $difference_array;
+function wto_array_diff_interactive( $array_1, $array_2 ) {
+	return array_merge( array_diff( $array_1, $array_2 ), array_diff( $array_2, $array_1 ) );
 }
 
 /**
@@ -52,15 +43,10 @@ function wto_get_non_hierarchical_taxonomies() {
 		'_builtin'     => true,
 		'hierarchical' => false,
 	);
-	$output             = 'objects';
-	$operator           = 'and';
-	$taxonomies_builtin = get_taxonomies( $args, $output, $operator );
-	// Drop post_format taxonomy from the array.
+	$taxonomies_builtin = get_taxonomies( $args, 'objects', 'and' );
 	$taxonomies_builtin = array_filter(
 		$taxonomies_builtin,
-		function ( $taxonomies_builtin ) {
-			return 'post_format' !== $taxonomies_builtin->name;
-		}
+		fn( $taxonomy ) => 'post_format' !== $taxonomy->name
 	);
 
 	$args              = array(
@@ -68,13 +54,9 @@ function wto_get_non_hierarchical_taxonomies() {
 		'_builtin'     => false,
 		'hierarchical' => false,
 	);
-	$output            = 'objects';
-	$operator          = 'and';
-	$taxonomies_custom = get_taxonomies( $args, $output, $operator );
+	$taxonomies_custom = get_taxonomies( $args, 'objects', 'and' );
 
-	$taxonomies = array_merge( $taxonomies_builtin, $taxonomies_custom );
-
-	return $taxonomies;
+	return array_merge( $taxonomies_builtin, $taxonomies_custom );
 }
 
 /**
@@ -83,7 +65,7 @@ function wto_get_non_hierarchical_taxonomies() {
  * @return array The value of the "wpto_enabled_taxonomies" option.
  */
 function wto_get_enabled_taxonomies() {
-	return get_option( 'wpto_enabled_taxonomies' );
+	return get_option( 'wpto_enabled_taxonomies', array() );
 }
 
 /**
@@ -94,25 +76,7 @@ function wto_get_enabled_taxonomies() {
  * @return bool True if the taxonomy is enabled, false otherwise.
  */
 function wto_is_enabled_taxonomy( $taxonomy ) {
-	$enabled_taxonomies = wto_get_enabled_taxonomies();
-	if ( ! empty( $enabled_taxonomies ) && in_array( $taxonomy, $enabled_taxonomies, true ) ) {
-		return true;
-	}
-	return false;
-}
-
-/**
- * Checks if any of the elements in the "needles" array are present in the "haystack" array.
- *
- * @param array $needles The array of values to search for.
- * @param array $haystack The array to search in.
- *
- * @return bool True if any of the needles are found in the haystack, false otherwise.
- *
- * @see https://stackoverflow.com/a/11040612/4542456
- */
-function wto_in_array_any( $needles, $haystack ) {
-	return ! empty( array_intersect( $needles, $haystack ) );
+	return in_array( $taxonomy, wto_get_enabled_taxonomies(), true );
 }
 
 /**
@@ -121,10 +85,11 @@ function wto_in_array_any( $needles, $haystack ) {
  * @param array $taxonomies The taxonomies to check.
  *
  * @return bool True if any of the taxonomies are enabled, false otherwise.
+ *
+ * @see https://stackoverflow.com/a/11040612/4542456
  */
 function wto_has_enabled_taxonomy( $taxonomies ) {
-	$taxonomies_enabled = wto_get_enabled_taxonomies();
-	return wto_in_array_any( $taxonomies_enabled, $taxonomies );
+	return ! empty( array_intersect( wto_get_enabled_taxonomies(), $taxonomies ) );
 }
 
 /**
@@ -136,7 +101,7 @@ function wto_has_enabled_taxonomy( $taxonomies ) {
  */
 function wto_get_post_types_by_taxonomy( $tax = 'category' ) {
 	global $wp_taxonomies;
-	return ( isset( $wp_taxonomies[ $tax ] ) ) ? $wp_taxonomies[ $tax ]->object_type : array();
+	return $wp_taxonomies[ $tax ]->object_type ?? array();
 }
 
 /**
@@ -158,36 +123,30 @@ function wto_has_tag_posttype() {
 	$hastagposttypes = array();
 	foreach ( $posttypes as $posttype ) {
 		$taxonomies = get_object_taxonomies( $posttype );
-		if ( ! empty( $taxonomies ) ) {
-			foreach ( $taxonomies as $taxonomy ) {
-				// only want hierarchical -- no tags please !
-				if ( ! is_taxonomy_hierarchical( $taxonomy ) ) {
-					array_push( $hastagposttypes, $posttype );
-				}
+		foreach ( $taxonomies as $taxonomy ) {
+			if ( ! is_taxonomy_hierarchical( $taxonomy ) ) {
+				$hastagposttypes[] = $posttype;
+				break;
 			}
 		}
 	}
-	$hastagposttypes = array_unique( $hastagposttypes );
-
-	return $hastagposttypes;
+	return array_unique( $hastagposttypes );
 }
 
 /**
  * Checks if any of the needles are found in the haystack string.
  *
  * @param string       $haystack The string to search in.
- * @param string|array $needle   The string or array of strings to search for.
+ * @param string|array $needles  The string or array of strings to search for.
  * @param int          $offset   The starting position for the search. Default is 0.
  *
  * @return bool True if any of the needles are found in the haystack, false otherwise.
  */
-function wto_strposa( $haystack, $needle, $offset = 0 ) {
-	if ( ! is_array( $needle ) ) {
-		$needle = array( $needle );
-	}
-	foreach ( $needle as $query ) {
-		if ( strpos( $haystack, $query, $offset ) !== false ) {
-			return true; // stop on first true result.
+function wto_strposa( $haystack, $needles, $offset = 0 ) {
+	$needles = (array) $needles;
+	foreach ( $needles as $needle ) {
+		if ( strpos( $haystack, $needle, $offset ) !== false ) {
+			return true;
 		}
 	}
 	return false;
@@ -203,10 +162,8 @@ function wto_strposa( $haystack, $needle, $offset = 0 ) {
 function wto_replace_script_tag( $tag ) {
 	$module = array( 'wp-tag-order/assets/js/' );
 	if ( wto_strposa( $tag, $module ) ) {
-		$tag = str_replace( " type='text/javascript'", '', $tag );
-		$tag = str_replace( '<script src=', '<script type="module" src=', $tag );
+		$tag = str_replace( array( " type='text/javascript'", '<script src=' ), array( '', '<script type="module" src=' ), $tag );
 	}
-
 	return $tag;
 }
 add_filter( 'script_loader_tag', 'wto_replace_script_tag', 10, 1 );
