@@ -35,7 +35,8 @@
 
 ## Requirements
 
-- WordPress 4.7+
+- WordPress 5.6+
+- PHP 8.0+
 
 ## APIs
 
