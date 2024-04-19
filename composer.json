@@ -4,7 +4,7 @@
   "keywords": ["github", "wordpress", "plugin", "tags", "order"],
   "type": "wordpress-plugin",
   "require": {
-    "php": ">=5.3"
+    "php": ">=8.0"
   },
   "require-dev":{
     "yoast/phpunit-polyfills" : "1.0.3",
@@ -19,6 +19,9 @@
   "config": {
     "allow-plugins": {
       "dealerdirect/phpcodesniffer-composer-installer": true
+    },
+    "platform": {
+      "php": "8.0.0"
     }
   }
 }
