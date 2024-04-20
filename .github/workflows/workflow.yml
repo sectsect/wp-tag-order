@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         php-versions: ['8.0', '8.1', '8.2', '8.3']
-        wp-versions: ['latest', 'trunk']
+        wp-versions: ['6.1', '6.2', '6.3']
 
     name: PHP ${{ matrix.php-versions }} WordPress ${{ matrix.wp-versions }}
 
