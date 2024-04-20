@@ -31,6 +31,16 @@ jobs:
         cd $GITHUB_WORKSPACE
         composer install --no-progress --prefer-dist --optimize-autoloader
 
+    - name: Start MySQL
+      run: |
+        sudo systemctl start mysql
+
+    - name: Wait for MySQL
+      run: |
+        while ! mysqladmin ping -hlocalhost --silent; do
+          sleep 1
+        done
+
     - name: Install WP Tests
       env:
         WP_VERSION: ${{ matrix.wp-versions }}
