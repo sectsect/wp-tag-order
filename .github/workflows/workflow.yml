@@ -7,7 +7,7 @@ name: CI
     branches:
       - master
 jobs:
-  phpunit:
+  test:
     runs-on: ubuntu-latest
 
     strategy:
