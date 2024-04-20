@@ -1,5 +1,21 @@
 # Changelog
 
+## [v3.0.0](https://github.com/sectsect/wp-tag-order/tree/v3.0.0) (2024-04-19)
+
+[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v2.2.5...v3.0.0)
+
+## [v2.2.5](https://github.com/sectsect/wp-tag-order/tree/v2.2.5) (2024-04-19)
+
+[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v2.2.4...v2.2.5)
+
+## [v2.2.4](https://github.com/sectsect/wp-tag-order/tree/v2.2.4) (2024-04-19)
+
+[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v2.2.3...v2.2.4)
+
+## [v2.2.3](https://github.com/sectsect/wp-tag-order/tree/v2.2.3) (2024-04-19)
+
+[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v2.2.2...v2.2.3)
+
 ## [v2.2.2](https://github.com/sectsect/wp-tag-order/tree/v2.2.2) (2024-04-18)
 
 [Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v2.2.1...v2.2.2)
