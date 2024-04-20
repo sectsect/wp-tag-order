@@ -71,6 +71,9 @@ jobs:
         cd $GITHUB_WORKSPACE
         composer install --no-progress --prefer-dist --optimize-autoloader
 
+    - name: Allow dealerdirect/phpcodesniffer-composer-installer plugin
+      run: composer global config allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
+
     - name: Install dependencies
       run: |
         cd $GITHUB_WORKSPACE
