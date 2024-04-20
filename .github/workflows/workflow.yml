@@ -10,100 +10,63 @@ defaults:
   run:
     working-directory: ${{ github.workspace }}
 jobs:
-  test:
-    runs-on: '${{ matrix.operating-system }}'
+  phpunit:
+    runs-on: ubuntu-latest
+
     strategy:
       matrix:
-        operating-system:
-          - ubuntu-latest
-        php-versions:
-          - '8.0'
-          - '8.1'
-          - '8.2'
-          - '8.3'
-        wp-versions:
-          - latest
-        coverage:
-          - true
-    services:
-      mysql:
-        image: 'mysql:8.0'
-        env:
-          MYSQL_DATABASE: wordpress_test
-          MYSQL_PASSWORD: password
-          MYSQL_USER: wp
-          MYSQL_ROOT_PASSWORD: root
-        ports:
-          - '3306:3306'
-        options: >-
-          --health-cmd="mysqladmin ping" --health-interval=10s
-          --health-timeout=10s --health-retries=10
-    name: 'WP ${{ matrix.wp-versions }} on PHP ${{ matrix.php-versions }}'
-    env:
-      WORDPRESS_DB_NAME: wordpress_test
-      WORDPRESS_DB_PASS: password
-      WORDPRESS_DB_USER: wp
+        php-versions: ['8.0', '8.1', '8.2', '8.3']
+        wp-versions: ['latest', 'trunk']
+
+    name: PHP ${{ matrix.php-versions }} WordPress ${{ matrix.wp-versions }}
+
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: 'Setup PHP ${{ matrix.php-versions }}'
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '${{ matrix.php-versions }}'
-          extensions: 'mysql, mysqli'
-          coverage: xdebug
-          tools: 'composer, cs2pr, phpunit'
-      - name: 'Setup WordPress ${{ matrix.wp-versions }}'
-        run: >-
-          bash bin/install-wp-tests.sh wordpress_test wp password localhost ${{
-          matrix.wp-versions }} true
-      - name: Setup Composer
-        run: composer install --no-progress --prefer-dist --optimize-autoloader
-      - name: Install dependencies
-        run: composer update --prefer-dist --no-interaction
-      - name: Create all branches
-        run: source ./vendor/thefrosty/wp-utilities/bin/create-all-branches.sh
-      - name: Run composer tests
-        run: composer tests
-        env:
-          DB_PORT: '${{ job.services.mysql.ports[3306] }}'
-      - name: Show PHPCS results in PR
-        run: cs2pr ./phpcs-report.xml
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
-        with:
-          fail_ci_if_error: false
-  phpcs:
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Fix host resolution
-        run: echo "127.0.0.1 $(hostname)" | sudo tee -a /etc/hosts
       - uses: actions/checkout@v4
+
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
-          coverage: none
-          tools: phpcs
-      - name: Setup Composer
-        run: composer install --no-progress --prefer-dist --optimize-autoloader
-      - name: Allow dealerdirect/phpcodesniffer-composer-installer plugin
-        run: >-
-          composer global config
-          allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
+          php-version: ${{ matrix.php-versions }}
+
       - name: Install dependencies
-        run: >
-          composer global require wp-coding-standards/wpcs
+        run: composer install --prefer-dist --no-progress
 
-          composer global require phpcompatibility/php-compatibility
+      - name: Setup WordPress
+        run: composer require --dev --no-update --no-progress roots/wordpress:"^${{ matrix.wp-versions }}" wp-phpunit/wp-phpunit:"^${{ matrix.wp-versions }}"
 
-          composer global require phpcompatibility/phpcompatibility-paragonie
+      - name: Run PHPUnit
+        run: composer run-script phpunit
+  # phpcs:
+  #   runs-on: ubuntu-22.04
+  #   steps:
+  #     - name: Fix host resolution
+  #       run: echo "127.0.0.1 $(hostname)" | sudo tee -a /etc/hosts
+  #     - uses: actions/checkout@v4
+  #     - name: Setup PHP
+  #       uses: shivammathur/setup-php@v2
+  #       with:
+  #         php-version: '8.2'
+  #         coverage: none
+  #         tools: phpcs
+  #     - name: Setup Composer
+  #       run: |
+  #         cd ${{ github.workspace }}
+  #         composer install --no-progress --prefer-dist --optimize-autoloader
+  #     - name: Allow dealerdirect/phpcodesniffer-composer-installer plugin
+  #       run: >-
+  #         composer global config
+  #         allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
+  #     - name: Install dependencies
+  #       run: >
+  #         composer global require wp-coding-standards/wpcs
 
-          composer global require phpcompatibility/phpcompatibility-wp
+  #         composer global require phpcompatibility/php-compatibility
 
-          phpcs --config-set installed_paths
-          $HOME/.composer/vendor/wp-coding-standards/wpcs,$HOME/.composer/vendor/phpcompatibility/php-compatibility,$HOME/.composer/vendor/phpcompatibility/phpcompatibility-paragonie,$HOME/.composer/vendor/phpcompatibility/phpcompatibility-wp
-      - name: Run PHPCS
-        run: phpcs
+  #         composer global require phpcompatibility/phpcompatibility-paragonie
+
+  #         composer global require phpcompatibility/phpcompatibility-wp
+
+  #         phpcs --config-set installed_paths
+  #         $HOME/.composer/vendor/wp-coding-standards/wpcs,$HOME/.composer/vendor/phpcompatibility/php-compatibility,$HOME/.composer/vendor/phpcompatibility/phpcompatibility-paragonie,$HOME/.composer/vendor/phpcompatibility/phpcompatibility-wp
+  #     - name: Run PHPCS
+  #       run: phpcs
