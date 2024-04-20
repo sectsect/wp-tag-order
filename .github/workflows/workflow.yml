@@ -6,6 +6,9 @@ name: CI
   pull_request:
     branches:
       - master
+defaults:
+  run:
+    working-directory: ${{ github.workspace }}
 jobs:
   test:
     runs-on: '${{ matrix.operating-system }}'
@@ -31,7 +34,7 @@ jobs:
           MYSQL_USER: wp
           MYSQL_ROOT_PASSWORD: root
         ports:
-          - '3307:3306'
+          - '3306:3306'
         options: >-
           --health-cmd="mysqladmin ping" --health-interval=10s
           --health-timeout=10s --health-retries=10
@@ -57,9 +60,7 @@ jobs:
           bash bin/install-wp-tests.sh wordpress_test wp password localhost ${{
           matrix.wp-versions }} true
       - name: Setup Composer
-        run: |
-          cd ${{ github.workspace }}
-          composer install --no-progress --prefer-dist --optimize-autoloader
+        run: composer install --no-progress --prefer-dist --optimize-autoloader
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction
       - name: Create all branches
@@ -87,17 +88,13 @@ jobs:
           coverage: none
           tools: phpcs
       - name: Setup Composer
-        run: |
-          cd ${{ github.workspace }}
-          composer install --no-progress --prefer-dist --optimize-autoloader
+        run: composer install --no-progress --prefer-dist --optimize-autoloader
       - name: Allow dealerdirect/phpcodesniffer-composer-installer plugin
         run: >-
           composer global config
           allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
       - name: Install dependencies
         run: >
-          cd $GITHUB_WORKSPACE
-
           composer global require wp-coding-standards/wpcs
 
           composer global require phpcompatibility/php-compatibility
