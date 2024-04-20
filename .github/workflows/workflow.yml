@@ -42,7 +42,7 @@ jobs:
         done
 
     - name: Set MySQL root password
-      run: sudo mysqladmin password 'root'
+      run: sudo mysqladmin -u root password 'root'
 
     - name: Install WP Tests
       env:
