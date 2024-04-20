@@ -14,97 +14,45 @@ jobs:
       matrix:
         php-versions: ['8.0', '8.1', '8.2', '8.3']
         wp-versions: ['latest', 'trunk']
-    # steps:
-    # - name: Fix host resolution
-    #   run: echo "127.0.0.1 $(hostname)" | sudo tee -a /etc/hosts
-
-    # - uses: actions/checkout@v4
-
-    # - name: Setup PHP
-    #   uses: shivammathur/setup-php@v2
-    #   with:
-    #     php-version: ${{ matrix.php-versions }}
-    #     coverage: none
-
-    # - name: Setup Composer
-    #   run: |
-    #     cd $GITHUB_WORKSPACE
-    #     composer install --no-progress --prefer-dist --optimize-autoloader
-
-    # - name: Start MySQL
-    #   run: |
-    #     sudo systemctl start mysql
-
-    # - name: Wait for MySQL
-    #   run: |
-    #     while ! mysqladmin ping -hlocalhost --silent; do
-    #       sleep 1
-    #     done
-
-    # - name: Set MySQL root password
-    #   run: sudo mysqladmin -u root password 'root'
-
-    # - name: Install WP Tests
-    #   env:
-    #     WP_VERSION: ${{ matrix.wp-versions }}
-    #   run: bash bin/install-wp-tests.sh wordpress_test root 'root' 127.0.0.1 $WP_VERSION
-
-    # - name: Run Tests
-    #   run: |
-    #     phpunit
-    #     WP_MULTISITE=1 phpunit
-
-    # strategy:
-    #   matrix:
-    #     wp-versions: ['latest']
-    #     php-versions: [ '7.0', '7.1', '7.2', '7.3', '7.4' ]
-    #     include:
-    #       - php-versions: '7.4'
-    #         wp-versions: 'trunk'
-    services:
-      mysql:
-        image: mysql:5.7
-        env:
-          MYSQL_ALLOW_EMPTY_PASSWORD: yes
-        ports:
-          - 3306:3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
     steps:
-      - uses: actions/checkout@v3
+    - name: Fix host resolution
+      run: echo "127.0.0.1 $(hostname)" | sudo tee -a /etc/hosts
 
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php-versions }}
-          extensions: curl, dom, exif, fileinfo, hash, json, mbstring, mysqli, openssl, pcre, xml, zip
-          ini-values: assert.exception=1, zend.assertions=1
+    - uses: actions/checkout@v4
 
-      - name: Setup Composer
-        run: |
-          composer install --no-progress --prefer-dist --optimize-autoloader
-        working-directory: ${{ github.workspace }}
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.php-versions }}
+        coverage: none
 
-      - name: Install WordPress
-        run: bash bin/install-wp-tests.sh wordpress_test root '' 127.0.0.1 ${{ matrix.wp-versions }}
+    - name: Setup Composer
+      run: |
+        cd $GITHUB_WORKSPACE
+        composer install --no-progress --prefer-dist --optimize-autoloader
 
-      - name: Install PHPUnit for PHP 8.0
-        # if: matrix.php-versions == '7.0'
-        run: composer global require "phpunit/phpunit=8.*"
+    - name: Start MySQL
+      run: |
+        sudo systemctl start mysql
 
-      # - name: Install PHPUnit for PHP 7.1 - 7.4
-      #   if: matrix.php-versions == '7.1' ||matrix.php-versions == '7.2' ||matrix.php-versions == '7.3' ||matrix.php-versions == '7.4'
-      #   run: composer global require "phpunit/phpunit=7.*"
+    - name: Wait for MySQL
+      run: |
+        while ! mysqladmin ping -hlocalhost --silent; do
+          sleep 1
+        done
 
-      - name: Install phpunit-polyfills
-        run: composer global require yoast/phpunit-polyfills
+    - name: Set MySQL root password
+      run: sudo mysqladmin -u root password 'root'
 
-      - run: phpunit --version
+    - name: Install WP Tests
+      env:
+        WP_VERSION: ${{ matrix.wp-versions }}
+      run: bash bin/install-wp-tests.sh wordpress_test root 'root' 127.0.0.1 $WP_VERSION
 
-      - name: Run PHPUnit
-        run: phpunit
-
-      - name: Run PHPUnit multisite
-        run: WP_MULTISITE=1 phpunit
+    - name: Run Tests
+      run: |
+        phpunit
+        WP_MULTISITE=1 phpunit
 
   phpcs:
     runs-on: ubuntu-22.04
@@ -123,8 +71,8 @@ jobs:
 
     - name: Setup Composer
       run: |
+        cd $GITHUB_WORKSPACE
         composer install --no-progress --prefer-dist --optimize-autoloader
-      working-directory: ${{ github.workspace }}
 
     - name: Allow dealerdirect/phpcodesniffer-composer-installer plugin
       run: composer global config allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
