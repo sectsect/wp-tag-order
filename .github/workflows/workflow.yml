@@ -1,90 +1,111 @@
 name: CI
-
-on:
+'on':
   push:
-    branches: [ master ]
+    branches:
+      - master
   pull_request:
-    branches: [ master ]
-
+    branches:
+      - master
 jobs:
-
   test:
-    runs-on: ubuntu-22.04
+    runs-on: '${{ matrix.operating-system }}'
     strategy:
       matrix:
-        php-versions: ['8.0', '8.1', '8.2', '8.3']
-        wp-versions: ['latest', 'trunk']
+        operating-system:
+          - ubuntu-latest
+        php-versions:
+          - '8.1'
+          - '8.2'
+          - '8.3'
+        wp-versions:
+          - latest
+        coverage:
+          - true
+    services:
+      mysql:
+        image: 'mysql:8.0'
+        env:
+          MYSQL_DATABASE: wordpress_test
+          MYSQL_PASSWORD: password
+          MYSQL_USER: wp
+          MYSQL_ROOT_PASSWORD: root
+        ports:
+          - '3306:3306'
+        options: >-
+          --health-cmd="mysqladmin ping" --health-interval=10s
+          --health-timeout=10s --health-retries=10
+    name: 'WP ${{ matrix.wp-versions }} on PHP ${{ matrix.php-versions }}'
+    env:
+      WORDPRESS_DB_NAME: wordpress_test
+      WORDPRESS_DB_PASS: password
+      WORDPRESS_DB_USER: wp
     steps:
-    - name: Fix host resolution
-      run: echo "127.0.0.1 $(hostname)" | sudo tee -a /etc/hosts
-
-    - uses: actions/checkout@v4
-
-    - name: Setup PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: ${{ matrix.php-versions }}
-        coverage: none
-
-    - name: Setup Composer
-      run: |
-        cd $GITHUB_WORKSPACE
-        composer install --no-progress --prefer-dist --optimize-autoloader
-
-    - name: Start MySQL
-      run: |
-        sudo systemctl start mysql
-
-    - name: Wait for MySQL
-      run: |
-        while ! mysqladmin ping -hlocalhost --silent; do
-          sleep 1
-        done
-
-    - name: Set MySQL root password
-      run: sudo mysqladmin -u root password 'root'
-
-    - name: Install WP Tests
-      env:
-        WP_VERSION: ${{ matrix.wp-versions }}
-      run: bash bin/install-wp-tests.sh wordpress_test root 'root' 127.0.0.1 $WP_VERSION
-
-    - name: Run Tests
-      run: |
-        phpunit
-        WP_MULTISITE=1 phpunit
-
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: 'Setup PHP ${{ matrix.php-versions }}'
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '${{ matrix.php-versions }}'
+          extensions: 'mysql, mysqli'
+          coverage: xdebug
+          tools: 'composer, cs2pr, phpunit'
+      - name: 'Setup WordPress ${{ matrix.wp-versions }}'
+        run: >-
+          bash bin/install-wp-tests.sh wordpress_test wp password localhost ${{
+          matrix.wp-versions }} true
+      - name: Setup Composer
+        run: |
+          cd $GITHUB_WORKSPACE
+          composer install --no-progress --prefer-dist --optimize-autoloader
+      - name: Install dependencies
+        run: composer update --prefer-dist --no-interaction
+      - name: Create all branches
+        run: source ./vendor/thefrosty/wp-utilities/bin/create-all-branches.sh
+      - name: Run composer tests
+        run: composer tests
+        env:
+          DB_PORT: '${{ job.services.mysql.ports[3306] }}'
+      - name: Show PHPCS results in PR
+        run: cs2pr ./phpcs-report.xml
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          fail_ci_if_error: false
   phpcs:
     runs-on: ubuntu-22.04
     steps:
-    - name: Fix host resolution
-      run: echo "127.0.0.1 $(hostname)" | sudo tee -a /etc/hosts
+      - name: Fix host resolution
+        run: echo "127.0.0.1 $(hostname)" | sudo tee -a /etc/hosts
+      - uses: actions/checkout@v4
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          coverage: none
+          tools: phpcs
+      - name: Setup Composer
+        run: |
+          cd $GITHUB_WORKSPACE
+          composer install --no-progress --prefer-dist --optimize-autoloader
+      - name: Allow dealerdirect/phpcodesniffer-composer-installer plugin
+        run: >-
+          composer global config
+          allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
+      - name: Install dependencies
+        run: >
+          cd $GITHUB_WORKSPACE
 
-    - uses: actions/checkout@v4
+          composer global require wp-coding-standards/wpcs
 
-    - name: Setup PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: '8.2'
-        coverage: none
-        tools: phpcs
+          composer global require phpcompatibility/php-compatibility
 
-    - name: Setup Composer
-      run: |
-        cd $GITHUB_WORKSPACE
-        composer install --no-progress --prefer-dist --optimize-autoloader
+          composer global require phpcompatibility/phpcompatibility-paragonie
 
-    - name: Allow dealerdirect/phpcodesniffer-composer-installer plugin
-      run: composer global config allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
+          composer global require phpcompatibility/phpcompatibility-wp
 
-    - name: Install dependencies
-      run: |
-        cd $GITHUB_WORKSPACE
-        composer global require wp-coding-standards/wpcs
-        composer global require phpcompatibility/php-compatibility
-        composer global require phpcompatibility/phpcompatibility-paragonie
-        composer global require phpcompatibility/phpcompatibility-wp
-        phpcs --config-set installed_paths $HOME/.composer/vendor/wp-coding-standards/wpcs,$HOME/.composer/vendor/phpcompatibility/php-compatibility,$HOME/.composer/vendor/phpcompatibility/phpcompatibility-paragonie,$HOME/.composer/vendor/phpcompatibility/phpcompatibility-wp
-
-    - name: Run PHPCS
-      run: phpcs
+          phpcs --config-set installed_paths
+          $HOME/.composer/vendor/wp-coding-standards/wpcs,$HOME/.composer/vendor/phpcompatibility/php-compatibility,$HOME/.composer/vendor/phpcompatibility/phpcompatibility-paragonie,$HOME/.composer/vendor/phpcompatibility/phpcompatibility-wp
+      - name: Run PHPCS
+        run: phpcs
