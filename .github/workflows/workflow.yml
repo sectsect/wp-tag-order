@@ -1,0 +1,74 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+
+  test:
+    runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        php-versions: ['8.0', '8.1', '8.2', '8.3']
+        wp-versions: ['latest', 'trunk']
+    steps:
+    - name: Fix host resolution
+      run: echo "127.0.0.1 $(hostname)" | sudo tee -a /etc/hosts
+
+    - uses: actions/checkout@v4
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2.26.0
+      with:
+        php-version: ${{ matrix.php-versions }}
+        coverage: none
+
+    - name: Setup Composer
+      run: |
+        cd $GITHUB_WORKSPACE
+        composer install --no-progress --prefer-dist --optimize-autoloader
+
+    - name: Install WP Tests
+      env:
+        WP_VERSION: ${{ matrix.wp-versions }}
+      run: bash bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION
+
+    - name: Run Tests
+      run: |
+        phpunit
+        WP_MULTISITE=1 phpunit
+
+  phpcs:
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Fix host resolution
+      run: echo "127.0.0.1 $(hostname)" | sudo tee -a /etc/hosts
+
+    - uses: actions/checkout@v4
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2.26.0
+      with:
+        php-version: '8.2'
+        coverage: none
+        tools: phpcs
+
+    - name: Setup Composer
+      run: |
+        cd $GITHUB_WORKSPACE
+        composer install --no-progress --prefer-dist --optimize-autoloader
+
+    - name: Install dependencies
+      run: |
+        cd $GITHUB_WORKSPACE
+        composer global require wp-coding-standards/wpcs
+        composer global require phpcompatibility/php-compatibility
+        composer global require phpcompatibility/phpcompatibility-paragonie
+        composer global require phpcompatibility/phpcompatibility-wp
+        phpcs --config-set installed_paths $HOME/.composer/vendor/wp-coding-standards/wpcs,$HOME/.composer/vendor/phpcompatibility/php-compatibility,$HOME/.composer/vendor/phpcompatibility/phpcompatibility-paragonie,$HOME/.composer/vendor/phpcompatibility/phpcompatibility-wp
+
+    - name: Run PHPCS
+      run: phpcs
