@@ -41,12 +41,13 @@ jobs:
       run: php -v
 
     - name: Composer install
-      run: |
-        composer install --optimize-autoloader --prefer-dist
-        composer update
+      run: composer install --optimize-autoloader --prefer-dist
 
     - name: Install WP Tests
       run: bash bin/install-wp-tests.sh wordpress_test root '' 127.0.0.1 ${{ matrix.wp-versions }}
+
+    - name: 'phpunit-polyfills' install
+      run: composer require --dev yoast/phpunit-polyfills:"^1.1.0"
 
     - name: phpunit tests
       run: ./vendor/bin/phpunit
