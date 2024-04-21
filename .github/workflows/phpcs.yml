@@ -16,7 +16,7 @@ concurrency:
 jobs:
   run:
     runs-on: ubuntu-latest
-    name: PHP Coding Standards
+    name: phpcs
 
     env:
       WP_TESTS_DIR: /tmp/wordpress-tests-lib
@@ -40,6 +40,6 @@ jobs:
     - name: Coding Sniffs.
       run: ./vendor/bin/phpcs --report-full --report-checkstyle=/tmp/phpcs-report.xml
 
-    # - name: Show PHPCS results in PR
-    #   # if: ${{ always() }}
-    #   run: cs2pr /tmp/phpcs-report.xml
+    - name: Show PHPCS results in PR
+      if: ${{ always() }}
+      run: cs2pr /tmp/phpcs-report.xml
