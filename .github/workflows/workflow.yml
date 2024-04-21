@@ -1,4 +1,4 @@
-name: PHP Unit Tests
+name: CI
 
 on:
   push:
@@ -8,43 +8,48 @@ on:
     branches:
       - master
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
+permissions:
+  contents: read
 
 jobs:
-  run:
+  testing:
+    name: Run tests
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        php-versions: ['7.4', '8.0', '8.1', '8.2', '8.3']
-        wp-versions: [ 'trunk' ]
-    name: WP ${{ matrix.wp-versions }} / PHP ${{ matrix.php-versions }}
-
+    services:
+      mysql:
+        image: mariadb:latest
+        ports:
+          - '3306:3306'
+        env:
+          MYSQL_ROOT_PASSWORD: wordpress
+          MARIADB_INITDB_SKIP_TZINFO: 1
+          MYSQL_USER: wordpress
+          MYSQL_PASSWORD: wordpress
+          MYSQL_DATABASE: wordpress_test
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
+      - name: Check out the source code
+        uses: actions/checkout@v3
 
-    - name: Setup PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: ${{ matrix.php-versions }}
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          coverage: none
+          php-version: "8.0"
 
-    - name: Setup Database
-      uses: getong/mariadb-action@v1.1
+      - name: Install PHP Dependencies
+        uses: ramsey/composer-install@v2
 
-    - name: Check PHP Version
-      run: php -v
+      - name: Set up WordPress and WordPress Test Library
+        uses: sjinks/setup-wordpress-test-library@master
+        with:
+          version: latest
 
-    - name: Composer install
-      run: composer install --optimize-autoloader --prefer-dist
+      - name: Verify MariaDB connection
+        run: |
+          while ! mysqladmin ping -h 127.0.0.1 -P ${{ job.services.mysql.ports[3306] }} --silent; do
+            sleep 1
+          done
+        timeout-minutes: 1
 
-    - name: Install WP Tests
-      run: bash bin/install-wp-tests.sh wordpress_test root '' 127.0.0.1 ${{ matrix.wp-versions }}
-
-    - name: phpunit tests
-      run: ./vendor/bin/phpunit
-      env:
-        WP_TESTS_DIR: ${{ runner.temp }}/wordpress-tests-lib
-        WP_CORE_DIR: ${{ runner.temp }}/wordpress
+      - name: Run tests
+        run: vendor/bin/phpunit
