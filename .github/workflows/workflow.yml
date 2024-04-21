@@ -18,16 +18,16 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php-versions: ['8.0', '8.1', '8.2', '8.3']
-        wp-versions: [ 'trunk' ]
+        php-versions: [ '8.0', '8.1', '8.2', '8.3' ]
+        wp-versions: [ 'latest' ]
     name: WP ${{ matrix.wp-versions }} / PHP ${{ matrix.php-versions }}
 
     env:
-      WP_TESTS_DIR: ${{ runner.temp }}/wordpress-tests-lib
+      WP_TESTS_DIR: /tmp/wordpress-tests-lib
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v3
 
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
@@ -49,5 +49,5 @@ jobs:
     - name: phpunit tests
       run: ./vendor/bin/phpunit
       env:
-        WP_TESTS_DIR: ${{ runner.temp }}/wordpress-tests-lib
-        WP_CORE_DIR: ${{ runner.temp }}/wordpress
+        WP_TESTS_DIR: /tmp/wordpress-tests-lib
+        WP_CORE_DIR: /tmp/wordpress
