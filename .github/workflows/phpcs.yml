@@ -8,7 +8,6 @@ on:
     branches:
       - master
 
-
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
@@ -16,6 +15,7 @@ concurrency:
 jobs:
   run:
     runs-on: ubuntu-latest
+
     name: phpcs
 
     env:
