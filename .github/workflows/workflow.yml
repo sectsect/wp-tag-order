@@ -7,35 +7,75 @@ name: CI
     branches:
       - master
 jobs:
+  # test:
+  #   runs-on: ubuntu-latest
+
+  #   strategy:
+  #     matrix:
+  #       php-versions: ['8.0', '8.1', '8.2', '8.3']
+  #       wp-versions: ['6.1', '6.2', '6.3']
+
+  #   name: PHP ${{ matrix.php-versions }} WordPress ${{ matrix.wp-versions }}
+
+  #   steps:
+  #     - uses: actions/checkout@v4
+
+  #     - name: Setup PHP
+  #       uses: shivammathur/setup-php@v2
+  #       with:
+  #         php-version: ${{ matrix.php-versions }}
+
+  #     - name: Install dependencies
+  #       run: composer install --prefer-dist --no-progress
+  #       working-directory: ${{ github.workspace }}
+
+  #     - name: Setup WordPress
+  #       run: composer require --dev --no-update --no-progress roots/wordpress:"^${{ matrix.wp-versions }}" wp-phpunit/wp-phpunit:"^${{ matrix.wp-versions }}"
+  #       working-directory: ${{ github.workspace }}
+
+  #     - name: Run PHPUnit
+  #       run: composer run-script phpunit
+  #       working-directory: ${{ github.workspace }}
+
   test:
     runs-on: ubuntu-latest
 
     strategy:
+      fail-fast: false
       matrix:
-        php-versions: ['8.0', '8.1', '8.2', '8.3']
-        wp-versions: ['6.1', '6.2', '6.3']
+        # php-versions: ['7.4', '8.0', '8.1', '8.2', '8.3']
+        # wp-versions: [ 'trunk' ]
+        php-versions: ['8.1', '8.2', '8.3']
+        wp-versions: ['6.3', '6.4', '6.5']
 
-    name: PHP ${{ matrix.php-versions }} WordPress ${{ matrix.wp-versions }}
+    name: WP ${{ matrix.wp-versions }} / PHP ${{ matrix.php-versions }}
 
     steps:
-      - uses: actions/checkout@v4
+    - name: Checkout
+      uses: actions/checkout@v4
 
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php-versions }}
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.php-versions }}
 
-      - name: Install dependencies
-        run: composer install --prefer-dist --no-progress
-        working-directory: ${{ github.workspace }}
+    - name: Setup Database
+      uses: getong/mariadb-action@v1.1
 
-      - name: Setup WordPress
-        run: composer require --dev --no-update --no-progress roots/wordpress:"^${{ matrix.wp-versions }}" wp-phpunit/wp-phpunit:"^${{ matrix.wp-versions }}"
-        working-directory: ${{ github.workspace }}
+    - name: Check PHP Version
+      run: php -v
 
-      - name: Run PHPUnit
-        run: composer run-script phpunit
-        working-directory: ${{ github.workspace }}
+    - name: Composer install
+      run: composer install --optimize-autoloader --prefer-dist
+
+    - name: Install WP Tests
+      run: bash bin/install-wp-tests.sh wordpress_test root '' 127.0.0.1 ${{ matrix.wp-versions }}
+
+    - name: phpunit tests
+      run: ./vendor/bin/phpunit
+      env:
+        WP_TESTS_DIR: ${{ runner.temp }}/wordpress-tests-lib
+        WP_CORE_DIR: ${{ runner.temp }}/wordpress
   # phpcs:
   #   runs-on: ubuntu-22.04
   #   steps:
