@@ -27,12 +27,15 @@ jobs:
 
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress
+        working-directory: ${{ github.workspace }}
 
       - name: Setup WordPress
         run: composer require --dev --no-update --no-progress roots/wordpress:"^${{ matrix.wp-versions }}" wp-phpunit/wp-phpunit:"^${{ matrix.wp-versions }}"
+        working-directory: ${{ github.workspace }}
 
       - name: Run PHPUnit
         run: composer run-script phpunit
+        working-directory: ${{ github.workspace }}
   # phpcs:
   #   runs-on: ubuntu-22.04
   #   steps:
