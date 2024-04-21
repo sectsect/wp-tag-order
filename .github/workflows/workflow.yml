@@ -48,19 +48,41 @@ jobs:
         php-versions: ['8.1', '8.2', '8.3']
         wp-versions: ['6.3', '6.4', '6.5']
 
+    services:
+      mysql:
+        image: 'mysql:8.0'
+        env:
+          MYSQL_DATABASE: wordpress_test
+          MYSQL_PASSWORD: password
+          MYSQL_USER: wp
+          MYSQL_ROOT_PASSWORD: root
+        ports:
+          - '3306:3306'
+        options: >-
+          --health-cmd="mysqladmin ping" --health-interval=10s
+          --health-timeout=10s --health-retries=10
+
     name: WP ${{ matrix.wp-versions }} / PHP ${{ matrix.php-versions }}
+
+    env:
+      WORDPRESS_DB_NAME: wordpress_test
+      WORDPRESS_DB_PASS: password
+      WORDPRESS_DB_USER: wp
 
     steps:
     - name: Checkout
       uses: actions/checkout@v4
 
-    - name: Setup PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: ${{ matrix.php-versions }}
+    - name: 'Setup PHP ${{ matrix.php-versions }}'
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '${{ matrix.php-versions }}'
+          extensions: 'mysql, mysqli'
+          coverage: xdebug
+          tools: 'composer, cs2pr, phpunit'
 
-    - name: Setup Database
-      uses: getong/mariadb-action@v1.1
+    # - name: Setup Database
+    #   uses: getong/mariadb-action@v1.1
 
     - name: Check PHP Version
       run: php -v
@@ -71,10 +93,15 @@ jobs:
     # - name: Install WP Tests
     #   run: bash bin/install-wp-tests.sh wordpress_test root '' 127.0.0.1 ${{ matrix.wp-versions }}
 
-    - name: Setup WordPress Tests
-      run: bash bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION
-      env:
-        WP_VERSION: ${{ matrix.wp-versions }}
+    # - name: Setup WordPress Tests
+    #   run: bash bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION
+    #   env:
+    #     WP_VERSION: ${{ matrix.wp-versions }}
+
+    - name: 'Setup WordPress ${{ matrix.wp-versions }}'
+        run: >-
+          bash bin/install-wp-tests.sh wordpress_test wp password localhost ${{
+          matrix.wp-versions }} true
 
     - name: phpunit tests
       run: ./vendor/bin/phpunit
