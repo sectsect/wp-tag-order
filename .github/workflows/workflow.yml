@@ -1,88 +1,38 @@
-name: CI
-'on':
+name: PHP Unit Tests
+
+on:
   push:
     branches:
-      - master
+      - main
   pull_request:
     branches:
-      - master
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  # test:
-  #   runs-on: ubuntu-latest
-
-  #   strategy:
-  #     matrix:
-  #       php-versions: ['8.0', '8.1', '8.2', '8.3']
-  #       wp-versions: ['6.1', '6.2', '6.3']
-
-  #   name: PHP ${{ matrix.php-versions }} WordPress ${{ matrix.wp-versions }}
-
-  #   steps:
-  #     - uses: actions/checkout@v4
-
-  #     - name: Setup PHP
-  #       uses: shivammathur/setup-php@v2
-  #       with:
-  #         php-version: ${{ matrix.php-versions }}
-
-  #     - name: Install dependencies
-  #       run: composer install --prefer-dist --no-progress
-  #       working-directory: ${{ github.workspace }}
-
-  #     - name: Setup WordPress
-  #       run: composer require --dev --no-update --no-progress roots/wordpress:"^${{ matrix.wp-versions }}" wp-phpunit/wp-phpunit:"^${{ matrix.wp-versions }}"
-  #       working-directory: ${{ github.workspace }}
-
-  #     - name: Run PHPUnit
-  #       run: composer run-script phpunit
-  #       working-directory: ${{ github.workspace }}
-
-  test:
+  run:
     runs-on: ubuntu-latest
-
     strategy:
       fail-fast: false
       matrix:
-        # php-versions: ['7.4', '8.0', '8.1', '8.2', '8.3']
-        # wp-versions: [ 'trunk' ]
-        php-versions: ['8.1', '8.2', '8.3']
-        wp-versions: ['6.3', '6.4', '6.5']
-
-    services:
-      mysql:
-        image: 'mysql:8.0'
-        env:
-          MYSQL_DATABASE: wordpress_test
-          MYSQL_PASSWORD: password
-          MYSQL_USER: wp
-          MYSQL_ROOT_PASSWORD: root
-        ports:
-          - '3306:3306'
-        options: >-
-          --health-cmd="mysqladmin ping" --health-interval=10s
-          --health-timeout=10s --health-retries=10
-
+        php-versions: ['7.4', '8.0', '8.1', '8.2', '8.3']
+        wp-versions: [ 'trunk' ]
     name: WP ${{ matrix.wp-versions }} / PHP ${{ matrix.php-versions }}
-
-    env:
-      WORDPRESS_DB_NAME: wordpress_test
-      WORDPRESS_DB_PASS: password
-      WORDPRESS_DB_USER: wp
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v3
 
-    - name: 'Setup PHP ${{ matrix.php-versions }}'
+    - name: Setup PHP
       uses: shivammathur/setup-php@v2
       with:
-        php-version: '${{ matrix.php-versions }}'
-        extensions: 'mysql, mysqli'
-        coverage: xdebug
-        tools: 'composer, cs2pr, phpunit'
+        php-version: ${{ matrix.php-versions }}
 
-    # - name: Setup Database
-    #   uses: getong/mariadb-action@v1.1
+    - name: Setup Database
+      uses: getong/mariadb-action@v1.1
 
     - name: Check PHP Version
       run: php -v
@@ -90,53 +40,11 @@ jobs:
     - name: Composer install
       run: composer install --optimize-autoloader --prefer-dist
 
-    # - name: Install WP Tests
-    #   run: bash bin/install-wp-tests.sh wordpress_test root '' 127.0.0.1 ${{ matrix.wp-versions }}
-
-    # - name: Setup WordPress Tests
-    #   run: bash bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION
-    #   env:
-    #     WP_VERSION: ${{ matrix.wp-versions }}
-
-    - name: 'Setup WordPress ${{ matrix.wp-versions }}'
-      run:  bash bin/install-wp-tests.sh wordpress_test wp password localhost ${{matrix.wp-versions }} true
+    - name: Install WP Tests
+      run: bash bin/install-wp-tests.sh wordpress_test root '' 127.0.0.1 ${{ matrix.wp-versions }}
 
     - name: phpunit tests
       run: ./vendor/bin/phpunit
       env:
         WP_TESTS_DIR: ${{ runner.temp }}/wordpress-tests-lib
         WP_CORE_DIR: ${{ runner.temp }}/wordpress
-  # phpcs:
-  #   runs-on: ubuntu-22.04
-  #   steps:
-  #     - name: Fix host resolution
-  #       run: echo "127.0.0.1 $(hostname)" | sudo tee -a /etc/hosts
-  #     - uses: actions/checkout@v4
-  #     - name: Setup PHP
-  #       uses: shivammathur/setup-php@v2
-  #       with:
-  #         php-version: '8.2'
-  #         coverage: none
-  #         tools: phpcs
-  #     - name: Setup Composer
-  #       run: |
-  #         cd ${{ github.workspace }}
-  #         composer install --no-progress --prefer-dist --optimize-autoloader
-  #     - name: Allow dealerdirect/phpcodesniffer-composer-installer plugin
-  #       run: >-
-  #         composer global config
-  #         allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
-  #     - name: Install dependencies
-  #       run: >
-  #         composer global require wp-coding-standards/wpcs
-
-  #         composer global require phpcompatibility/php-compatibility
-
-  #         composer global require phpcompatibility/phpcompatibility-paragonie
-
-  #         composer global require phpcompatibility/phpcompatibility-wp
-
-  #         phpcs --config-set installed_paths
-  #         $HOME/.composer/vendor/wp-coding-standards/wpcs,$HOME/.composer/vendor/phpcompatibility/php-compatibility,$HOME/.composer/vendor/phpcompatibility/phpcompatibility-paragonie,$HOME/.composer/vendor/phpcompatibility/phpcompatibility-wp
-  #     - name: Run PHPCS
-  #       run: phpcs
