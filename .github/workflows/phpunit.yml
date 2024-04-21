@@ -13,7 +13,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  run:
+  phpunit:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
