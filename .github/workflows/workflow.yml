@@ -72,9 +72,7 @@ jobs:
     #   run: bash bin/install-wp-tests.sh wordpress_test root '' 127.0.0.1 ${{ matrix.wp-versions }}
 
     - name: Setup WordPress Tests
-      run: |
-        bash bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION
-        cp ./tests/php.xml ./phpunit.xml
+      run: bash bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION
       env:
         WP_VERSION: ${{ matrix.wp-versions }}
 
