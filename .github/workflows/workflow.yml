@@ -99,8 +99,7 @@ jobs:
     #     WP_VERSION: ${{ matrix.wp-versions }}
 
     - name: 'Setup WordPress ${{ matrix.wp-versions }}'
-      run: |
-        bash bin/install-wp-tests.sh wordpress_test root '' localhost ${{ matrix.wp-versions }}
+      run:  bash bin/install-wp-tests.sh wordpress_test wp password localhost ${{matrix.wp-versions }} true
 
     - name: phpunit tests
       run: ./vendor/bin/phpunit
