@@ -25,7 +25,7 @@ global $wpdb;
  *
  * @return void
  */
-function wpto_meta_box_markup( $obj, $metabox ) {
+function wpto_meta_box_markup( WP_Post $obj, array $metabox ): void {
 	wp_nonce_field( basename( __FILE__ ), 'wpto-meta-box-nonce' );
 	?>
 <div class="inner">
@@ -58,7 +58,7 @@ function wpto_meta_box_markup( $obj, $metabox ) {
  *
  * @return void
  */
-function add_wpto_meta_box() {
+function add_wpto_meta_box(): void {
 	$screens = wto_has_tag_posttype();
 	foreach ( $screens as $screen ) {
 		$taxonomies = wto_get_enabled_taxonomies();
@@ -94,7 +94,7 @@ add_action( 'add_meta_boxes', 'add_wpto_meta_box' );
  *
  * @return array The modified CSS classes.
  */
-function add_metabox_classes_tagsdiv( $classes ) {
+function add_metabox_classes_tagsdiv( array $classes ): array {
 	$classes[] = 'wpto_meta_box';
 	$classes[] = 'wpto_meta_box_tagsdiv';
 	// add support for controller in metaboxes on WordPress 5.5 or higher.
@@ -112,7 +112,7 @@ function add_metabox_classes_tagsdiv( $classes ) {
  *
  * @return array The modified CSS classes.
  */
-function add_metabox_classes_panel( $classes ) {
+function add_metabox_classes_panel( array $classes ): array {
 	$classes[] = 'wpto_meta_box';
 	$classes[] = 'wpto_meta_box_panel';
 	// add support for controller in metaboxes on WordPress 5.5 or higher.
@@ -132,7 +132,7 @@ function add_metabox_classes_panel( $classes ) {
  *
  * @return int|void The post ID if the save was successful, or void if not.
  */
-function save_wpto_meta_box( $post_id, $post, $update ) {
+function save_wpto_meta_box( int $post_id, WP_Post $post, bool $update ) {
 	if ( ! isset( $_POST['wpto-meta-box-nonce'] ) || ! wp_verify_nonce( $_POST['wpto-meta-box-nonce'], basename( __FILE__ ) ) ) {
 		return $post_id;
 	}
@@ -171,7 +171,7 @@ add_action( 'save_post', 'save_wpto_meta_box', 10, 3 );
  *
  * @return array The plugin data.
  */
-function wpto_get_plugin_data() {
+function wpto_get_plugin_data(): array {
 	$plugin_data = get_plugin_data( plugin_dir_path( __DIR__ ) . 'wp-tag-order.php' );
 	return $plugin_data;
 }
@@ -183,10 +183,15 @@ function wpto_get_plugin_data() {
  *
  * @return void
  */
-function load_wpto_admin_script( $hook ) {
+function load_wpto_admin_script( string $hook ): void {
 	$plugin_data    = wpto_get_plugin_data();
 	$plugin_version = $plugin_data['Version'];
 	global $post;
+
+	if ( ! $post ) {
+		return;
+	}
+
 	if ( 'post-new.php' === $hook || 'post.php' === $hook ) {
 		$pt                  = wto_has_tag_posttype();
 		$taxonomies_attached = get_object_taxonomies( $post->post_type );
@@ -219,14 +224,14 @@ add_action( 'admin_enqueue_scripts', 'load_wpto_admin_script', 10, 1 );
  *
  * @return void
  */
-function ajax_wto_sync_tags() {
+function ajax_wto_sync_tags(): void {
 	$id       = $_POST['id'];
 	$nonce    = $_POST['nonce'];
 	$action   = $_POST['action'];
 	$taxonomy = $_POST['taxonomy'];
 	$tags     = $_POST['tags'];
 
-	if ( ! isset( $nonce ) || empty( $nonce ) || ! wp_verify_nonce( $nonce, $action ) || ! check_ajax_referer( $action, 'nonce', false ) || 'POST' !== $_SERVER['REQUEST_METHOD'] ) {
+	if ( ! isset( $id ) || ! isset( $nonce ) || empty( $nonce ) || ! wp_verify_nonce( $nonce, $action ) || ! check_ajax_referer( $action, 'nonce', false ) || 'POST' !== $_SERVER['REQUEST_METHOD'] ) {
 		wp_safe_redirect( home_url( '/' ), 301 );
 		exit;
 	}
@@ -305,14 +310,14 @@ add_action( 'wp_ajax_nopriv_wto_sync_tags', 'ajax_wto_sync_tags' );
  *
  * @return void
  */
-function ajax_wto_update_tags() {
+function ajax_wto_update_tags(): void {
 	$id       = $_POST['id'];
 	$nonce    = $_POST['nonce'];
 	$action   = $_POST['action'];
 	$taxonomy = $_POST['taxonomy'];
 	$tags     = $_POST['tags'];
 
-	if ( ! isset( $tags ) || ! isset( $nonce ) || empty( $nonce ) || ! wp_verify_nonce( $nonce, $action ) || ! check_ajax_referer( $action, 'nonce', false ) || 'POST' !== $_SERVER['REQUEST_METHOD'] ) {
+	if ( ! isset( $tags ) || ! isset( $id ) || ! isset( $nonce ) || empty( $nonce ) || ! wp_verify_nonce( $nonce, $action ) || ! check_ajax_referer( $action, 'nonce', false ) || 'POST' !== $_SERVER['REQUEST_METHOD'] ) {
 		wp_safe_redirect( home_url( '/' ), 301 );
 		exit;
 	}
@@ -338,7 +343,7 @@ add_action( 'wp_ajax_nopriv_wto_update_tags', 'ajax_wto_update_tags' );
  *
  * @return void
  */
-function wpto_menu() {
+function wpto_menu(): void {
 	$page_hook_suffix = add_options_page( 'WP Tag Order', 'WP Tag Order', 'manage_options', 'wpto_menu', 'wpto_options_page' );
 	add_action( 'admin_print_styles-' . $page_hook_suffix, 'wpto_admin_styles' );
 	add_action( 'admin_print_scripts-' . $page_hook_suffix, 'wpto_admin_scripts' );
@@ -351,7 +356,7 @@ add_action( 'admin_menu', 'wpto_menu' );
  *
  * @return void
  */
-function wpto_admin_styles() {
+function wpto_admin_styles(): void {
 	$plugin_data    = wpto_get_plugin_data();
 	$plugin_version = $plugin_data['Version'];
 	wp_enqueue_style( 'sweetalert2', plugin_dir_url( __DIR__ ) . 'assets/css/options.css?v=' . $plugin_version, array() );
@@ -362,7 +367,7 @@ function wpto_admin_styles() {
  *
  * @return void
  */
-function wpto_admin_scripts() {
+function wpto_admin_scripts(): void {
 	$plugin_data    = wpto_get_plugin_data();
 	$plugin_version = $plugin_data['Version'];
 	wp_enqueue_script( 'wto-commons', plugin_dir_url( __DIR__ ) . 'assets/js/commons.js?v=' . $plugin_version, array( 'jquery' ), null, true );
@@ -384,7 +389,7 @@ function wpto_admin_scripts() {
  *
  * @return void
  */
-function ajax_wto_options() {
+function ajax_wto_options(): void {
 	$nonce  = $_POST['nonce'];
 	$action = $_POST['action'];
 	if ( ! isset( $nonce ) || empty( $nonce ) || ! wp_verify_nonce( $nonce, $action ) || ! check_ajax_referer( $action, 'nonce', false ) || 'POST' !== $_SERVER['REQUEST_METHOD'] ) {
@@ -450,7 +455,7 @@ add_action( 'wp_ajax_nopriv_wto_options', 'ajax_wto_options' );
  *
  * @return void
  */
-function register_wpto_settings() {
+function register_wpto_settings(): void {
 	register_setting( 'wpto-settings-group', 'wpto_enabled_taxonomies' );
 }
 
@@ -459,6 +464,6 @@ function register_wpto_settings() {
  *
  * @return void
  */
-function wpto_options_page() {
+function wpto_options_page(): void {
 	require_once plugin_dir_path( __DIR__ ) . 'options/index.php';
 }
