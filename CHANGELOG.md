@@ -1,5 +1,17 @@
 # Changelog
 
+## [v3.1.0](https://github.com/sectsect/wp-tag-order/tree/v3.1.0) (2024-04-24)
+
+[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v3.0.0...v3.1.0)
+
+**Merged pull requests:**
+
+- refactor: add PHP type hints [\#38](https://github.com/sectsect/wp-tag-order/pull/38) ([sectsect](https://github.com/sectsect))
+- Drop support for PHP 8.0 on PHPUnit 10 [\#37](https://github.com/sectsect/wp-tag-order/pull/37) ([sectsect](https://github.com/sectsect))
+- test: migrate config for phpunit [\#36](https://github.com/sectsect/wp-tag-order/pull/36) ([sectsect](https://github.com/sectsect))
+- ci: improve workflow [\#34](https://github.com/sectsect/wp-tag-order/pull/34) ([sectsect](https://github.com/sectsect))
+- ci: migrate CI to GitHub Actions [\#33](https://github.com/sectsect/wp-tag-order/pull/33) ([sectsect](https://github.com/sectsect))
+
 ## [v3.0.0](https://github.com/sectsect/wp-tag-order/tree/v3.0.0) (2024-04-19)
 
 [Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v2.2.5...v3.0.0)
