@@ -61,7 +61,7 @@ if ( $terms && ! is_wp_error( $terms ) ) :
 <ul>
     <?php foreach ( $terms as $term ) : ?>
         <li>
-            <a href="<?php echo get_term_link( $term->slug ); ?>">
+            <a href="<?php echo get_term_link( $term->slug, 'post_tag' ); ?>">
                 <?php echo $term->name; ?>
             </a>
         </li>
@@ -80,7 +80,7 @@ if ( $terms && ! is_wp_error( $terms ) ) :
 <ul>
     <?php foreach ( $terms as $term ) : ?>
         <li>
-            <a href="<?php echo get_term_link( $term->slug ); ?>">
+            <a href="<?php echo get_term_link( $term->slug, 'post_tag' ); ?>">
                 <?php echo $term->name; ?>
             </a>
         </li>
