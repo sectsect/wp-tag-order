@@ -19,7 +19,7 @@ $wptagorder_minimalrequiredphpversion = '8.0';
  *
  * @return void
  */
-function wptagorder_noticephpversionwrong() {
+function wptagorder_noticephpversionwrong(): void {
 	global $wptagorder_minimalrequiredphpversion;
 	// Ensure $wptagorder_minimalrequiredphpversion is not null and is a string.
 	$required_version = is_null( $wptagorder_minimalrequiredphpversion ) ? 'unknown' : $wptagorder_minimalrequiredphpversion;
@@ -35,7 +35,7 @@ function wptagorder_noticephpversionwrong() {
  *
  * @return bool True if the PHP version is sufficient, false otherwise.
  */
-function wptagorder_phpversioncheck() {
+function wptagorder_phpversioncheck(): bool {
 	global $wptagorder_minimalrequiredphpversion;
 	// Ensure $wptagorder_minimalrequiredphpversion is not null before comparison.
 	if ( null === $wptagorder_minimalrequiredphpversion || version_compare( phpversion(), $wptagorder_minimalrequiredphpversion ) < 0 ) {
@@ -50,7 +50,7 @@ function wptagorder_phpversioncheck() {
  *
  * @return void
  */
-function wptagorder_load_textdomain() {
+function wptagorder_load_textdomain(): void {
 	load_plugin_textdomain( 'wp-tag-order', false, plugin_basename( __DIR__ ) . '/languages' );
 }
 add_action( 'plugins_loaded', 'wptagorder_load_textdomain' );
@@ -65,7 +65,7 @@ add_action( 'plugins_loaded', 'wptagorder_load_textdomain' );
  *
  * @return array The modified plugin metadata array.
  */
-function my_plugin_row_meta( $plugin_meta, $plugin_file, $plugin_data, $status ) {
+function my_plugin_row_meta( array $plugin_meta, string $plugin_file, array $plugin_data, string $status ): array {
 	if ( plugin_basename( __FILE__ ) === $plugin_file ) {
 		$plugin_meta[] = '<a href="https://github.com/sectsect/wp-tag-order" target="_blank"><span class="dashicons dashicons-randomize"></span> GitHub</a>';
 	}

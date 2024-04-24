@@ -16,13 +16,8 @@
  *
  * @return array|false An array of term objects on success, false if no terms are found.
  */
-function get_the_terms_ordered( $post_id, $taxonomy ) {
-	global $post;
-
-	if ( ! $post_id ) {
-		$post_id = $post->ID;
-	}
-	$ids = get_post_meta( $post_id, 'wp-tag-order-' . $taxonomy, true );
+function get_the_terms_ordered( int $post_id, string $taxonomy ) {
+	$ids = get_post_meta( intval( $post_id ), 'wp-tag-order-' . $taxonomy, true );
 	if ( $ids ) {
 		$return = array();
 		$ids    = unserialize( $ids );
@@ -56,7 +51,17 @@ function get_the_terms_ordered( $post_id, $taxonomy ) {
  *
  * @return array|false An array of tag objects on success, false if no tags are found.
  */
-function get_the_tags_ordered( $post_id = '' ) {
+function get_the_tags_ordered( ?int $post_id = null ): array|false {
+	global $post;
+
+	if ( ! $post ) {
+		return array();
+	}
+
+	if ( ! $post_id ) {
+		$post_id = $post->ID;
+	}
+
 	return get_the_terms_ordered( $post_id, 'post_tag' );
 }
 
@@ -70,7 +75,16 @@ function get_the_tags_ordered( $post_id = '' ) {
  *
  * @return string|false|WP_Error A list of tags on success, false if there are no terms, WP_Error on failure.
  */
-function get_the_tag_list_ordered( $before = '', $sep = '', $after = '', $id = 0 ) {
+function get_the_tag_list_ordered( string $before = '', string $sep = '', string $after = '', int $id = 0 ): string|false|WP_Error {
+	global $post;
+
+	if ( ! $post ) {
+		return array();
+	}
+
+	if ( ! $id ) {
+		$id = $post->ID;
+	}
 
 	/**
 	 * Filters the tags list for a given post.
@@ -95,7 +109,7 @@ function get_the_tag_list_ordered( $before = '', $sep = '', $after = '', $id = 0
  *
  * @return void
  */
-function the_tags_ordered( $before = null, $sep = ', ', $after = '' ) {
+function the_tags_ordered( ?string $before = null, string $sep = ', ', string $after = '' ): void {
 	if ( null === $before ) {
 		$before = __( 'Tags: ' );
 	}
@@ -113,7 +127,7 @@ function the_tags_ordered( $before = null, $sep = ', ', $after = '' ) {
  *
  * @return string|false|WP_Error A list of terms on success, false if there are no terms, WP_Error on failure.
  */
-function get_the_term_list_ordered( $id, $taxonomy, $before = '', $sep = '', $after = '' ) {
+function get_the_term_list_ordered( int $id, string $taxonomy, string $before = '', string $sep = '', string $after = '' ): string|false|WP_Error {
 	$terms = get_the_terms_ordered( $id, $taxonomy );
 
 	if ( is_wp_error( $terms ) ) {
@@ -160,7 +174,7 @@ function get_the_term_list_ordered( $id, $taxonomy, $before = '', $sep = '', $af
  *
  * @return void|false
  */
-function the_terms_ordered( $id, $taxonomy, $before = '', $sep = ', ', $after = '' ) {
+function the_terms_ordered( int $id, string $taxonomy, string $before = '', string $sep = ', ', string $after = '' ) {
 	$term_list = get_the_term_list_ordered( $id, $taxonomy, $before, $sep, $after );
 
 	if ( is_wp_error( $term_list ) ) {
