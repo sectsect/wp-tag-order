@@ -16,7 +16,7 @@
  *
  * @return array|false An array of term objects on success, false if no terms are found.
  */
-function get_the_terms_ordered( ?int $post_id = null, string $taxonomy ) {
+function get_the_terms_ordered( int $post_id, string $taxonomy ) {
 	global $post;
 
 	if ( ! $post_id && $post ) {
@@ -56,7 +56,7 @@ function get_the_terms_ordered( ?int $post_id = null, string $taxonomy ) {
  *
  * @return array|false An array of tag objects on success, false if no tags are found.
  */
-function get_the_tags_ordered( ?int $post_id = null ) {
+function get_the_tags_ordered( int $post_id ) {
 	return get_the_terms_ordered( $post_id, 'post_tag' );
 }
 
