@@ -17,11 +17,6 @@
  * @return array|false An array of term objects on success, false if no terms are found.
  */
 function get_the_terms_ordered( int $post_id, string $taxonomy ) {
-	global $post;
-
-	if ( ! $post_id && $post ) {
-		$post_id = $post->ID;
-	}
 	$ids = get_post_meta( intval( $post_id ), 'wp-tag-order-' . $taxonomy, true );
 	if ( $ids ) {
 		$return = array();
@@ -56,7 +51,17 @@ function get_the_terms_ordered( int $post_id, string $taxonomy ) {
  *
  * @return array|false An array of tag objects on success, false if no tags are found.
  */
-function get_the_tags_ordered( int $post_id ) {
+function get_the_tags_ordered( ?int $post_id = null ): array|false {
+	global $post;
+
+	if ( ! $post ) {
+		return array();
+	}
+
+	if ( ! $post_id ) {
+		$post_id = $post->ID;
+	}
+
 	return get_the_terms_ordered( $post_id, 'post_tag' );
 }
 
