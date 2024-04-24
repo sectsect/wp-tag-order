@@ -76,6 +76,15 @@ function get_the_tags_ordered( ?int $post_id = null ): array|false {
  * @return string|false|WP_Error A list of tags on success, false if there are no terms, WP_Error on failure.
  */
 function get_the_tag_list_ordered( string $before = '', string $sep = '', string $after = '', int $id = 0 ): string|false|WP_Error {
+	global $post;
+
+	if ( ! $post ) {
+		return array();
+	}
+
+	if ( ! $id ) {
+		$id = $post->ID;
+	}
 
 	/**
 	 * Filters the tags list for a given post.
