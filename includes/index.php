@@ -239,6 +239,7 @@ function ajax_wto_sync_tags(): void {
 	if ( $tags ) {
 		$newtags    = explode( ',', wp_unslash( $tags ) );
 		$newtagsids = array();
+
 		foreach ( $newtags as $newtag ) {
 			$term = term_exists( $newtag, sanitize_text_field( wp_unslash( $taxonomy ) ) );
 			if ( 0 === $term || null === $term ) {
@@ -255,7 +256,7 @@ function ajax_wto_sync_tags(): void {
 			$savedata = array();
 			$tags_val = get_post_meta( sanitize_text_field( wp_unslash( $id ) ), 'wp-tag-order-' . sanitize_text_field( wp_unslash( $taxonomy ) ), true );
 
-			if ( ! $tags_val ) {
+			if ( $tags_val ) {
 				$basetagsids = unserialize( $tags_val );
 				$added       = wto_array_diff_interactive( $newtagsids, $basetagsids );
 				foreach ( $added as $val ) {
