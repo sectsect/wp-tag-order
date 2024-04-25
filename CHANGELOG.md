@@ -1,5 +1,13 @@
 # Changelog
 
+## [v3.4.1](https://github.com/sectsect/wp-tag-order/tree/v3.4.1) (2024-04-25)
+
+[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v3.4.0...v3.4.1)
+
+**Merged pull requests:**
+
+- refactor: add 'declare\(strict\_types=1\)' to PHP files [\#42](https://github.com/sectsect/wp-tag-order/pull/42) ([sectsect](https://github.com/sectsect))
+
 ## [v3.4.0](https://github.com/sectsect/wp-tag-order/tree/v3.4.0) (2024-04-25)
 
 [Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v3.3.0...v3.4.0)
