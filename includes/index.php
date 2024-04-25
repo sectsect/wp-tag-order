@@ -33,9 +33,8 @@ function wpto_meta_box_markup( WP_Post $obj, array $metabox ): void {
 	<?php
 	$taxonomy   = $metabox['args']['taxonomy'];
 	$tags_value = get_post_meta( $obj->ID, 'wp-tag-order-' . $taxonomy, true );
-	$tags       = array();
 	$tags       = unserialize( $tags_value );
-	if ( ! wto_is_array_empty( $tags ) ) :
+	if ( $tags && is_array( $tags ) ) :
 		foreach ( $tags as $tagid ) :
 			$tag = get_term_by( 'id', $tagid, $taxonomy );
 			?>
@@ -124,15 +123,20 @@ function add_metabox_classes_panel( array $classes ): array {
 }
 
 /**
- * Saves the tag order meta box data.
+ * Saves the tag order meta box data when a post is saved.
  *
- * @param int     $post_id The post ID.
- * @param WP_Post $post    The post object.
- * @param bool    $update  Whether this is an existing post being updated.
+ * This function handles the saving of non-hierarchical taxonomy terms (tags) order for a post.
+ * It checks for nonce validation, user capabilities, and autosave status before proceeding.
+ * The function iterates through each taxonomy associated with the post type and updates the
+ * post meta with the order of tags if the taxonomy is enabled and non-hierarchical.
  *
- * @return int|void The post ID if the save was successful, or void if not.
+ * @param int     $post_id The ID of the post being saved.
+ * @param WP_Post $post    The post object associated with the ID.
+ * @param bool    $update  Indicates if the save operation is for an existing post being updated.
+ *
+ * @return int|bool The post ID if the save was successful, or false if the save operation was halted.
  */
-function save_wpto_meta_box( int $post_id, WP_Post $post, bool $update ) {
+function save_wpto_meta_box( int $post_id, WP_Post $post, bool $update ): int|bool {
 	if ( ! isset( $_POST['wpto-meta-box-nonce'] ) || ! wp_verify_nonce( $_POST['wpto-meta-box-nonce'], basename( __FILE__ ) ) ) {
 		return $post_id;
 	}
@@ -145,22 +149,29 @@ function save_wpto_meta_box( int $post_id, WP_Post $post, bool $update ) {
 		return $post_id;
 	}
 
+	if ( ! $post?->post_type ) {
+		return $post_id;
+	}
+
 	$pt = wto_has_tag_posttype();
 	if ( ! in_array( $post->post_type, $pt, true ) ) {
 		return $post_id;
 	}
 
 	$taxonomies = get_object_taxonomies( $post->post_type );
-	if ( ! empty( $taxonomies ) ) {
-		foreach ( $taxonomies as $taxonomy ) {
-			if ( ! is_taxonomy_hierarchical( $taxonomy ) && wto_is_enabled_taxonomy( $taxonomy ) ) {
-				$meta_box_tags_value = '';
-				$fieldname           = 'wp-tag-order-' . $taxonomy;
-				if ( isset( $_POST[ $fieldname ] ) ) {
-					$meta_box_tags_value = serialize( $_POST[ $fieldname ] );
-				}
-				update_post_meta( $post_id, $fieldname, $meta_box_tags_value );
+
+	if ( empty( $taxonomies ) ) {
+		return $post_id;
+	}
+
+	foreach ( $taxonomies as $taxonomy ) {
+		if ( ! is_taxonomy_hierarchical( $taxonomy ) && wto_is_enabled_taxonomy( $taxonomy ) ) {
+			$meta_box_tags_value = '';
+			$fieldname           = 'wp-tag-order-' . $taxonomy;
+			if ( isset( $_POST[ $fieldname ] ) ) {
+				$meta_box_tags_value = serialize( $_POST[ $fieldname ] );
 			}
+			return update_post_meta( $post_id, $fieldname, $meta_box_tags_value );
 		}
 	}
 }
@@ -188,7 +199,7 @@ function load_wpto_admin_script( string $hook ): void {
 	$plugin_version = $plugin_data['Version'];
 	global $post;
 
-	if ( ! $post ) {
+	if ( ! $post?->post_type ) {
 		return;
 	}
 
