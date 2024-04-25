@@ -8,6 +8,8 @@
  * @subpackage WP_Tag_Order/includes
  */
 
+declare(strict_types=1);
+
 /**
  * Checks if an array is empty.
  *

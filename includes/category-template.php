@@ -8,6 +8,8 @@
  * @subpackage WP_Tag_Order/includes
  */
 
+declare(strict_types=1);
+
 /**
  * Retrieves the ordered terms for a given post and specified taxonomy.
  * This function fetches the post object, retrieves the stored term IDs from post meta,

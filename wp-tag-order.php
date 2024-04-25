@@ -12,6 +12,8 @@
  * @package         WP_Tag_Order
  */
 
+declare(strict_types=1);
+
 $wptagorder_minimalrequiredphpversion = '8.0';
 
 /**
