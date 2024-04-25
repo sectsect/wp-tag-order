@@ -33,9 +33,8 @@ function wpto_meta_box_markup( WP_Post $obj, array $metabox ): void {
 	<?php
 	$taxonomy   = $metabox['args']['taxonomy'];
 	$tags_value = get_post_meta( $obj->ID, 'wp-tag-order-' . $taxonomy, true );
-	$tags       = array();
 	$tags       = unserialize( $tags_value );
-	if ( ! wto_is_array_empty( $tags ) ) :
+	if ( $tags && is_array( $tags ) ) :
 		foreach ( $tags as $tagid ) :
 			$tag = get_term_by( 'id', $tagid, $taxonomy );
 			?>
