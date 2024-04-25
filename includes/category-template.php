@@ -9,15 +9,23 @@
  */
 
 /**
- * Retrieves the ordered terms for a given post and taxonomy.
+ * Retrieves the ordered terms for a given post and specified taxonomy.
+ * This function fetches the post object, retrieves the stored term IDs from post meta,
+ * and constructs an array of term objects in the order specified in the post meta.
  *
- * @param int    $post_id  The ID of the post.
- * @param string $taxonomy The taxonomy name.
+ * @param int|WP_Post $post  The ID of the post or the WP_Post object itself.
+ * @param string      $taxonomy The taxonomy name for which terms are to be retrieved.
  *
- * @return array|false An array of term objects on success, false if no terms are found.
+ * @return array|false An array of term objects on success, or false if no terms are found or the post does not exist.
  */
-function get_the_terms_ordered( int $post_id, string $taxonomy ) {
-	$ids = get_post_meta( intval( $post_id ), 'wp-tag-order-' . $taxonomy, true );
+function get_the_terms_ordered( int|WP_Post $post, string $taxonomy ): array|false {
+	$post = get_post( $post );
+
+	if ( ! $post ) {
+		return false;
+	}
+
+	$ids = get_post_meta( intval( $post->ID ), 'wp-tag-order-' . $taxonomy, true );
 	if ( $ids ) {
 		$return = array();
 		$ids    = unserialize( $ids );
@@ -46,56 +54,42 @@ function get_the_terms_ordered( int $post_id, string $taxonomy ) {
 
 /**
  * Retrieves the ordered tags for a given post.
+ * This function is a wrapper for get_the_terms_ordered, specifically for the 'post_tag' taxonomy.
  *
- * @param int $post_id The ID of the post.
+ * @param int|WP_Post $post The ID of the post or the WP_Post object itself. Defaults to the current post if not specified.
  *
- * @return array|false An array of tag objects on success, false if no tags are found.
+ * @return array|false An array of tag objects on success, or false if no tags are found.
  */
-function get_the_tags_ordered( ?int $post_id = null ): array|false {
-	global $post;
-
-	if ( ! $post ) {
-		return array();
-	}
-
-	if ( ! $post_id ) {
-		$post_id = $post->ID;
-	}
-
-	return get_the_terms_ordered( $post_id, 'post_tag' );
+function get_the_tags_ordered( int|WP_Post $post = 0 ): array|false {
+	return get_the_terms_ordered( $post, 'post_tag' );
 }
 
 /**
- * Retrieves the tags for a post formatted as a string.
+ * Retrieves a formatted string of ordered tags for a specified post.
  *
- * @param string $before Optional. String to use before the tags.
- * @param string $sep    Optional. String to use between the tags.
- * @param string $after  Optional. String to use after the tags.
- * @param int    $id     Optional. The ID of the post. Defaults to the current post.
+ * This function fetches the tags associated with a given post in the order they are stored and formats them as a string.
+ * The tags are retrieved using the `get_the_term_list_ordered` function specifically for the 'post_tag' taxonomy.
  *
- * @return string|false|WP_Error A list of tags on success, false if there are no terms, WP_Error on failure.
+ * @param string $before Optional. The string to prepend before the tag list. Defaults to an empty string.
+ * @param string $sep    Optional. The separator string between individual tags. Defaults to an empty string.
+ * @param string $after  Optional. The string to append after the tag list. Defaults to an empty string.
+ * @param int    $id     Optional. The ID of the post for which to retrieve tags. Defaults to the current post if not specified.
+ *
+ * @return string|false|WP_Error The formatted tag list as a string on success, false if no tags are found, or WP_Error on failure.
  */
 function get_the_tag_list_ordered( string $before = '', string $sep = '', string $after = '', int $id = 0 ): string|false|WP_Error {
-	global $post;
-
-	if ( ! $post ) {
-		return array();
-	}
-
-	if ( ! $id ) {
-		$id = $post->ID;
-	}
-
 	/**
-	 * Filters the tags list for a given post.
+	 * Filters the formatted tag list for a post.
+	 *
+	 * Allows modification of the final output of tag list string before it is returned.
 	 *
 	 * @since 2.3.0
 	 *
-	 * @param string $tag_list List of tags.
-	 * @param string $before   String to use before tags.
-	 * @param string $sep      String to use between the tags.
-	 * @param string $after    String to use after tags.
-	 * @param int    $id       Post ID.
+	 * @param string $tag_list The formatted list of tags.
+	 * @param string $before   The string used before the tag list.
+	 * @param string $sep      The separator used between tags.
+	 * @param string $after    The string used after the tag list.
+	 * @param int    $id       The ID of the post.
 	 */
 	return apply_filters( 'the_tags', get_the_term_list_ordered( $id, 'post_tag', $before, $sep, $after ), $before, $sep, $after, $id );
 }
