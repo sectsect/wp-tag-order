@@ -132,7 +132,7 @@ function wto_has_tag_posttype(): array {
 			}
 		}
 	}
-	return array_unique( $hastagposttypes );
+	return array_values( array_unique( $hastagposttypes ) );
 }
 
 /**
