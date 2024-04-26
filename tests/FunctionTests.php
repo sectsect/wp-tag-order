@@ -94,7 +94,23 @@ class FunctionTests extends WP_UnitTestCase {
 	 * @covers wto_has_tag_posttype
 	 */
 	public function testWtoHasTagPosttype() {
-		register_post_type( 'news', array( 'taxonomies' => array( 'post_tag' ) ) );
+		register_post_type(
+			'news',
+			array(
+				'public'     => true,
+				'taxonomies' => array(
+					'post_tag',
+					'news_tag'
+				)
+			)
+		);
+		register_taxonomy(
+			'news_tag',
+			'news',
+			array(
+				'hierarchical' => false
+			)
+		);
 
 		$expected_post_type = array( 'post', 'news' );
 
