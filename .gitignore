@@ -9,3 +9,7 @@ node_modules/
 /vendor/
 
 .tsbuildinfo
+
+# PHPUnit
+/.phpunit.cache
+.phpunit.result.cache

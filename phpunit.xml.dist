@@ -2,7 +2,7 @@
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" bootstrap="tests/bootstrap.php" backupGlobals="false" colors="true" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd" cacheDirectory=".phpunit.cache">
   <testsuites>
     <testsuite name="testing">
-      <directory prefix="test-" suffix=".php">./tests/</directory>
+      <directory suffix=".php">./tests/</directory>
       <exclude>./tests/test-sample.php</exclude>
     </testsuite>
   </testsuites>
