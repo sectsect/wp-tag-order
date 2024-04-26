@@ -142,7 +142,7 @@ class FunctionTests extends WP_UnitTestCase {
 	 * @covers wto_get_enabled_taxonomies
 	 */
 	public function testWtoGetEnabledTaxonomies() {
-		$expected = array();
+		$expected = array( 'post_tag', 'enabled_cat' );
 
 		$result = wto_get_enabled_taxonomies();
 		$this->assertEquals( $expected, $result );
@@ -153,6 +153,7 @@ class FunctionTests extends WP_UnitTestCase {
 	 */
 	public function testWtoIsEnabledTaxonomy() {
 		$this->assertTrue( wto_is_enabled_taxonomy( 'post_tag' ) );
+		$this->assertFalse( wto_is_enabled_taxonomy( 'disabled_cat' ) );
 	}
 
 	/**
@@ -160,6 +161,7 @@ class FunctionTests extends WP_UnitTestCase {
 	 */
 	public function testWtoHasEnabledTaxonomy() {
 		$this->assertTrue( wto_has_enabled_taxonomy( array( 'post_tag', 'enabled_cat' ) ) );
+		$this->assertFalse( wto_has_enabled_taxonomy( array( 'disabled_cat' ) ) );
 	}
 
 	/**
@@ -169,9 +171,11 @@ class FunctionTests extends WP_UnitTestCase {
 		// Assuming wto_get_post_types_by_taxonomy function returns an array of post types for a given taxonomy
 		$expected_category        = array( 'post' );
 		$expected_post_tag        = array( 'post' );
+		$expected_custom_taxonomy = array( 'custom_post_type' );
 
 		$this->assertEquals( $expected_category, wto_get_post_types_by_taxonomy( 'category' ) );
 		$this->assertEquals( $expected_post_tag, wto_get_post_types_by_taxonomy( 'post_tag' ) );
+		$this->assertEquals( $expected_custom_taxonomy, wto_get_post_types_by_taxonomy( 'custom_taxonomy' ) );
 	}
 
 	/**
