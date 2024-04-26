@@ -63,48 +63,48 @@ class CategoryTemplateTests extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Test get_the_terms_ordered function with valid input.
+	 * @covers get_the_terms_ordered function with valid input.
 	 */
 	public function test_get_the_terms_ordered_valid() {
-		$terms = get_the_terms_ordered($this->post_id, 'post_tag');
+		$terms = get_the_terms_ordered( $this->post_id, 'post_tag' );
 
-		$this->assertIsArray($terms);
+		$this->assertIsArray( $terms );
 
-		$this->assertCount(5, $terms);
+		$this->assertCount( 5, $terms );
 
 		$expected_tags = array( 'Tag1', 'Tag2', 'Tag3', 'Tag4', 'Tag5' );
-		$tag_names = array_map(function ($term) {
-			return $term->name;
-		}, $terms);
+		$tag_names     = array_map(
+			function ( $term ) {
+				return $term->name;
+			},
+			$terms
+		);
 
-		$this->assertEquals($expected_tags, $tag_names);
+		$this->assertEquals( $expected_tags, $tag_names );
 	}
 
 	/**
-	 * Test get_the_terms_ordered function with invalid post ID.
+	 * @covers get_the_terms_ordered function with invalid post ID.
 	 */
 	public function test_get_the_terms_ordered_invalid_post() {
-		$terms = get_the_terms_ordered(999999, 'post_tag'); // Assuming this ID does not exist.
+		$terms = get_the_terms_ordered( 999999, 'post_tag' ); // Assuming this ID does not exist.
 
-		$this->assertFalse($terms);
+		$this->assertFalse( $terms );
 	}
 
 	/**
-	 * Test get_the_terms_ordered function with invalid taxonomy.
+	 * @covers get_the_terms_ordered function with invalid taxonomy.
 	 */
 	public function test_get_the_terms_ordered_invalid_taxonomy() {
-		$terms = get_the_terms_ordered($this->post_id, 'nonexistent_taxonomy');
+		$terms = get_the_terms_ordered( $this->post_id, 'nonexistent_taxonomy' );
 
-		$this->assertFalse($terms);
+		$this->assertFalse( $terms );
 	}
 
 	/**
 	 * @covers get_the_tags_ordered with a valid post.
 	 */
 	public function test_get_the_tags_ordered_valid_post() {
-		// Check if the function exists
-		$this->assertTrue( function_exists( 'get_the_tags_ordered' ), 'The function get_the_tags_ordered does not exist.' );
-
 		$tags = get_the_tags_ordered( $this->post_id );
 
 		// Check if the function returns an array of tags.
@@ -122,7 +122,7 @@ class CategoryTemplateTests extends WP_UnitTestCase {
 			$tags
 		);
 
-		$this->assertEquals( $expected_tags, $tag_names, 'Failed asserting the correct order of tags.' );
+		$this->assertEquals( $expected_tags, $tag_names );
 	}
 
 	/**
@@ -139,29 +139,29 @@ class CategoryTemplateTests extends WP_UnitTestCase {
 	 * @covers get_the_tag_list_ordered function.
 	 */
 	public function test_get_the_tag_list_ordered() {
-		$tag_list = get_the_tag_list_ordered('', ', ', '', $this->post_id);
-		$this->assertIsString($tag_list);
-		$this->assertStringContainsString('Tag1', $tag_list);
+		$tag_list = get_the_tag_list_ordered( '', ', ', '', $this->post_id );
+		$this->assertIsString( $tag_list );
+		$this->assertStringContainsString( 'Tag1', $tag_list );
 	}
 
 	/**
 	 * @covers the_tags_ordered function.
 	 */
 	// public function test_the_tags_ordered() {
-	// 	ob_start();
-	// 	the_tags_ordered(null, ', ', '', $this->post_id);
-	// 	$output = ob_get_clean();
-	// 	$this->assertIsString($output);
-	// 	$this->assertStringContainsString('Tags:', $output);
+	// ob_start();
+	// the_tags_ordered(null, ', ', '', $this->post_id);
+	// $output = ob_get_clean();
+	// $this->assertIsString($output);
+	// $this->assertStringContainsString('Tags:', $output);
 	// }
 
 	/**
 	 * @covers get_the_term_list_ordered function.
 	 */
 	public function test_get_the_term_list_ordered() {
-		$term_list = get_the_term_list_ordered($this->post_id, 'post_tag', '', ', ', '');
-		$this->assertIsString($term_list);
-		$this->assertStringContainsString('Tag1', $term_list);
+		$term_list = get_the_term_list_ordered( $this->post_id, 'post_tag', '', ', ', '' );
+		$this->assertIsString( $term_list );
+		$this->assertStringContainsString( 'Tag1', $term_list );
 	}
 
 	/**
@@ -169,9 +169,9 @@ class CategoryTemplateTests extends WP_UnitTestCase {
 	 */
 	public function test_the_terms_ordered() {
 		ob_start();
-		the_terms_ordered($this->post_id, 'post_tag', '', ', ', '');
+		the_terms_ordered( $this->post_id, 'post_tag', '', ', ', '' );
 		$output = ob_get_clean();
-		$this->assertIsString($output);
-		$this->assertStringContainsString('Tag1', $output);
+		$this->assertIsString( $output );
+		$this->assertStringContainsString( 'Tag1', $output );
 	}
 }
