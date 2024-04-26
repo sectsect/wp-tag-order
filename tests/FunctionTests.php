@@ -100,15 +100,7 @@ class FunctionTests extends WP_UnitTestCase {
 				'public'     => true,
 				'taxonomies' => array(
 					'post_tag',
-					'news_tag'
 				)
-			)
-		);
-		register_taxonomy(
-			'news_tag',
-			'news',
-			array(
-				'hierarchical' => false
 			)
 		);
 
