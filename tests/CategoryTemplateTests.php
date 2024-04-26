@@ -147,13 +147,17 @@ class CategoryTemplateTests extends WP_UnitTestCase {
 	/**
 	 * @covers the_tags_ordered function.
 	 */
-	// public function test_the_tags_ordered() {
-	// ob_start();
-	// the_tags_ordered(null, ', ', '', $this->post_id);
-	// $output = ob_get_clean();
-	// $this->assertIsString($output);
-	// $this->assertStringContainsString('Tags:', $output);
-	// }
+	public function test_the_tags_ordered() {
+		$permalink = get_permalink( $this->post_id );
+		$this->go_to( '/{$permalink}' ); // Set up the environment to simulate being on the post's page.
+
+		ob_start();
+		the_tags_ordered();
+		$output = ob_get_clean();
+
+		$this->assertIsString( $output );
+		$this->assertStringContainsString( 'Tags:', $output );
+	}
 
 	/**
 	 * @covers get_the_term_list_ordered function.
