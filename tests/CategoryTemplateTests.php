@@ -33,6 +33,18 @@ class CategoryTemplateTests extends WP_UnitTestCase {
 
 		// Add tags to the post.
 		wp_set_post_tags( $this->post_id, array( 'Tag1', 'Tag2', 'Tag3', 'Tag4', 'Tag5' ), true );
+
+		// Retrieve all assigned tags to get their term_ids.
+		$tags = wp_get_post_tags($this->post_id);
+		$tag_ids = array_map(function($tag) {
+			return $tag->term_id;
+		}, $tags);
+
+		// Serialize the array of tag IDs.
+		$serialized_tag_ids = serialize($tag_ids);
+
+		// Insert the serialized tag IDs into the wp_postmeta table with a custom key.
+		add_post_meta($this->post_id, 'wp-tag-order-post_tag', $serialized_tag_ids);
 	}
 
 	/**
