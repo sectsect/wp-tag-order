@@ -32,7 +32,7 @@ class CategoryTemplateTests extends WP_UnitTestCase {
 		]);
 
 		// Add tags to the post.
-		wp_set_post_tags( $this->post_id, ['Tag1', 'Tag2', 'Tag3', 'Tag4', 'Tag5'], true );
+		wp_set_post_tags( $this->post_id, array( 'Tag1', 'Tag2', 'Tag3', 'Tag4', 'Tag5' ), true );
 	}
 
 	/**
@@ -49,13 +49,16 @@ class CategoryTemplateTests extends WP_UnitTestCase {
 	 * @covers get_the_tags_ordered with a valid post.
 	 */
 	public function test_get_the_tags_ordered_valid_post() {
-		$tags = get_the_tags_ordered( $this->post_id );
+		// Check if the function exists
+		$this->assertTrue(function_exists('get_the_tags_ordered'), 'The function get_the_tags_ordered does not exist.');
+
+		$tags = get_the_tags_ordered($this->post_id);
 
 		// Check if the function returns an array of tags.
-		$this->assertIsArray( $tags );
+		$this->assertIsArray($tags, 'Failed asserting that the output is an array.');
 
 		// Check the count of tags.
-		$this->assertCount( 5, $tags );
+		$this->assertCount(5, $tags, 'Failed asserting the correct number of tags.');
 
 		// Check for correct order and data type.
 		$expected_tags = ['Tag1', 'Tag2', 'Tag3', 'Tag4', 'Tag5'];
@@ -63,7 +66,7 @@ class CategoryTemplateTests extends WP_UnitTestCase {
 			return $tag->name;
 		}, $tags);
 
-		$this->assertEquals( $expected_tags, $tag_names );
+		$this->assertEquals($expected_tags, $tag_names, 'Failed asserting the correct order of tags.');
 	}
 
 	/**
