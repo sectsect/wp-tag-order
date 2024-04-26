@@ -93,11 +93,18 @@ class FunctionTests extends WP_UnitTestCase {
 	/**
 	 * @covers wto_has_tag_posttype
 	 */
-	// public function testWtoHasTagPosttype() {
-	// 	$expected_post_type = array( 'post', 'news' );
+	public function testWtoHasTagPosttype() {
+		register_post_type( 'news', array() );
+		register_taxonomy(
+			'news_tag',
+			'news',
+			array( "hierarchical" => false )
+		);
 
-	// 	$this->assertEquals( $expected_post_type, wto_has_tag_posttype() );
-	// }
+		$expected_post_type = array( 'post', 'news' );
+
+		$this->assertEquals( $expected_post_type, wto_has_tag_posttype() );
+	}
 
 	/**
 	 * @covers wto_strposa
