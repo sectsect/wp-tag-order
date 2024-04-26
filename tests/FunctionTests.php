@@ -1,88 +1,103 @@
 <?php
 
 // Mocking WordPress function add_filter if not exists
-function add_filter( $tag, $function_to_add, $priority = 10, $accepted_args = 1 ) {
-	// Mock implementation can be customized as needed
+if ( ! function_exists( 'add_filter' ) ) {
+	function add_filter( $tag, $function_to_add, $priority = 10, $accepted_args = 1 ) {
+		// Mock implementation can be customized as needed
+	}
 }
-
 // Mocking WordPress function get_option if not exists
-function get_option( $option_name ) {
-	$options = array(
-		'wpto_enabled_taxonomies' => array( 'post_tag', 'enabled_cat' ),
-	);
+if ( ! function_exists( 'get_option' ) ) {
+	function get_option( $option_name ) {
+		$options = array(
+			'wpto_enabled_taxonomies' => array( 'post_tag', 'enabled_cat' ),
+		);
 
-	return $options[ $option_name ] ?? false;
+		return $options[ $option_name ] ?? false;
+	}
 }
 
 // Mocking WordPress function get_taxonomies if not exists
-function get_taxonomies( $args = array(), $output = 'names', $operator = 'and' ) {
-	return array(
-		'post_tag'    => (object) array( 'hierarchical' => false ),
-		'category'    => (object) array( 'hierarchical' => true ),
-		'post_format' => (object) array( 'hierarchical' => false ),
-	);
+if ( ! function_exists( 'get_taxonomies' ) ) {
+	function get_taxonomies( $args = array(), $output = 'names', $operator = 'and' ) {
+		return array(
+			'post_tag'    => (object) array( 'hierarchical' => false ),
+			'category'    => (object) array( 'hierarchical' => true ),
+			'post_format' => (object) array( 'hierarchical' => false ),
+		);
+	}
 }
 
 // Mocking WordPress global variable $wp_taxonomies if not exists
-$GLOBALS['wp_taxonomies'] = array(
-	'category'        => (object) array(
-		'name'         => 'category',
-		'object_type'  => array( 'post' ),
-		'hierarchical' => true,
-	),
-	'post_tag'        => (object) array(
-		'name'         => 'post_tag',
-		'object_type'  => array( 'post' ),
-		'hierarchical' => false,
-	),
-	'custom_taxonomy' => (object) array(
-		'name'         => 'custom_taxonomy',
-		'object_type'  => array( 'custom_post_type' ),
-		'hierarchical' => false,
-	),
-);
+if ( ! isset( $GLOBALS['wp_taxonomies'] ) ) {
+	$GLOBALS['wp_taxonomies'] = array(
+		'category'        => (object) array(
+			'name'         => 'category',
+			'object_type'  => array( 'post' ),
+			'hierarchical' => true,
+		),
+		'post_tag'        => (object) array(
+			'name'         => 'post_tag',
+			'object_type'  => array( 'post' ),
+			'hierarchical' => false,
+		),
+		'custom_taxonomy' => (object) array(
+			'name'         => 'custom_taxonomy',
+			'object_type'  => array( 'custom_post_type' ),
+			'hierarchical' => false,
+		),
+	);
+}
 
 // Mocking WordPress function get_post_types if not exists
-function get_post_types( $args = array(), $output = 'names', $operator = 'and' ) {
-	return array(
-		'post'             => 'post',
-		'news'             => 'news',
-		'custom_post_type' => 'custom_post_type',
-	)[ $output ];
+if ( ! function_exists( 'get_post_types' ) ) {
+	function get_post_types( $args = array(), $output = 'names', $operator = 'and' ) {
+		return array(
+			'post'             => 'post',
+			'news'             => 'news',
+			'custom_post_type' => 'custom_post_type',
+		)[ $output ];
+	}
 }
 
 // Mocking WordPress function get_object_taxonomies if not exists
-function get_object_taxonomies( $object, $output = 'names' ) {
-	$taxonomies = array(
-		'post'             => array( 'category', 'post_tag' ),
-		'news'             => array( 'page_tag' ),
-		'custom_post_type' => array( 'custom_taxonomy' ),
-	);
+if ( ! function_exists( 'get_object_taxonomies' ) ) {
+	function get_object_taxonomies( $object, $output = 'names' ) {
+		$taxonomies = array(
+			'post'             => array( 'category', 'post_tag' ),
+			'news'             => array( 'page_tag' ),
+			'custom_post_type' => array( 'custom_taxonomy' ),
+		);
 
-	return $taxonomies[ $object ] ?? array();
+		return $taxonomies[ $object ] ?? array();
+	}
 }
 
 // Mocking WordPress function get_bloginfo if not exists
-function get_bloginfo( $show = '' ) {
-	$info = array(
-		'name'           => 'Test Site',
-		'description'    => 'Just another WordPress site',
-		'wpurl'          => 'http://localhost',
-		'url'            => 'http://localhost',
-		'admin_email'    => 'admin@example.com',
-		'charset'        => 'UTF-8',
-		'version'        => '5.8',
-		'html_type'      => 'text/html',
-		'text_direction' => 'ltr',
-		'language'       => 'en-US',
-	);
+if ( ! function_exists( 'get_bloginfo' ) ) {
+	function get_bloginfo( $show = '' ) {
+		$info = array(
+			'name'           => 'Test Site',
+			'description'    => 'Just another WordPress site',
+			'wpurl'          => 'http://localhost',
+			'url'            => 'http://localhost',
+			'admin_email'    => 'admin@example.com',
+			'charset'        => 'UTF-8',
+			'version'        => '5.8',
+			'html_type'      => 'text/html',
+			'text_direction' => 'ltr',
+			'language'       => 'en-US',
+		);
 
-	return $info[ $show ] ?? '';
+		return $info[ $show ] ?? '';
+	}
 }
 
 // Mocking WordPress function is_taxonomy_hierarchical() if not exists
-function is_taxonomy_hierarchical( $taxonomy ) {
-	return true;
+if ( ! function_exists( 'is_taxonomy_hierarchical' ) ) {
+	function is_taxonomy_hierarchical( $taxonomy ) {
+		return true;
+	}
 }
 
 require_once __DIR__ . '/../includes/functions.php';
