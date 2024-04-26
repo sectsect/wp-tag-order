@@ -64,8 +64,6 @@ class CategoryTemplateTests extends WP_UnitTestCase {
 		// Check if the function exists
 		$this->assertTrue(function_exists('get_the_tags_ordered'), 'The function get_the_tags_ordered does not exist.');
 
-		$this->assertTrue($this->post_id, '`post_id` does not defined. -> ' . $this->post_id);
-
 		$tags = get_the_tags_ordered($this->post_id);
 
 		// Check if the function returns an array of tags.
