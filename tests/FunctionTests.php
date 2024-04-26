@@ -1,5 +1,4 @@
 <?php
-use PHPUnit\Framework\TestCase;
 
 // Mocking WordPress function add_filter if not exists
 if ( ! function_exists( 'add_filter' ) ) {
@@ -103,7 +102,7 @@ if ( ! function_exists( 'is_taxonomy_hierarchical' ) ) {
 
 require_once __DIR__ . '/../includes/functions.php';
 
-class FunctionTests extends TestCase {
+class FunctionTests extends WP_UnitTestCase {
 	/**
 	 * @covers wto_is_array_empty
 	 */
