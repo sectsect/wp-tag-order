@@ -22,11 +22,27 @@ class CategoryTemplateTests extends WP_UnitTestCase {
 	public function setUp(): void {
 		parent::setUp();
 
-		// Create a post.
-		$this->post_id = $this->factory->post->create();
+		// Create a post using wp_insert_post.
+		$this->post_id = wp_insert_post([
+			'post_title'    => 'Test Post',
+			'post_content'  => 'This is a test post.',
+			'post_status'   => 'publish',
+			'post_author'   => 1,
+			'post_type'     => 'post'
+		]);
 
 		// Add tags to the post.
 		wp_set_post_tags( $this->post_id, ['Tag1', 'Tag2', 'Tag3', 'Tag4', 'Tag5'], true );
+	}
+
+	/**
+	 * Clean up the environment after each test.
+	 */
+	public function tearDown(): void {
+		// Delete the post.
+		wp_delete_post( $this->post_id, true );
+
+		parent::tearDown();
 	}
 
 	/**
