@@ -31,8 +31,8 @@ class CategoryTemplateTests extends WP_UnitTestCase {
 			'post_type'     => 'post'
 		]);
 
-		// Add tags to the post.
-		wp_set_post_tags( $this->post_id, array( 'Tag1', 'Tag2', 'Tag3', 'Tag4', 'Tag5' ), true );
+		// // Add tags to the post.
+		// wp_set_post_tags( $this->post_id, array( 'Tag1', 'Tag2', 'Tag3', 'Tag4', 'Tag5' ), true );
 	}
 
 	/**
@@ -49,6 +49,9 @@ class CategoryTemplateTests extends WP_UnitTestCase {
 	 * @covers get_the_tags_ordered with a valid post.
 	 */
 	public function test_get_the_tags_ordered_valid_post() {
+		// Add tags to the post.
+		wp_set_post_tags( $this->post_id, array( 'Tag1', 'Tag2', 'Tag3', 'Tag4', 'Tag5' ), true );
+
 		// Check if the function exists
 		$this->assertTrue(function_exists('get_the_tags_ordered'), 'The function get_the_tags_ordered does not exist.');
 
