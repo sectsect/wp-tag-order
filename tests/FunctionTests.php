@@ -1,9 +1,9 @@
 <?php
 
-// // Mocking WordPress function add_filter if not exists
-// function add_filter( $tag, $function_to_add, $priority = 10, $accepted_args = 1 ) {
-// 	// Mock implementation can be customized as needed
-// }
+// Mocking WordPress function add_filter if not exists
+function add_filter( $tag, $function_to_add, $priority = 10, $accepted_args = 1 ) {
+	// Mock implementation can be customized as needed
+}
 
 // Mocking WordPress function get_option if not exists
 function get_option( $option_name ) {
