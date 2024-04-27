@@ -68,7 +68,8 @@ function wto_get_non_hierarchical_taxonomies(): array {
  * @return array<string> The value of the "wpto_enabled_taxonomies" option.
  */
 function wto_get_enabled_taxonomies(): array {
-	return get_option( 'wpto_enabled_taxonomies', array() );
+	$option = get_option( 'wpto_enabled_taxonomies', array() );
+	return is_array( $option ) ? $option : array();
 }
 
 /**

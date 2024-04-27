@@ -33,18 +33,18 @@ function wpto_meta_box_markup( WP_Post $obj, array $metabox ): void {
 <div class="inner">
 	<ul>
 	<?php
-	$taxonomy   = $metabox['args']['taxonomy'];
+	$taxonomy   = isset( $metabox['args'] ) && is_array( $metabox['args'] ) && isset( $metabox['args']['taxonomy'] ) ? $metabox['args']['taxonomy'] : '';
 	$tags_value = get_post_meta( $obj->ID, 'wp-tag-order-' . $taxonomy, true );
-	$tags       = unserialize( $tags_value );
+	$tags       = is_string( $tags_value ) ? unserialize( $tags_value ) : array();
 	if ( $tags && is_array( $tags ) ) :
 		foreach ( $tags as $tagid ) :
-			$tag = get_term_by( 'id', $tagid, $taxonomy );
+			$tag = is_string( $taxonomy ) && ! empty( $taxonomy ) ? get_term_by( 'id', $tagid, $taxonomy ) : null;
 			if ( ! $tag instanceof WP_Term ) {
 				continue; // Skip if $tag is not a WP_Term object.
 			}
 			?>
 		<li>
-			<input type="text" readonly="readonly" value="<?php echo $tag->name; ?>">
+			<input type="text" readonly="readonly" value="<?php echo esc_html( $tag->name ); ?>">
 			<input type="hidden" name="wp-tag-order-<?php echo $taxonomy; ?>[]" value="<?php echo $tag->term_id; ?>">
 		</li>
 			<?php
@@ -281,27 +281,27 @@ function ajax_wto_sync_tags(): void {
 			$tags_val = get_post_meta( intval( sanitize_text_field( wp_unslash( $id ) ) ), 'wp-tag-order-' . sanitize_text_field( wp_unslash( $taxonomy ) ), true );
 
 			if ( $tags_val ) {
-				$basetagsids = unserialize( $tags_val );
-				$added       = wto_array_diff_interactive( $newtagsids, $basetagsids );
-				foreach ( $added as $val ) {
-					if ( ! in_array( $val, $basetagsids, true ) ) {
-						array_push( $basetagsids, $val );
-					} else {
-						$key = array_search( $val, $basetagsids, true );
-						if ( false !== $key ) {
-							unset( $basetagsids[ $key ] );
+				$basetagsids = is_string( $tags_val ) ? unserialize( $tags_val ) : array();
+				if ( is_array( $basetagsids ) ) {
+					$added = wto_array_diff_interactive( $newtagsids, $basetagsids );
+					foreach ( $added as $val ) {
+						if ( is_array( $basetagsids ) && ! in_array( $val, $basetagsids, true ) ) {
+							array_push( $basetagsids, $val );
+						} else {
+							$key = array_search( $val, $basetagsids, true );
+							if ( false !== $key ) {
+								unset( $basetagsids[ $key ] );
+							}
 						}
 					}
+					$savedata = $basetagsids;
 				}
-				$savedata = $basetagsids;
 			} else {
 				$savedata = $newtagsids;
 			}
 			// Update the DB in real time (wp_postmeta) !
-			if ( isset( $savedata ) ) {
-				$meta_box_tags_value = serialize( $savedata );
-			}
-			$return = update_post_meta( intval( sanitize_text_field( wp_unslash( $id ) ) ), 'wp-tag-order-' . sanitize_text_field( wp_unslash( $taxonomy ) ), $meta_box_tags_value );
+			$meta_box_tags_value = serialize( $savedata );
+			$return              = update_post_meta( intval( sanitize_text_field( wp_unslash( $id ) ) ), 'wp-tag-order-' . sanitize_text_field( wp_unslash( $taxonomy ) ), $meta_box_tags_value );
 
 			// Update the DB in real time (wp_term_relationships) !
 			$newtagsids_int    = array_map( 'intval', $newtagsids ); // Cast string to integer  @ Line: 23 !
@@ -316,7 +316,7 @@ function ajax_wto_sync_tags(): void {
 		$return = '';
 		if ( ! wto_is_array_empty( $savedata ) ) {
 			foreach ( $savedata as $newtag ) {
-				$tag = get_term_by( 'id', esc_attr( $newtag ), sanitize_text_field( wp_unslash( $taxonomy ) ) );
+				$tag = get_term_by( 'id', (int) $newtag, sanitize_text_field( wp_unslash( $taxonomy ) ) );
 				if ( ! $tag instanceof WP_Term ) {
 					continue; // Skip if $tag is not a WP_Term object.
 				}

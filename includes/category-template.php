@@ -28,29 +28,36 @@ function get_the_terms_ordered( int|WP_Post $post, string $taxonomy ): array|fal
 	}
 
 	$ids = get_post_meta( intval( $post->ID ), 'wp-tag-order-' . $taxonomy, true );
-	if ( $ids ) {
-		$return = array();
-		$ids    = unserialize( $ids );
-		foreach ( $ids as $tagid ) {
-			$tag = get_term_by( 'id', $tagid, $taxonomy );
-			if ( ! $tag || is_wp_error( $tag ) ) {
-				continue; // Skip if the term is not found or an error occurred.
-			}
-			$return[] = (object) array(
-				'term_id'          => $tag->term_id,
-				'name'             => $tag->name,
-				'slug'             => $tag->slug,
-				'term_group'       => $tag->term_group,
-				'term_taxonomy_id' => $tag->term_taxonomy_id,
-				'taxonomy'         => $tag->taxonomy,
-				'description'      => $tag->description,
-				'parent'           => $tag->parent,
-				'count'            => $tag->count,
-				'filter'           => $tag->filter,
-			);
+	if ( ! is_string( $ids ) ) {
+		return false; // Ensure that $ids is a string before unserializing.
+	}
+
+	$ids = unserialize( $ids );
+	if ( ! is_array( $ids ) ) {
+		return false; // Ensure that $ids is an array before iterating.
+	}
+
+	$return = array();
+	foreach ( $ids as $tagid ) {
+		if ( ! is_numeric( $tagid ) ) {
+			continue; // Ensure that $tagid is an int or string numeric before passing to get_term_by.
 		}
-	} else {
-		$return = false;
+		$tag = get_term_by( 'id', (int) $tagid, $taxonomy );
+		if ( ! $tag || is_wp_error( $tag ) ) {
+			continue; // Skip if the term is not found or an error occurred.
+		}
+		$return[] = (object) array(
+			'term_id'          => $tag->term_id,
+			'name'             => $tag->name,
+			'slug'             => $tag->slug,
+			'term_group'       => $tag->term_group,
+			'term_taxonomy_id' => $tag->term_taxonomy_id,
+			'taxonomy'         => $tag->taxonomy,
+			'description'      => $tag->description,
+			'parent'           => $tag->parent,
+			'count'            => $tag->count,
+			'filter'           => $tag->filter,
+		);
 	}
 
 	return apply_filters( 'get_the_tags', $return );
