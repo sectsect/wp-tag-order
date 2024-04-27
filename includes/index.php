@@ -201,7 +201,7 @@ function load_wpto_admin_script( string $hook ): void {
 	$plugin_version = $plugin_data['Version'];
 	global $post;
 
-	if ( ! $post->post_type ) {
+	if ( ! $post?->post_type ) {
 		return;
 	}
 
