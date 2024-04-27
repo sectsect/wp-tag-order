@@ -185,12 +185,12 @@ function get_the_term_list_ordered( int $id, string $taxonomy, string $before = 
  * @param string $sep      Optional. String to use between the terms.
  * @param string $after    Optional. String to use after the term list.
  *
- * @return string|WP_Error|false
+ * @return bool
  */
 function the_terms_ordered( int $id, string $taxonomy, string $before = '', string $sep = ', ', string $after = '' ) {
 	$term_list = get_the_term_list_ordered( $id, $taxonomy, $before, $sep, $after );
 
-	if ( false === $term_list ) {
+	if ( false === $term_list || is_wp_error( $term_list ) ) {
 		return false;
 	}
 
@@ -199,11 +199,13 @@ function the_terms_ordered( int $id, string $taxonomy, string $before = '', stri
 	 *
 	 * @since 2.9.0
 	 *
-	 * @param string|false|WP_Error $term_list List of terms to display.
-	 * @param string                $taxonomy  The taxonomy name.
-	 * @param string                $before    String to use before the terms.
-	 * @param string                $sep       String to use between the terms.
-	 * @param string                $after     String to use after the terms.
+	 * @param string $term_list List of terms to display.
+	 * @param string $taxonomy  The taxonomy name.
+	 * @param string $before    String to use before the terms.
+	 * @param string $sep       String to use between the terms.
+	 * @param string $after     String to use after the terms.
 	 */
-	return apply_filters( 'the_terms', $term_list, $taxonomy, $before, $sep, $after );
+	echo apply_filters( 'the_terms', $term_list, $taxonomy, $before, $sep, $after );
+
+	return true; // Ensure the function returns true as expected.
 }
