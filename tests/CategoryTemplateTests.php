@@ -145,6 +145,29 @@ class CategoryTemplateTests extends WP_UnitTestCase {
 	}
 
 	/**
+	 * @covers get_the_term_list_ordered function with specific formatting.
+	 */
+	public function test_get_the_term_list_ordered_formatting() {
+		$before = '<ul>';
+		$sep    = '</li><li>';
+		$after  = '</li></ul>';
+
+		// Execute the function with formatting arguments.
+		$term_list = get_the_term_list_ordered( $this->post_id, 'post_tag', $before, $sep, $after );
+
+		// Build the expected output using the tags added in setUp().
+		$expected_tags   = array( 'Tag1', 'Tag2', 'Tag3', 'Tag4', 'Tag5' );
+		$expected_output = $before;
+		foreach ( $expected_tags as $tag ) {
+			$term             = get_term_by( 'name', $tag, 'post_tag' );
+			$expected_output .= '<a href="' . esc_url( get_term_link( $term ) ) . '" rel="tag">' . $tag . '</a>' . $sep;
+		}
+		$expected_output = rtrim( $expected_output, $sep ) . $after; // Remove the last separator and close with $after
+
+		$this->assertEquals( $expected_output, $term_list );
+	}
+
+	/**
 	 * @covers the_tags_ordered function.
 	 */
 	public function test_the_tags_ordered() {
