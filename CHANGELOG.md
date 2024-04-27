@@ -1,5 +1,68 @@
 # Changelog
 
+## [v3.6.0](https://github.com/sectsect/wp-tag-order/tree/v3.6.0) (2024-04-27)
+
+[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v3.5.0...v3.6.0)
+
+**Merged pull requests:**
+
+- make level for PHPStan stricter [\#49](https://github.com/sectsect/wp-tag-order/pull/49) ([sectsect](https://github.com/sectsect))
+- Feature/add phpstan [\#48](https://github.com/sectsect/wp-tag-order/pull/48) ([sectsect](https://github.com/sectsect))
+- test: add unit test [\#47](https://github.com/sectsect/wp-tag-order/pull/47) ([sectsect](https://github.com/sectsect))
+- test: add unit tests [\#46](https://github.com/sectsect/wp-tag-order/pull/46) ([sectsect](https://github.com/sectsect))
+
+## [v3.5.0](https://github.com/sectsect/wp-tag-order/tree/v3.5.0) (2024-04-26)
+
+[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v3.4.1...v3.5.0)
+
+**Merged pull requests:**
+
+- test: add unit tests [\#44](https://github.com/sectsect/wp-tag-order/pull/44) ([sectsect](https://github.com/sectsect))
+
+## [v3.4.1](https://github.com/sectsect/wp-tag-order/tree/v3.4.1) (2024-04-25)
+
+[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v3.4.0...v3.4.1)
+
+**Merged pull requests:**
+
+- refactor: add 'declare\(strict\_types=1\)' to PHP files [\#42](https://github.com/sectsect/wp-tag-order/pull/42) ([sectsect](https://github.com/sectsect))
+
+## [v3.4.0](https://github.com/sectsect/wp-tag-order/tree/v3.4.0) (2024-04-25)
+
+[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v3.3.0...v3.4.0)
+
+**Merged pull requests:**
+
+- Feature/type hinting [\#41](https://github.com/sectsect/wp-tag-order/pull/41) ([sectsect](https://github.com/sectsect))
+
+## [v3.3.0](https://github.com/sectsect/wp-tag-order/tree/v3.3.0) (2024-04-25)
+
+[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v3.2.0...v3.3.0)
+
+**Merged pull requests:**
+
+- fix: fix bug [\#40](https://github.com/sectsect/wp-tag-order/pull/40) ([sectsect](https://github.com/sectsect))
+
+## [v3.2.0](https://github.com/sectsect/wp-tag-order/tree/v3.2.0) (2024-04-25)
+
+[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v3.1.0...v3.2.0)
+
+**Merged pull requests:**
+
+- Fix bug [\#39](https://github.com/sectsect/wp-tag-order/pull/39) ([sectsect](https://github.com/sectsect))
+
+## [v3.1.0](https://github.com/sectsect/wp-tag-order/tree/v3.1.0) (2024-04-24)
+
+[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v3.0.0...v3.1.0)
+
+**Merged pull requests:**
+
+- refactor: add PHP type hints [\#38](https://github.com/sectsect/wp-tag-order/pull/38) ([sectsect](https://github.com/sectsect))
+- Drop support for PHP 8.0 on PHPUnit 10 [\#37](https://github.com/sectsect/wp-tag-order/pull/37) ([sectsect](https://github.com/sectsect))
+- test: migrate config for phpunit [\#36](https://github.com/sectsect/wp-tag-order/pull/36) ([sectsect](https://github.com/sectsect))
+- ci: improve workflow [\#34](https://github.com/sectsect/wp-tag-order/pull/34) ([sectsect](https://github.com/sectsect))
+- ci: migrate CI to GitHub Actions [\#33](https://github.com/sectsect/wp-tag-order/pull/33) ([sectsect](https://github.com/sectsect))
+
 ## [v3.0.0](https://github.com/sectsect/wp-tag-order/tree/v3.0.0) (2024-04-19)
 
 [Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v2.2.5...v3.0.0)

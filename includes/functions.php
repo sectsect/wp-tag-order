@@ -13,7 +13,7 @@ declare(strict_types=1);
 /**
  * Checks if an array is empty.
  *
- * @param array $arr The array to check.
+ * @param array<mixed> $arr The array to check.
  *
  * @return bool True if the array is empty, false otherwise.
  */
@@ -24,10 +24,10 @@ function wto_is_array_empty( array $arr ): bool {
 /**
  * Computes the difference between two arrays.
  *
- * @param array $array_1 The first array.
- * @param array $array_2 The second array.
+ * @param array<mixed> $array_1 The first array.
+ * @param array<mixed> $array_2 The second array.
  *
- * @return array The difference between the two arrays.
+ * @return array<mixed> The difference between the two arrays.
  */
 function wto_array_diff_interactive( array $array_1, array $array_2 ): array {
 	return array_merge( array_diff( $array_1, $array_2 ), array_diff( $array_2, $array_1 ) );
@@ -36,7 +36,7 @@ function wto_array_diff_interactive( array $array_1, array $array_2 ): array {
 /**
  * Retrieves all non-hierarchical taxonomies in WordPress, excluding the built-in `post_format` taxonomy.
  *
- * @return array An array of non-hierarchical taxonomies.
+ * @return array<string, WP_Taxonomy> An array of non-hierarchical taxonomies.
  */
 function wto_get_non_hierarchical_taxonomies(): array {
 	$args               = array(
@@ -65,10 +65,11 @@ function wto_get_non_hierarchical_taxonomies(): array {
 /**
  * Retrieves the value of the "wpto_enabled_taxonomies" option.
  *
- * @return array The value of the "wpto_enabled_taxonomies" option.
+ * @return array<string> The value of the "wpto_enabled_taxonomies" option.
  */
 function wto_get_enabled_taxonomies(): array {
-	return get_option( 'wpto_enabled_taxonomies', array() );
+	$option = get_option( 'wpto_enabled_taxonomies', array() );
+	return is_array( $option ) ? $option : array();
 }
 
 /**
@@ -85,11 +86,9 @@ function wto_is_enabled_taxonomy( string $taxonomy ): bool {
 /**
  * Checks if any of the given taxonomies are enabled.
  *
- * @param array $taxonomies The taxonomies to check.
+ * @param array<string> $taxonomies The taxonomies to check.
  *
  * @return bool True if any of the taxonomies are enabled, false otherwise.
- *
- * @see https://stackoverflow.com/a/11040612/4542456
  */
 function wto_has_enabled_taxonomy( array $taxonomies ): bool {
 	return ! empty( array_intersect( wto_get_enabled_taxonomies(), $taxonomies ) );
@@ -100,7 +99,7 @@ function wto_has_enabled_taxonomy( array $taxonomies ): bool {
  *
  * @param string $tax The taxonomy slug. Default is 'category'.
  *
- * @return array An array of post types associated with the given taxonomy.
+ * @return array<string> An array of post types associated with the given taxonomy.
  */
 function wto_get_post_types_by_taxonomy( string $tax = 'category' ): array {
 	global $wp_taxonomies;
@@ -110,7 +109,7 @@ function wto_get_post_types_by_taxonomy( string $tax = 'category' ): array {
 /**
  * Retrieves all post types that have non-hierarchical taxonomies.
  *
- * @return array An array of post types that have non-hierarchical taxonomies.
+ * @return array<string> An array of post types that have non-hierarchical taxonomies.
  */
 function wto_has_tag_posttype(): array {
 	$args      = array(
@@ -132,19 +131,19 @@ function wto_has_tag_posttype(): array {
 			}
 		}
 	}
-	return array_unique( $hastagposttypes );
+	return array_values( array_unique( $hastagposttypes ) );
 }
 
 /**
  * Checks if any of the needles are found in the haystack string.
  *
- * @param string       $haystack The string to search in.
- * @param string|array $needles  The string or array of strings to search for.
- * @param int          $offset   The starting position for the search. Default is 0.
+ * @param string               $haystack The string to search in.
+ * @param array<string>|string $needles  The string or array of strings to search for.
+ * @param int                  $offset   The starting position for the search. Default is 0.
  *
  * @return bool True if any of the needles are found in the haystack, false otherwise.
  */
-function wto_strposa( string $haystack, string|array $needles, int $offset = 0 ): bool {
+function wto_strposa( string $haystack, array|string $needles, int $offset = 0 ): bool {
 	$needles = (array) $needles;
 	foreach ( $needles as $needle ) {
 		if ( strpos( $haystack, $needle, $offset ) !== false ) {
