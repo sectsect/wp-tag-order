@@ -1,5 +1,24 @@
 # Changelog
 
+## [v3.6.0](https://github.com/sectsect/wp-tag-order/tree/v3.6.0) (2024-04-27)
+
+[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v3.5.0...v3.6.0)
+
+**Merged pull requests:**
+
+- make level for PHPStan stricter [\#49](https://github.com/sectsect/wp-tag-order/pull/49) ([sectsect](https://github.com/sectsect))
+- Feature/add phpstan [\#48](https://github.com/sectsect/wp-tag-order/pull/48) ([sectsect](https://github.com/sectsect))
+- test: add unit test [\#47](https://github.com/sectsect/wp-tag-order/pull/47) ([sectsect](https://github.com/sectsect))
+- test: add unit tests [\#46](https://github.com/sectsect/wp-tag-order/pull/46) ([sectsect](https://github.com/sectsect))
+
+## [v3.5.0](https://github.com/sectsect/wp-tag-order/tree/v3.5.0) (2024-04-26)
+
+[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v3.4.1...v3.5.0)
+
+**Merged pull requests:**
+
+- test: add unit tests [\#44](https://github.com/sectsect/wp-tag-order/pull/44) ([sectsect](https://github.com/sectsect))
+
 ## [v3.4.1](https://github.com/sectsect/wp-tag-order/tree/v3.4.1) (2024-04-25)
 
 [Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v3.4.0...v3.4.1)
