@@ -39,6 +39,9 @@ function wpto_meta_box_markup( WP_Post $obj, array $metabox ): void {
 	if ( $tags && is_array( $tags ) ) :
 		foreach ( $tags as $tagid ) :
 			$tag = get_term_by( 'id', $tagid, $taxonomy );
+			if ( ! $tag instanceof WP_Term ) {
+				continue; // Skip if $tag is not a WP_Term object.
+			}
 			?>
 		<li>
 			<input type="text" readonly="readonly" value="<?php echo $tag->name; ?>">
@@ -66,7 +69,10 @@ function add_wpto_meta_box(): void {
 		if ( ! empty( $taxonomies ) ) {
 			foreach ( $taxonomies as $taxonomy ) {
 				if ( ! is_taxonomy_hierarchical( $taxonomy ) && 'post_format' !== $taxonomy ) {
-					$obj   = get_taxonomy( $taxonomy );
+					$obj = get_taxonomy( $taxonomy );
+					if ( ! $obj instanceof WP_Taxonomy ) {
+						continue; // Skip if $obj is not a WP_Taxonomy object.
+					}
 					$label = $obj->label;
 					add_meta_box(
 						'wpto_meta_box-' . $taxonomy,
@@ -264,6 +270,9 @@ function ajax_wto_sync_tags(): void {
 				}
 			}
 			$tag = get_term_by( 'name', $newtag, sanitize_text_field( wp_unslash( $taxonomy ) ) );
+			if ( ! $tag instanceof WP_Term ) {
+				continue; // Skip if $tag is not a WP_Term object.
+			}
 			array_push( $newtagsids, (string) $tag->term_id );
 		}
 
@@ -307,7 +316,10 @@ function ajax_wto_sync_tags(): void {
 		$return = '';
 		if ( ! wto_is_array_empty( $savedata ) ) {
 			foreach ( $savedata as $newtag ) {
-				$tag     = get_term_by( 'id', esc_attr( $newtag ), sanitize_text_field( wp_unslash( $taxonomy ) ) );
+				$tag = get_term_by( 'id', esc_attr( $newtag ), sanitize_text_field( wp_unslash( $taxonomy ) ) );
+				if ( ! $tag instanceof WP_Term ) {
+					continue; // Skip if $tag is not a WP_Term object.
+				}
 				$return .= '<li><input type="text" readonly="readonly" value="' . esc_attr( $tag->name ) . '"><input type="hidden" name="wp-tag-order-' . esc_attr( wp_unslash( $taxonomy ) ) . '[]" value="' . esc_attr( (string) $tag->term_id ) . '"></li>';
 			}
 		}
@@ -440,7 +452,10 @@ function ajax_wto_options(): void {
 				foreach ( $taxonomies as $taxonomy ) {
 					if ( ! is_taxonomy_hierarchical( $taxonomy ) && 'post_format' !== $taxonomy && wto_has_enabled_taxonomy( $taxonomies ) ) {
 						$terms = get_the_terms( $postid, $taxonomy );
-						$meta  = get_post_meta( $postid, 'wp-tag-order-' . $taxonomy, true );
+						if ( ! is_array( $terms ) ) {
+							continue; // Skip if $terms is not an array.
+						}
+						$meta = get_post_meta( $postid, 'wp-tag-order-' . $taxonomy, true );
 						if ( ! empty( $terms ) && ! $meta ) {
 							$term_ids = array();
 							foreach ( $terms as $term ) {

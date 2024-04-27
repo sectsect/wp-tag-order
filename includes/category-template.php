@@ -32,7 +32,10 @@ function get_the_terms_ordered( int|WP_Post $post, string $taxonomy ): array|fal
 		$return = array();
 		$ids    = unserialize( $ids );
 		foreach ( $ids as $tagid ) {
-			$tag      = get_term_by( 'id', $tagid, $taxonomy );
+			$tag = get_term_by( 'id', $tagid, $taxonomy );
+			if ( ! $tag || is_wp_error( $tag ) ) {
+				continue; // Skip if the term is not found or an error occurred.
+			}
 			$return[] = (object) array(
 				'term_id'          => $tag->term_id,
 				'name'             => $tag->name,
@@ -76,9 +79,11 @@ function get_the_tags_ordered( int|WP_Post $post = 0 ): array|false {
  * @param string $after  Optional. The string to append after the tag list. Defaults to an empty string.
  * @param int    $id     Optional. The ID of the post for which to retrieve tags. Defaults to the current post if not specified.
  *
- * @return string The formatted tag list as a string on success, false if no tags are found, or WP_Error on failure.
+ * @return string|false|WP_Error The formatted tag list as a string on success, false if no tags are found, or WP_Error on failure.
  */
-function get_the_tag_list_ordered( string $before = '', string $sep = '', string $after = '', int $id = 0 ): string {
+function get_the_tag_list_ordered( string $before = '', string $sep = '', string $after = '', int $id = 0 ): string|false|WP_Error {
+	$tag_list = get_the_term_list_ordered( $id, 'post_tag', $before, $sep, $after );
+
 	/**
 	 * Filters the formatted tag list for a post.
 	 *
@@ -86,13 +91,13 @@ function get_the_tag_list_ordered( string $before = '', string $sep = '', string
 	 *
 	 * @since 2.3.0
 	 *
-	 * @param string $tag_list The formatted list of tags.
+	 * @param string|false|WP_Error $tag_list The formatted list of tags.
 	 * @param string $before   The string used before the tag list.
 	 * @param string $sep      The separator used between tags.
 	 * @param string $after    The string used after the tag list.
 	 * @param int    $id       The ID of the post.
 	 */
-	return apply_filters( 'the_tags', get_the_term_list_ordered( $id, 'post_tag', $before, $sep, $after ), $before, $sep, $after, $id );
+	return apply_filters( 'the_tags', $tag_list, $before, $sep, $after, $id );
 }
 
 /**
@@ -108,7 +113,17 @@ function the_tags_ordered( ?string $before = null, string $sep = ', ', string $a
 	if ( null === $before ) {
 		$before = __( 'Tags: ' );
 	}
-	echo get_the_tag_list_ordered( $before, $sep, $after );
+	$tag_list = get_the_tag_list_ordered( $before, $sep, $after );
+
+	if ( is_string( $tag_list ) ) {
+		echo $tag_list;
+	} elseif ( is_wp_error( $tag_list ) ) {
+		// Log the error or display an error message.
+		error_log( 'Error retrieving tags: ' . $tag_list->get_error_message() );
+	} else {
+		// Handle the case where no tags are found.
+		echo 'No tags found.';
+	}
 }
 
 /**
@@ -163,7 +178,7 @@ function get_the_term_list_ordered( int $id, string $taxonomy, string $before = 
  * @param string $sep      Optional. String to use between the terms.
  * @param string $after    Optional. String to use after the term list.
  *
- * @return false
+ * @return string|WP_Error|false
  */
 function the_terms_ordered( int $id, string $taxonomy, string $before = '', string $sep = ', ', string $after = '' ) {
 	$term_list = get_the_term_list_ordered( $id, $taxonomy, $before, $sep, $after );
@@ -183,7 +198,5 @@ function the_terms_ordered( int $id, string $taxonomy, string $before = '', stri
 	 * @param string                $sep       String to use between the terms.
 	 * @param string                $after     String to use after the terms.
 	 */
-	echo apply_filters( 'the_terms', $term_list, $taxonomy, $before, $sep, $after );
-
-	return false; // Ensure the function returns false as expected.
+	return apply_filters( 'the_terms', $term_list, $taxonomy, $before, $sep, $after );
 }
