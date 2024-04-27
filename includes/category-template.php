@@ -18,7 +18,7 @@ declare(strict_types=1);
  * @param int|WP_Post $post  The ID of the post or the WP_Post object itself.
  * @param string      $taxonomy The taxonomy name for which terms are to be retrieved.
  *
- * @return array|false An array of term objects on success, or false if no terms are found or the post does not exist.
+ * @return WP_Term[]|false An array of term objects on success, or false if no terms are found or the post does not exist.
  */
 function get_the_terms_ordered( int|WP_Post $post, string $taxonomy ): array|false {
 	$post = get_post( $post );
@@ -59,7 +59,7 @@ function get_the_terms_ordered( int|WP_Post $post, string $taxonomy ): array|fal
  *
  * @param int|WP_Post $post The ID of the post or the WP_Post object itself. Defaults to the current post if not specified.
  *
- * @return array|false An array of tag objects on success, or false if no tags are found.
+ * @return WP_Term[]|false An array of tag objects on success, or false if no tags are found.
  */
 function get_the_tags_ordered( int|WP_Post $post = 0 ): array|false {
 	return get_the_terms_ordered( $post, 'post_tag' );

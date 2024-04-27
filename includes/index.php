@@ -22,8 +22,8 @@ global $wpdb;
  * Adds a meta box for tag ordering.
  * @ https://www.sitepoint.com/adding-custom-meta-boxes-to-wordpress/
  *
- * @param WP_Post $obj     The post object.
- * @param array   $metabox The meta box arguments.
+ * @param WP_Post              $obj     The post object.
+ * @param array<string, mixed> $metabox The meta box arguments.
  *
  * @return void
  */
@@ -91,9 +91,9 @@ add_action( 'add_meta_boxes', 'add_wpto_meta_box' );
 /**
  * Adds CSS classes to the tags meta box.
  *
- * @param array $classes The existing CSS classes.
+ * @param array<string> $classes The existing CSS classes.
  *
- * @return array The modified CSS classes.
+ * @return array<string> The modified CSS classes.
  */
 function add_metabox_classes_tagsdiv( array $classes ): array {
 	$classes[] = 'wpto_meta_box';
@@ -109,9 +109,9 @@ function add_metabox_classes_tagsdiv( array $classes ): array {
 /**
  * Adds CSS classes to the tag order meta box.
  *
- * @param array $classes The existing CSS classes.
+ * @param array<string> $classes The existing CSS classes.
  *
- * @return array The modified CSS classes.
+ * @return array<string> The modified CSS classes.
  */
 function add_metabox_classes_panel( array $classes ): array {
 	$classes[] = 'wpto_meta_box';
@@ -182,7 +182,7 @@ add_action( 'save_post', 'save_wpto_meta_box', 10, 3 );
 /**
  * Retrieves the plugin data.
  *
- * @return array The plugin data.
+ * @return array<string, mixed> The plugin data.
  */
 function wpto_get_plugin_data(): array {
 	$plugin_data = get_plugin_data( plugin_dir_path( __DIR__ ) . 'wp-tag-order.php' );
