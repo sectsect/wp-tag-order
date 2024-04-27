@@ -60,12 +60,12 @@ add_action( 'plugins_loaded', 'wptagorder_load_textdomain' );
 /**
  * Adds custom meta data to the plugin's row in the plugins list table.
  *
- * @param array  $plugin_meta An array of the plugin's metadata.
- * @param string $plugin_file Path to the plugin file relative to the plugins directory.
- * @param array  $plugin_data An array of plugin data.
- * @param string $status      Status of the plugin.
+ * @param string[]             $plugin_meta An array of the plugin's metadata.
+ * @param string               $plugin_file Path to the plugin file relative to the plugins directory.
+ * @param array<string, mixed> $plugin_data An array of plugin data.
+ * @param string               $status Status of the plugin.
  *
- * @return array The modified plugin metadata array.
+ * @return string[] The modified plugin metadata array.
  */
 function my_plugin_row_meta( array $plugin_meta, string $plugin_file, array $plugin_data, string $status ): array {
 	if ( plugin_basename( __FILE__ ) === $plugin_file ) {

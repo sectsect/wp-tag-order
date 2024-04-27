@@ -1,5 +1,5 @@
 parameters:
-  level: 5
+  level: 9
   paths:
     - wp-tag-order.php
     - includes/

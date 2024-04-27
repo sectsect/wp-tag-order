@@ -22,8 +22,8 @@ global $wpdb;
  * Adds a meta box for tag ordering.
  * @ https://www.sitepoint.com/adding-custom-meta-boxes-to-wordpress/
  *
- * @param WP_Post $obj     The post object.
- * @param array   $metabox The meta box arguments.
+ * @param WP_Post              $obj     The post object.
+ * @param array<string, mixed> $metabox The meta box arguments.
  *
  * @return void
  */
@@ -33,15 +33,18 @@ function wpto_meta_box_markup( WP_Post $obj, array $metabox ): void {
 <div class="inner">
 	<ul>
 	<?php
-	$taxonomy   = $metabox['args']['taxonomy'];
+	$taxonomy   = isset( $metabox['args'] ) && is_array( $metabox['args'] ) && isset( $metabox['args']['taxonomy'] ) ? $metabox['args']['taxonomy'] : '';
 	$tags_value = get_post_meta( $obj->ID, 'wp-tag-order-' . $taxonomy, true );
-	$tags       = unserialize( $tags_value );
+	$tags       = is_string( $tags_value ) ? unserialize( $tags_value ) : array();
 	if ( $tags && is_array( $tags ) ) :
 		foreach ( $tags as $tagid ) :
-			$tag = get_term_by( 'id', $tagid, $taxonomy );
+			$tag = is_string( $taxonomy ) && ! empty( $taxonomy ) ? get_term_by( 'id', $tagid, $taxonomy ) : null;
+			if ( ! $tag instanceof WP_Term ) {
+				continue; // Skip if $tag is not a WP_Term object.
+			}
 			?>
 		<li>
-			<input type="text" readonly="readonly" value="<?php echo $tag->name; ?>">
+			<input type="text" readonly="readonly" value="<?php echo esc_html( $tag->name ); ?>">
 			<input type="hidden" name="wp-tag-order-<?php echo $taxonomy; ?>[]" value="<?php echo $tag->term_id; ?>">
 		</li>
 			<?php
@@ -66,7 +69,10 @@ function add_wpto_meta_box(): void {
 		if ( ! empty( $taxonomies ) ) {
 			foreach ( $taxonomies as $taxonomy ) {
 				if ( ! is_taxonomy_hierarchical( $taxonomy ) && 'post_format' !== $taxonomy ) {
-					$obj   = get_taxonomy( $taxonomy );
+					$obj = get_taxonomy( $taxonomy );
+					if ( ! $obj instanceof WP_Taxonomy ) {
+						continue; // Skip if $obj is not a WP_Taxonomy object.
+					}
 					$label = $obj->label;
 					add_meta_box(
 						'wpto_meta_box-' . $taxonomy,
@@ -91,9 +97,9 @@ add_action( 'add_meta_boxes', 'add_wpto_meta_box' );
 /**
  * Adds CSS classes to the tags meta box.
  *
- * @param array $classes The existing CSS classes.
+ * @param array<string> $classes The existing CSS classes.
  *
- * @return array The modified CSS classes.
+ * @return array<string> The modified CSS classes.
  */
 function add_metabox_classes_tagsdiv( array $classes ): array {
 	$classes[] = 'wpto_meta_box';
@@ -109,9 +115,9 @@ function add_metabox_classes_tagsdiv( array $classes ): array {
 /**
  * Adds CSS classes to the tag order meta box.
  *
- * @param array $classes The existing CSS classes.
+ * @param array<string> $classes The existing CSS classes.
  *
- * @return array The modified CSS classes.
+ * @return array<string> The modified CSS classes.
  */
 function add_metabox_classes_panel( array $classes ): array {
 	$classes[] = 'wpto_meta_box';
@@ -182,7 +188,7 @@ add_action( 'save_post', 'save_wpto_meta_box', 10, 3 );
 /**
  * Retrieves the plugin data.
  *
- * @return array The plugin data.
+ * @return array<string, mixed> The plugin data.
  */
 function wpto_get_plugin_data(): array {
 	$plugin_data = get_plugin_data( plugin_dir_path( __DIR__ ) . 'wp-tag-order.php' );
@@ -264,6 +270,9 @@ function ajax_wto_sync_tags(): void {
 				}
 			}
 			$tag = get_term_by( 'name', $newtag, sanitize_text_field( wp_unslash( $taxonomy ) ) );
+			if ( ! $tag instanceof WP_Term ) {
+				continue; // Skip if $tag is not a WP_Term object.
+			}
 			array_push( $newtagsids, (string) $tag->term_id );
 		}
 
@@ -272,27 +281,27 @@ function ajax_wto_sync_tags(): void {
 			$tags_val = get_post_meta( intval( sanitize_text_field( wp_unslash( $id ) ) ), 'wp-tag-order-' . sanitize_text_field( wp_unslash( $taxonomy ) ), true );
 
 			if ( $tags_val ) {
-				$basetagsids = unserialize( $tags_val );
-				$added       = wto_array_diff_interactive( $newtagsids, $basetagsids );
-				foreach ( $added as $val ) {
-					if ( ! in_array( $val, $basetagsids, true ) ) {
-						array_push( $basetagsids, $val );
-					} else {
-						$key = array_search( $val, $basetagsids, true );
-						if ( false !== $key ) {
-							unset( $basetagsids[ $key ] );
+				$basetagsids = is_string( $tags_val ) ? unserialize( $tags_val ) : array();
+				if ( is_array( $basetagsids ) ) {
+					$added = wto_array_diff_interactive( $newtagsids, $basetagsids );
+					foreach ( $added as $val ) {
+						if ( is_array( $basetagsids ) && ! in_array( $val, $basetagsids, true ) ) {
+							array_push( $basetagsids, $val );
+						} else {
+							$key = array_search( $val, $basetagsids, true );
+							if ( false !== $key ) {
+								unset( $basetagsids[ $key ] );
+							}
 						}
 					}
+					$savedata = $basetagsids;
 				}
-				$savedata = $basetagsids;
 			} else {
 				$savedata = $newtagsids;
 			}
 			// Update the DB in real time (wp_postmeta) !
-			if ( isset( $savedata ) ) {
-				$meta_box_tags_value = serialize( $savedata );
-			}
-			$return = update_post_meta( intval( sanitize_text_field( wp_unslash( $id ) ) ), 'wp-tag-order-' . sanitize_text_field( wp_unslash( $taxonomy ) ), $meta_box_tags_value );
+			$meta_box_tags_value = serialize( $savedata );
+			$return              = update_post_meta( intval( sanitize_text_field( wp_unslash( $id ) ) ), 'wp-tag-order-' . sanitize_text_field( wp_unslash( $taxonomy ) ), $meta_box_tags_value );
 
 			// Update the DB in real time (wp_term_relationships) !
 			$newtagsids_int    = array_map( 'intval', $newtagsids ); // Cast string to integer  @ Line: 23 !
@@ -307,7 +316,10 @@ function ajax_wto_sync_tags(): void {
 		$return = '';
 		if ( ! wto_is_array_empty( $savedata ) ) {
 			foreach ( $savedata as $newtag ) {
-				$tag     = get_term_by( 'id', esc_attr( $newtag ), sanitize_text_field( wp_unslash( $taxonomy ) ) );
+				$tag = get_term_by( 'id', (int) $newtag, sanitize_text_field( wp_unslash( $taxonomy ) ) );
+				if ( ! $tag instanceof WP_Term ) {
+					continue; // Skip if $tag is not a WP_Term object.
+				}
 				$return .= '<li><input type="text" readonly="readonly" value="' . esc_attr( $tag->name ) . '"><input type="hidden" name="wp-tag-order-' . esc_attr( wp_unslash( $taxonomy ) ) . '[]" value="' . esc_attr( (string) $tag->term_id ) . '"></li>';
 			}
 		}
@@ -440,7 +452,10 @@ function ajax_wto_options(): void {
 				foreach ( $taxonomies as $taxonomy ) {
 					if ( ! is_taxonomy_hierarchical( $taxonomy ) && 'post_format' !== $taxonomy && wto_has_enabled_taxonomy( $taxonomies ) ) {
 						$terms = get_the_terms( $postid, $taxonomy );
-						$meta  = get_post_meta( $postid, 'wp-tag-order-' . $taxonomy, true );
+						if ( ! is_array( $terms ) ) {
+							continue; // Skip if $terms is not an array.
+						}
+						$meta = get_post_meta( $postid, 'wp-tag-order-' . $taxonomy, true );
 						if ( ! empty( $terms ) && ! $meta ) {
 							$term_ids = array();
 							foreach ( $terms as $term ) {
