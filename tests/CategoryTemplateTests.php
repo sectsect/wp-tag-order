@@ -162,7 +162,7 @@ class CategoryTemplateTests extends WP_UnitTestCase {
 			$term             = get_term_by( 'name', $tag, 'post_tag' );
 			$expected_output .= '<a href="' . esc_url( get_term_link( $term ) ) . '" rel="tag">' . $tag . '</a>' . $sep;
 		}
-		$expected_output = rtrim( $expected_output, $sep ) . $after; // Remove the last separator and close with $after
+		$expected_output = rtrim( $expected_output, '<li>' ) . $after; // Remove the last separator and close with $after
 
 		$this->assertEquals( $expected_output, $term_list );
 	}
