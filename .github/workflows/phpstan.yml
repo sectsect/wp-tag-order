@@ -1,0 +1,38 @@
+name: PHPStan
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  phpstan:
+    runs-on: ubuntu-latest
+
+    name: Static Analysis
+
+    env:
+      WP_TESTS_DIR: /tmp/wordpress-tests-lib
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          tools: composer:v2, cs2pr
+
+      - name: Composer install
+        run: composer install --optimize-autoloader --prefer-dist
+
+      - name: PHPStan
+        run: composer phpstan
