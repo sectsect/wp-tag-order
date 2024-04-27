@@ -1,6 +1,6 @@
 # <img src="https://github-sect.s3-ap-northeast-1.amazonaws.com/logo.svg" width="28" height="auto"> WP Tag Order
 
-[![PHP Unit Tests](https://github.com/sectsect/wp-tag-order/actions/workflows/phpunit.yml/badge.svg)](https://github.com/sectsect/wp-tag-order/actions/workflows/phpunit.yml) [![PHP Coding Standards](https://github.com/sectsect/wp-tag-order/actions/workflows/phpcs.yml/badge.svg)](https://github.com/sectsect/wp-tag-order/actions/workflows/phpcs.yml) [![Latest Stable Version](https://poser.pugx.org/sectsect/wp-tag-order/v)](//packagist.org/packages/sectsect/wp-tag-order)
+[![PHP Unit Tests](https://github.com/sectsect/wp-tag-order/actions/workflows/phpunit.yml/badge.svg)](https://github.com/sectsect/wp-tag-order/actions/workflows/phpunit.yml) [![PHPStan](https://github.com/sectsect/wp-tag-order/actions/workflows/phpstan.yml/badge.svg)](https://github.com/sectsect/wp-tag-order/actions/workflows/phpstan.yml) [![PHP Coding Standards](https://github.com/sectsect/wp-tag-order/actions/workflows/phpcs.yml/badge.svg)](https://github.com/sectsect/wp-tag-order/actions/workflows/phpcs.yml) [![Latest Stable Version](https://poser.pugx.org/sectsect/wp-tag-order/v)](//packagist.org/packages/sectsect/wp-tag-order)
 
 ### Order tags independently in each posts (not site-globally) on WordPress with simple Drag-and-Drop ↕︎ sortable feature.
 
