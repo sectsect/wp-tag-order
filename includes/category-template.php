@@ -114,9 +114,9 @@ function get_the_tag_list_ordered( string $before = '', string $sep = '', string
  * @param string $sep    Optional. String to use between the tags.
  * @param string $after  Optional. String to use after the tags.
  *
- * @return void
+ * @return bool
  */
-function the_tags_ordered( ?string $before = null, string $sep = ', ', string $after = '' ): void {
+function the_tags_ordered( ?string $before = null, string $sep = ', ', string $after = '' ): bool {
 	if ( null === $before ) {
 		$before = __( 'Tags: ' );
 	}
@@ -124,12 +124,14 @@ function the_tags_ordered( ?string $before = null, string $sep = ', ', string $a
 
 	if ( is_string( $tag_list ) ) {
 		echo $tag_list;
+		return true;
 	} elseif ( is_wp_error( $tag_list ) ) {
 		// Log the error or display an error message.
 		error_log( 'Error retrieving tags: ' . $tag_list->get_error_message() );
+		return true;
 	} else {
-		// Handle the case where no tags are found.
-		echo 'No tags found.';
+		// Handle the case where no tags are found. Based on `the_tags` -> `get_the_tag_list`.
+		return false;
 	}
 }
 
