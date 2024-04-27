@@ -189,7 +189,7 @@ function get_the_term_list_ordered( int $id, string $taxonomy, string $before = 
  *
  * @return bool
  */
-function the_terms_ordered( int $id, string $taxonomy, string $before = '', string $sep = ', ', string $after = '' ) {
+function the_terms_ordered( int $id, string $taxonomy, string $before = '', string $sep = ', ', string $after = '' ): bool {
 	$term_list = get_the_term_list_ordered( $id, $taxonomy, $before, $sep, $after );
 
 	if ( false === $term_list || is_wp_error( $term_list ) ) {
