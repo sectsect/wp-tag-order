@@ -160,9 +160,12 @@ class CategoryTemplateTests extends WP_UnitTestCase {
 		$expected_output = $before;
 		foreach ( $expected_tags as $tag ) {
 			$term             = get_term_by( 'name', $tag, 'post_tag' );
-			$expected_output .= '<a href="' . esc_url( get_term_link( $term ) ) . '" rel="tag">' . $tag . '</a>' . $sep;
+			$expected_output .= '<a href="' . esc_url( get_term_link( $term ) ) . '" rel="tag">' . $tag . '</a>';
+			if ( $tag !== end( $expected_tags ) ) {
+				$expected_output .= $sep;
+			}
 		}
-		$expected_output = rtrim( $expected_output, $sep ) . $after; // Remove the last separator and close with $after
+		$expected_output .= $after;
 
 		$this->assertEquals( $expected_output, $term_list );
 	}
