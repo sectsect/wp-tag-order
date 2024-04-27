@@ -136,34 +136,34 @@ function add_metabox_classes_panel( array $classes ): array {
  * @param WP_Post $post    The post object associated with the ID.
  * @param bool    $update  Indicates if the save operation is for an existing post being updated.
  *
- * @return int|bool The post ID if the save was successful, or false if the save operation was halted.
+ * @return void
  */
-function save_wpto_meta_box( int $post_id, WP_Post $post, bool $update ): int|bool {
+function save_wpto_meta_box( int $post_id, WP_Post $post, bool $update ): void {
 	if ( ! isset( $_POST['wpto-meta-box-nonce'] ) || ! wp_verify_nonce( $_POST['wpto-meta-box-nonce'], basename( __FILE__ ) ) ) {
-		return $post_id;
+		return;
 	}
 
 	if ( ! current_user_can( 'edit_post', $post_id ) ) {
-		return $post_id;
+		return;
 	}
 
 	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
-		return $post_id;
+		return;
 	}
 
-	if ( ! $post?->post_type ) {
-		return $post_id;
+	if ( ! $post->post_type ) {
+		return;
 	}
 
 	$pt = wto_has_tag_posttype();
 	if ( ! in_array( $post->post_type, $pt, true ) ) {
-		return $post_id;
+		return;
 	}
 
 	$taxonomies = get_object_taxonomies( $post->post_type );
 
 	if ( empty( $taxonomies ) ) {
-		return $post_id;
+		return;
 	}
 
 	foreach ( $taxonomies as $taxonomy ) {
@@ -173,7 +173,7 @@ function save_wpto_meta_box( int $post_id, WP_Post $post, bool $update ): int|bo
 			if ( isset( $_POST[ $fieldname ] ) ) {
 				$meta_box_tags_value = serialize( $_POST[ $fieldname ] );
 			}
-			return update_post_meta( $post_id, $fieldname, $meta_box_tags_value );
+			update_post_meta( $post_id, $fieldname, $meta_box_tags_value );
 		}
 	}
 }
@@ -201,7 +201,7 @@ function load_wpto_admin_script( string $hook ): void {
 	$plugin_version = $plugin_data['Version'];
 	global $post;
 
-	if ( ! $post?->post_type ) {
+	if ( ! $post->post_type ) {
 		return;
 	}
 
@@ -249,14 +249,16 @@ function ajax_wto_sync_tags(): void {
 		exit;
 	}
 
+	$meta_box_tags_value = '';
+
 	if ( $tags ) {
 		$newtags    = explode( ',', wp_unslash( $tags ) );
 		$newtagsids = array();
 
 		foreach ( $newtags as $newtag ) {
 			$term = term_exists( $newtag, sanitize_text_field( wp_unslash( $taxonomy ) ) );
-			if ( 0 === $term || null === $term ) {
-				$term_taxonomy_ids = wp_set_object_terms( sanitize_text_field( wp_unslash( $id ) ), $newtag, sanitize_text_field( wp_unslash( $taxonomy ) ), true );
+			if ( null === $term ) {
+				$term_taxonomy_ids = wp_set_object_terms( intval( sanitize_text_field( wp_unslash( $id ) ) ), $newtag, sanitize_text_field( wp_unslash( $taxonomy ) ), true );
 				if ( is_wp_error( $term_taxonomy_ids ) ) {
 					exit;
 				}
@@ -267,7 +269,7 @@ function ajax_wto_sync_tags(): void {
 
 		if ( $id ) {
 			$savedata = array();
-			$tags_val = get_post_meta( sanitize_text_field( wp_unslash( $id ) ), 'wp-tag-order-' . sanitize_text_field( wp_unslash( $taxonomy ) ), true );
+			$tags_val = get_post_meta( intval( sanitize_text_field( wp_unslash( $id ) ) ), 'wp-tag-order-' . sanitize_text_field( wp_unslash( $taxonomy ) ), true );
 
 			if ( $tags_val ) {
 				$basetagsids = unserialize( $tags_val );
@@ -290,11 +292,11 @@ function ajax_wto_sync_tags(): void {
 			if ( isset( $savedata ) ) {
 				$meta_box_tags_value = serialize( $savedata );
 			}
-			$return = update_post_meta( sanitize_text_field( wp_unslash( $id ) ), 'wp-tag-order-' . sanitize_text_field( wp_unslash( $taxonomy ) ), $meta_box_tags_value );
+			$return = update_post_meta( intval( sanitize_text_field( wp_unslash( $id ) ) ), 'wp-tag-order-' . sanitize_text_field( wp_unslash( $taxonomy ) ), $meta_box_tags_value );
 
 			// Update the DB in real time (wp_term_relationships) !
 			$newtagsids_int    = array_map( 'intval', $newtagsids ); // Cast string to integer  @ Line: 23 !
-			$term_taxonomy_ids = wp_set_object_terms( sanitize_text_field( wp_unslash( $id ) ), $newtagsids_int, sanitize_text_field( wp_unslash( $taxonomy ) ) );
+			$term_taxonomy_ids = wp_set_object_terms( intval( sanitize_text_field( wp_unslash( $id ) ) ), $newtagsids_int, sanitize_text_field( wp_unslash( $taxonomy ) ) );
 			if ( is_wp_error( $term_taxonomy_ids ) ) {
 				exit;
 			}
@@ -306,11 +308,11 @@ function ajax_wto_sync_tags(): void {
 		if ( ! wto_is_array_empty( $savedata ) ) {
 			foreach ( $savedata as $newtag ) {
 				$tag     = get_term_by( 'id', esc_attr( $newtag ), sanitize_text_field( wp_unslash( $taxonomy ) ) );
-				$return .= '<li><input type="text" readonly="readonly" value="' . esc_attr( $tag->name ) . '"><input type="hidden" name="wp-tag-order-' . esc_attr( wp_unslash( $taxonomy ) ) . '[]" value="' . esc_attr( $tag->term_id ) . '"></li>';
+				$return .= '<li><input type="text" readonly="readonly" value="' . esc_attr( $tag->name ) . '"><input type="hidden" name="wp-tag-order-' . esc_attr( wp_unslash( $taxonomy ) ) . '[]" value="' . esc_attr( (string) $tag->term_id ) . '"></li>';
 			}
 		}
 	} else {
-		delete_post_meta( sanitize_text_field( wp_unslash( $id ) ), 'wp-tag-order-' . sanitize_text_field( wp_unslash( $taxonomy ) ) );
+		delete_post_meta( intval( sanitize_text_field( wp_unslash( $id ) ) ), 'wp-tag-order-' . sanitize_text_field( wp_unslash( $taxonomy ) ) );
 		$return = '';
 	}
 
@@ -338,11 +340,9 @@ function ajax_wto_update_tags(): void {
 	}
 
 	if ( $id ) {
-		$newordertags = explode( ',', sanitize_text_field( wp_unslash( $tags ) ) );
-		if ( isset( $newordertags ) ) {
-			$meta_box_tags_value = serialize( $newordertags );
-		}
-		$return = update_post_meta( sanitize_text_field( wp_unslash( $id ) ), 'wp-tag-order-' . sanitize_text_field( wp_unslash( $taxonomy ) ), $meta_box_tags_value );
+		$newordertags        = explode( ',', sanitize_text_field( wp_unslash( $tags ) ) );
+		$meta_box_tags_value = serialize( $newordertags );
+		$return              = update_post_meta( intval( sanitize_text_field( wp_unslash( $id ) ) ), 'wp-tag-order-' . sanitize_text_field( wp_unslash( $taxonomy ) ), $meta_box_tags_value );
 	} else {
 		$return = false;
 	}
