@@ -19,12 +19,11 @@ declare(strict_types=1);
 global $wpdb;
 
 /**
- * Adds a meta box for tag ordering.
- * @ https://www.sitepoint.com/adding-custom-meta-boxes-to-wordpress/
+ * Adds a meta box for tag ordering on post edit screens.
+ * This function creates a meta box that allows users to order tags associated with a post.
  *
- * @param WP_Post              $obj     The post object.
- * @param array<string, mixed> $metabox The meta box arguments.
- *
+ * @param WP_Post              $obj The post object currently being edited.
+ * @param array<string, mixed> $metabox The meta box arguments including 'taxonomy' to specify which taxonomy the tags belong to.
  * @return void
  */
 function wpto_meta_box_markup( WP_Post $obj, array $metabox ): void {
@@ -57,8 +56,8 @@ function wpto_meta_box_markup( WP_Post $obj, array $metabox ): void {
 }
 
 /**
- * Adds meta boxes for tag ordering to post edit screens.
- * @ https://www.sitepoint.com/adding-custom-meta-boxes-to-wordpress/
+ * Registers and adds meta boxes for tag ordering to applicable post types.
+ * This function iterates through post types and taxonomies to add a custom meta box for non-hierarchical taxonomies.
  *
  * @return void
  */
@@ -95,11 +94,11 @@ function add_wpto_meta_box(): void {
 add_action( 'add_meta_boxes', 'add_wpto_meta_box' );
 
 /**
- * Adds CSS classes to the tags meta box.
+ * Adds CSS classes to the tags meta box to enhance its appearance and functionality.
+ * This function appends additional CSS classes to the meta box for styling and JavaScript interactions.
  *
- * @param array<string> $classes The existing CSS classes.
- *
- * @return array<string> The modified CSS classes.
+ * @param array<string> $classes The existing CSS classes for the meta box.
+ * @return array<string> The modified list of CSS classes.
  */
 function add_metabox_classes_tagsdiv( array $classes ): array {
 	$classes[] = 'wpto_meta_box';
@@ -113,11 +112,11 @@ function add_metabox_classes_tagsdiv( array $classes ): array {
 }
 
 /**
- * Adds CSS classes to the tag order meta box.
+ * Adds CSS classes to the tag order meta box panel.
+ * Similar to `add_metabox_classes_tagsdiv`, this function enhances the meta box panel's CSS classes.
  *
- * @param array<string> $classes The existing CSS classes.
- *
- * @return array<string> The modified CSS classes.
+ * @param array<string> $classes The existing CSS classes for the panel.
+ * @return array<string> The modified list of CSS classes.
  */
 function add_metabox_classes_panel( array $classes ): array {
 	$classes[] = 'wpto_meta_box';
@@ -131,17 +130,12 @@ function add_metabox_classes_panel( array $classes ): array {
 }
 
 /**
- * Saves the tag order meta box data when a post is saved.
- *
- * This function handles the saving of non-hierarchical taxonomy terms (tags) order for a post.
- * It checks for nonce validation, user capabilities, and autosave status before proceeding.
- * The function iterates through each taxonomy associated with the post type and updates the
- * post meta with the order of tags if the taxonomy is enabled and non-hierarchical.
+ * Saves the ordered tags when a post is saved.
+ * This function checks for user permissions, nonce validation, and autosave status before saving the tag order into post meta.
  *
  * @param int     $post_id The ID of the post being saved.
- * @param WP_Post $post    The post object associated with the ID.
- * @param bool    $update  Indicates if the save operation is for an existing post being updated.
- *
+ * @param WP_Post $post The post object associated with the ID.
+ * @param bool    $update Indicates if the save operation is for an existing post being updated.
  * @return void
  */
 function save_wpto_meta_box( int $post_id, WP_Post $post, bool $update ): void {
@@ -186,7 +180,8 @@ function save_wpto_meta_box( int $post_id, WP_Post $post, bool $update ): void {
 add_action( 'save_post', 'save_wpto_meta_box', 10, 3 );
 
 /**
- * Retrieves the plugin data.
+ * Retrieves plugin data from the main plugin file.
+ * This function fetches data such as version number and plugin name from the plugin's main file.
  *
  * @return array<string, mixed> The plugin data.
  */
@@ -196,10 +191,10 @@ function wpto_get_plugin_data(): array {
 }
 
 /**
- * Loads the admin scripts for the plugin.
+ * Enqueues admin-specific styles and scripts for the plugin.
+ * This function loads necessary CSS and JavaScript files for the plugin's admin interface on applicable admin pages.
  *
- * @param string $hook The current admin page.
- *
+ * @param string $hook The current admin page hook suffix.
  * @return void
  */
 function load_wpto_admin_script( string $hook ): void {
@@ -239,7 +234,8 @@ function load_wpto_admin_script( string $hook ): void {
 add_action( 'admin_enqueue_scripts', 'load_wpto_admin_script', 10, 1 );
 
 /**
- * Handles the AJAX request for syncing tags.
+ * Handles AJAX request for synchronizing tags.
+ * This function processes AJAX requests to synchronize tag order changes made on the client side with the server.
  *
  * @return void
  */
@@ -335,31 +331,28 @@ add_action( 'wp_ajax_wto_sync_tags', 'ajax_wto_sync_tags' );
 add_action( 'wp_ajax_nopriv_wto_sync_tags', 'ajax_wto_sync_tags' );
 
 /**
- * Handles the AJAX request for updating tags.
+ * Handles AJAX request for updating tag orders.
+ * This function updates the tag order based on user input from the AJAX request.
  *
- * @return void
+ * @return void Outputs true on success or false on failure.
  */
 function ajax_wto_update_tags(): void {
-	$id       = $_POST['id'];
-	$nonce    = $_POST['nonce'];
-	$action   = $_POST['action'];
-	$taxonomy = $_POST['taxonomy'];
-	$tags     = $_POST['tags'];
+	$id       = $_POST['id'] ?? null;
+	$nonce    = $_POST['nonce'] ?? '';
+	$action   = $_POST['action'] ?? '';
+	$taxonomy = $_POST['taxonomy'] ?? '';
+	$tags     = $_POST['tags'] ?? '';
 
-	if ( ! isset( $tags ) || ! isset( $id ) || ! isset( $nonce ) || empty( $nonce ) || ! wp_verify_nonce( $nonce, $action ) || ! check_ajax_referer( $action, 'nonce', false ) || 'POST' !== $_SERVER['REQUEST_METHOD'] ) {
+	if ( empty( $id ) || empty( $nonce ) || empty( $action ) || empty( $taxonomy ) || empty( $tags ) || ! wp_verify_nonce( $nonce, $action ) || ! check_ajax_referer( $action, 'nonce', false ) || 'POST' !== $_SERVER['REQUEST_METHOD'] ) {
 		wp_safe_redirect( home_url( '/' ), 301 );
 		exit;
 	}
 
-	if ( $id ) {
-		$newordertags        = explode( ',', sanitize_text_field( wp_unslash( $tags ) ) );
-		$meta_box_tags_value = serialize( $newordertags );
-		$return              = update_post_meta( intval( sanitize_text_field( wp_unslash( $id ) ) ), 'wp-tag-order-' . sanitize_text_field( wp_unslash( $taxonomy ) ), $meta_box_tags_value );
-	} else {
-		$return = false;
-	}
+	$newordertags        = array_map( 'sanitize_text_field', explode( ',', wp_unslash( $tags ) ) );
+	$meta_box_tags_value = serialize( $newordertags );
+	$result              = update_post_meta( intval( $id ), 'wp-tag-order-' . $taxonomy, $meta_box_tags_value );
 
-	echo $return;
+	echo json_encode( $result );
 	exit;
 }
 add_action( 'wp_ajax_wto_update_tags', 'ajax_wto_update_tags' );
@@ -367,6 +360,7 @@ add_action( 'wp_ajax_nopriv_wto_update_tags', 'ajax_wto_update_tags' );
 
 /**
  * Adds the plugin options page to the WordPress admin menu.
+ * This function creates a new options page under the WordPress settings menu for configuring the plugin.
  *
  * @return void
  */
@@ -482,6 +476,7 @@ add_action( 'wp_ajax_nopriv_wto_options', 'ajax_wto_options' );
 
 /**
  * Registers the plugin settings.
+ * This function registers settings that can be configured from the plugin's options page.
  *
  * @return void
  */
@@ -491,6 +486,7 @@ function register_wpto_settings(): void {
 
 /**
  * Loads the options page template.
+ * This function includes the PHP file that contains the HTML and PHP code for the plugin's options page.
  *
  * @return void
  */
