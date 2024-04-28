@@ -343,7 +343,7 @@ function ajax_wto_update_tags(): void {
 	$taxonomy = $_POST['taxonomy'] ?? '';
 	$tags     = $_POST['tags'] ?? '';
 
-	if ( empty( $id ) || empty( $nonce ) || empty( $action ) || empty( $taxonomy ) || empty( $tags ) || ! wp_verify_nonce( $nonce, $action ) || ! check_ajax_referer( $action, 'nonce', false ) || $_SERVER['REQUEST_METHOD'] !== 'POST' ) {
+	if ( empty( $id ) || empty( $nonce ) || empty( $action ) || empty( $taxonomy ) || empty( $tags ) || ! wp_verify_nonce( $nonce, $action ) || ! check_ajax_referer( $action, 'nonce', false ) || 'POST' !== $_SERVER['REQUEST_METHOD'] ) {
 		wp_safe_redirect( home_url( '/' ), 301 );
 		exit;
 	}
