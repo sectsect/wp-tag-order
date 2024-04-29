@@ -1,10 +1,15 @@
 <?php
 /**
- * PHPUnit bootstrap file.
+ * PHPUnit bootstrap file for the WP Tag Order plugin.
  *
- * @package My_Plugin
+ * Loads the necessary files and configurations to run PHPUnit tests for the WP Tag Order plugin.
+ * This file is responsible for setting up the WordPress testing environment, loading the plugin,
+ * and providing access to necessary testing functions and utilities.
+ *
+ * @package WP_Tag_Order
  */
 
+// Load the Composer autoloader.
 require_once dirname( __DIR__, 1 ) . '/vendor/autoload.php';
 
 $_tests_dir = getenv( 'WP_TESTS_DIR' );
