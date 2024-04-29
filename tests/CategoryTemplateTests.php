@@ -63,7 +63,7 @@ class CategoryTemplateTests extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers get_the_terms_ordered function with valid input.
+	 * @covers get_the_terms_ordered
 	 */
 	public function test_get_the_terms_ordered_valid() {
 		$terms = get_the_terms_ordered( $this->post_id, 'post_tag' );
@@ -84,7 +84,7 @@ class CategoryTemplateTests extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers get_the_terms_ordered function with invalid post ID.
+	 * @covers get_the_terms_ordered
 	 */
 	public function test_get_the_terms_ordered_invalid_post() {
 		$terms = get_the_terms_ordered( 999999, 'post_tag' ); // Assuming this ID does not exist.
@@ -93,7 +93,7 @@ class CategoryTemplateTests extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers get_the_terms_ordered function with invalid taxonomy.
+	 * @covers get_the_terms_ordered
 	 */
 	public function test_get_the_terms_ordered_invalid_taxonomy() {
 		$terms = get_the_terms_ordered( $this->post_id, 'nonexistent_taxonomy' );
@@ -102,7 +102,7 @@ class CategoryTemplateTests extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers get_the_tags_ordered with a valid post.
+	 * @covers get_the_tags_ordered
 	 */
 	public function test_get_the_tags_ordered_valid_post() {
 		$tags = get_the_tags_ordered( $this->post_id );
@@ -126,7 +126,7 @@ class CategoryTemplateTests extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers get_the_tags_ordered with an invalid post.
+	 * @covers get_the_tags_ordered
 	 */
 	public function test_get_the_tags_ordered_invalid_post() {
 		$tags = get_the_tags_ordered( 999999 ); // Assuming this ID does not exist.
@@ -136,7 +136,7 @@ class CategoryTemplateTests extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers get_the_tag_list_ordered function.
+	 * @covers get_the_tag_list_ordered
 	 */
 	public function test_get_the_tag_list_ordered() {
 		$tag_list = get_the_tag_list_ordered( '', ', ', '', $this->post_id );
@@ -145,7 +145,7 @@ class CategoryTemplateTests extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers get_the_term_list_ordered function with specific formatting.
+	 * @covers get_the_term_list_ordered
 	 */
 	public function test_get_the_term_list_ordered_formatting() {
 		$before = '<ul>';
@@ -171,7 +171,7 @@ class CategoryTemplateTests extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers the_tags_ordered function.
+	 * @covers the_tags_ordered
 	 */
 	public function test_the_tags_ordered() {
 		$permalink = get_permalink( $this->post_id );
@@ -186,7 +186,7 @@ class CategoryTemplateTests extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers get_the_term_list_ordered function.
+	 * @covers get_the_term_list_ordered
 	 */
 	public function test_get_the_term_list_ordered() {
 		$term_list = get_the_term_list_ordered( $this->post_id, 'post_tag', '', ', ', '' );
@@ -195,7 +195,7 @@ class CategoryTemplateTests extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers the_terms_ordered function.
+	 * @covers the_terms_ordered
 	 */
 	public function test_the_terms_ordered() {
 		ob_start();
