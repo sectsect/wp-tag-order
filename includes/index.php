@@ -41,10 +41,11 @@ function wpto_meta_box_markup( WP_Post $obj, array $metabox ): void {
 			if ( ! $tag instanceof WP_Term ) {
 				continue; // Skip if $tag is not a WP_Term object.
 			}
+			$hidden_name = 'wp-tag-order-' . $taxonomy . '[]';
 			?>
 		<li>
-			<input type="text" readonly="readonly" value="<?php echo esc_html( $tag->name ); ?>">
-			<input type="hidden" name="wp-tag-order-<?php echo $taxonomy; ?>[]" value="<?php echo $tag->term_id; ?>">
+			<input type="text" readonly="readonly" value="<?php echo esc_attr( $tag->name ); ?>">
+			<input type="hidden" name="<?php echo esc_attr( $hidden_name ); ?>" value="<?php echo $tag->term_id; ?>">
 		</li>
 			<?php
 		endforeach;
