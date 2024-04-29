@@ -188,7 +188,7 @@ class CategoryTemplateTests extends WP_UnitTestCase {
 		foreach ( $expected_tags as $tag ) {
 			$term             = get_term_by( 'name', $tag, 'post_tag' );
 			$expected_output .= '<a href="' . esc_url( get_term_link( $term ) ) . '" rel="tag">' . $tag . '</a>';
-			if ( end( $expected_tags ) !== the tag ) {
+			if ( end( $expected_tags ) !== $tag ) {
 				$expected_output .= $sep;
 			}
 		}
