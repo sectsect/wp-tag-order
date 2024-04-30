@@ -87,11 +87,8 @@ class WPTOTest extends WP_UnitTestCase {
 		$post_id = $this->factory->post->create();
 		$post    = get_post( $post_id );
 
-		$_POST['wpto-meta-box-nonce']   = wp_create_nonce( basename( __FILE__ ) );
+		$_POST['wpto-meta-box-nonce']   = wp_create_nonce( 'index.php' );
 		$_POST['wp-tag-order-post_tag'] = array( 1, 2, 3 );
-
-		var_dump( 'basename( __FILE__ )', basename( __FILE__ ) );
-		var_dump( 'wp_create_nonce( basename( __FILE__ ) )', wp_create_nonce( basename( __FILE__ ) ) );
 
 		save_wpto_meta_box( $post_id, $post, true );
 
