@@ -90,12 +90,12 @@ class WPTOTest extends WP_UnitTestCase {
 		$_POST['wpto-meta-box-nonce']   = wp_create_nonce( basename( __FILE__ ) );
 		$_POST['wp-tag-order-post_tag'] = array( 1, 2, 3 );
 
+		var_dump( 'basename( __FILE__ )', basename( __FILE__ ) );
+		var_dump( 'wp_create_nonce( basename( __FILE__ ) )', wp_create_nonce( basename( __FILE__ ) ) );
+
 		save_wpto_meta_box( $post_id, $post, true );
 
 		$saved_tags = get_post_meta( $post_id, 'wp-tag-order-post_tag', true );
-
-		var_dump( $post_id );
-		var_dump( $saved_tags );
 
 		$this->assertEquals( serialize( array( 1, 2, 3 ) ), $saved_tags );
 	}
