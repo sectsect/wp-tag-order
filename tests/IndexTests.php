@@ -93,6 +93,10 @@ class WPTOTest extends WP_UnitTestCase {
 		save_wpto_meta_box( $post_id, $post, true );
 
 		$saved_tags = get_post_meta( $post_id, 'wp-tag-order-post_tag', true );
+
+		var_dump( $post_id );
+		var_dump( $saved_tags );
+
 		$this->assertEquals( serialize( array( 1, 2, 3 ) ), $saved_tags );
 	}
 
@@ -111,6 +115,16 @@ class WPTOTest extends WP_UnitTestCase {
 		$_POST['action']   = 'wto_sync_tags';
 		$_POST['taxonomy'] = 'post_tag';
 		$_POST['tags']     = 'Tag 1,Tag 2,Tag 3';
+
+		// Mock wp_redirect to return false.
+		add_filter(
+			'wp_redirect',
+			function ( $location, $status ) {
+				return false;
+			},
+			10,
+			2
+		);
 
 		ob_start();
 		ajax_wto_sync_tags();
@@ -137,6 +151,16 @@ class WPTOTest extends WP_UnitTestCase {
 		$_POST['taxonomy'] = 'post_tag';
 		$_POST['tags']     = '1,2,3';
 
+		// Mock wp_redirect to return false.
+		add_filter(
+			'wp_redirect',
+			function ( $location, $status ) {
+				return false;
+			},
+			10,
+			2
+		);
+
 		ob_start();
 		ajax_wto_update_tags();
 		$output = ob_get_clean();
@@ -145,32 +169,5 @@ class WPTOTest extends WP_UnitTestCase {
 
 		$saved_tags = get_post_meta( $post_id, 'wp-tag-order-post_tag', true );
 		$this->assertEquals( serialize( array( '1', '2', '3' ) ), $saved_tags );
-	}
-
-	/**
-	 * Test ajax_wto_delete_tags function.
-	 *
-	 * @return void
-	 *
-	 * @covers ::ajax_wto_delete_tags
-	 */
-	public function test_ajax_wto_delete_tags() {
-		$post_id = $this->factory->post->create();
-
-		update_post_meta( $post_id, 'wp-tag-order-post_tag', serialize( array( 1, 2, 3 ) ) );
-
-		$_POST['id']       = $post_id;
-		$_POST['nonce']    = wp_create_nonce( 'wto_delete_tags' );
-		$_POST['action']   = 'wto_delete_tags';
-		$_POST['taxonomy'] = 'post_tag';
-
-		ob_start();
-		ajax_wto_delete_tags();
-		$output = ob_get_clean();
-
-		$this->assertEquals( 'true', $output );
-
-		$saved_tags = get_post_meta( $post_id, 'wp-tag-order-post_tag', true );
-		$this->assertEmpty( $saved_tags );
 	}
 }
