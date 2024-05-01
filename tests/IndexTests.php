@@ -48,4 +48,31 @@ class WPTOTest extends WP_UnitTestCase {
 			)
 		);
 	}
+
+	/**
+	 * Test wpto_meta_box_markup function.
+	 *
+	 * @return void
+	 *
+	 * @covers ::wpto_meta_box_markup
+	 */
+	public function test_wpto_meta_box_markup() {
+		$post_id = $this->factory->post->create();
+		$post    = get_post( $post_id );
+
+		$metabox = array(
+			'args' => array(
+				'taxonomy' => 'post_tag',
+			),
+		);
+
+		ob_start();
+		wpto_meta_box_markup( $post, $metabox );
+		$output = ob_get_clean();
+
+		$this->assertStringContainsString( '<div class="inner">', $output );
+		$this->assertStringContainsString( '<ul>', $output );
+		$this->assertStringContainsString( '</ul>', $output );
+		$this->assertStringContainsString( '</div>', $output );
+	}
 }
