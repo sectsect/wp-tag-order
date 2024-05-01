@@ -139,11 +139,14 @@ function add_metabox_classes_panel( array $classes ): array {
  * @return void
  */
 function save_wpto_meta_box( int $post_id, WP_Post $post, bool $update ): void {
-	$message = '$_POST\[\'wpto-meta-box-nonce\'\]: ' . $_POST['wpto-meta-box-nonce'];
-	var_dump( $message );
+	$message = '$_POST\[\'wpto-meta-box-nonce\'\]: ' . $_POST['wpto-meta-box-nonce'] . ' - ' . wp_verify_nonce( $_POST['wpto-meta-box-nonce'], 'wpto_save_meta_box' );
+	die( print_r( $message ) );
 
-	$message = 'wp_verify_nonce( ... ): ' . wp_verify_nonce( $_POST['wpto-meta-box-nonce'], 'wpto_save_meta_box' );
-	var_dump( $message );
+	// $message = 'wp_verify_nonce( ... ): ' . wp_verify_nonce( $_POST['wpto-meta-box-nonce'], 'wpto_save_meta_box' );
+	// // var_dump( $message );
+	// if ( $message ) {
+	// die( print_r( $message ) );
+	// }
 
 	if ( ! isset( $_POST['wpto-meta-box-nonce'] ) || ! wp_verify_nonce( $_POST['wpto-meta-box-nonce'], 'wpto_save_meta_box' ) ) {
 		return;
