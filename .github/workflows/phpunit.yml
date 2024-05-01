@@ -48,15 +48,27 @@ jobs:
     - name: Install WP Tests
       run: bash bin/install-wp-tests.sh wordpress_test root '' 127.0.0.1 ${{ matrix.wp-versions }}
 
-    - name: phpunit tests
-      run: ./vendor/bin/phpunit --coverage-clover=./coverage.xml
+    # - name: phpunit tests
+    #   run: ./vendor/bin/phpunit --coverage-clover=/tmp/coverage.xml
+    #   env:
+    #     WP_TESTS_DIR: /tmp/wordpress-tests-lib
+    #     WP_CORE_DIR: /tmp/wordpress
+
+    - name: PHPUnit Tests
+      uses: php-actions/phpunit@v3
       env:
         WP_TESTS_DIR: /tmp/wordpress-tests-lib
         WP_CORE_DIR: /tmp/wordpress
+        XDEBUG_MODE: coverage
+      with:
+        # bootstrap: vendor/autoload.php
+        # configuration: phpunit.xml
+        php_extensions: xdebug
+        args: tests --coverage-clover /tmp/coverage.xml
 
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v4
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
       with:
-        files: ./coverage.xml
+        files: /tmp/coverage.xml
