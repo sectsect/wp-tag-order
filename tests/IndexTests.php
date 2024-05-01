@@ -94,9 +94,6 @@ class WPTOTest extends WP_UnitTestCase {
 
 		$saved_tags = get_post_meta( $post_id, 'wp-tag-order-post_tag', true );
 
-		var_dump( $post_id );
-		var_dump( $saved_tags );
-
 		$this->assertEquals( serialize( array( 1, 2, 3 ) ), $saved_tags );
 	}
 
