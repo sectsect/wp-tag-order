@@ -49,7 +49,12 @@ jobs:
       run: bash bin/install-wp-tests.sh wordpress_test root '' 127.0.0.1 ${{ matrix.wp-versions }}
 
     - name: phpunit tests
-      run: ./vendor/bin/phpunit
+      run: ./vendor/bin/phpunit --coverage-clover=/tmp/coverage.xml
       env:
         WP_TESTS_DIR: /tmp/wordpress-tests-lib
         WP_CORE_DIR: /tmp/wordpress
+
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v4.0.1
+      with:
+        files: /tmp/coverage.xml
