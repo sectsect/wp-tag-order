@@ -87,14 +87,14 @@ class WPTOTest extends WP_UnitTestCase {
 		$post_id = $this->factory->post->create();
 		$post    = get_post( $post_id );
 
-		var_dump( $post );
-
 		$_POST['wpto-meta-box-nonce']   = wp_create_nonce( 'save_wpto_meta_box' );
 		$_POST['wp-tag-order-post_tag'] = array( 1, 2, 3 );
 
 		save_wpto_meta_box( $post_id, $post, true );
 
 		$saved_tags = get_post_meta( $post_id, 'wp-tag-order-post_tag', true );
+
+		var_dump( $saved_tags );
 
 		$this->assertEquals( serialize( array( 1, 2, 3 ) ), $saved_tags );
 	}
