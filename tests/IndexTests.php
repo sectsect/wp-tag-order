@@ -77,6 +77,27 @@ class WPTOTest extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Test save_wpto_meta_box function.
+	 *
+	 * @return void
+	 *
+	 * @covers ::save_wpto_meta_box
+	 */
+	public function test_save_wpto_meta_box() {
+		$post_id = $this->factory->post->create();
+		$post    = get_post( $post_id );
+
+		$_POST['wpto-meta-box-nonce']   = wp_create_nonce( 'save_wpto_meta_box' );
+		$_POST['wp-tag-order-post_tag'] = array( 1, 2, 3 );
+
+		save_wpto_meta_box( $post_id, $post, true );
+
+		$saved_tags = get_post_meta( $post_id, 'wp-tag-order-post_tag', true );
+
+		$this->assertEquals( serialize( array( 1, 2, 3 ) ), $saved_tags );
+	}
+
+	/**
 	 * Test ajax_wto_sync_tags function.
 	 *
 	 * @return void
