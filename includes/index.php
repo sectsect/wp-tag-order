@@ -139,6 +139,10 @@ function add_metabox_classes_panel( array $classes ): array {
  * @return void
  */
 function save_wpto_meta_box( int $post_id, WP_Post $post, bool $update ): void {
+	if ( ! isset( $_POST['wpto-meta-box-nonce'] ) || ! wp_verify_nonce( $_POST['wpto-meta-box-nonce'], basename( __FILE__ ) ) ) {
+		return;
+	}
+
 	if ( ! current_user_can( 'edit_post', $post_id ) ) {
 		return;
 	}
