@@ -156,8 +156,9 @@ function save_wpto_meta_box( int $post_id, WP_Post $post, bool $update ): void {
 		return;
 	}
 
-	$pt = wto_has_tag_posttype();
-	if ( ! in_array( $post->post_type, $pt, true ) ) {
+	$post_type         = sanitize_key( $post->post_type );
+	$post_type_has_tag = wto_has_tag_posttype();
+	if ( ! in_array( $post_type, $post_type_has_tag, true ) ) {
 		return;
 	}
 
@@ -168,11 +169,12 @@ function save_wpto_meta_box( int $post_id, WP_Post $post, bool $update ): void {
 	}
 
 	foreach ( $taxonomies as $taxonomy ) {
+		$taxonomy = sanitize_key( $taxonomy );
 		if ( ! is_taxonomy_hierarchical( $taxonomy ) && wto_is_enabled_taxonomy( $taxonomy ) ) {
 			$meta_box_tags_value = '';
 			$fieldname           = 'wp-tag-order-' . $taxonomy;
-			if ( isset( $_POST[ $fieldname ] ) ) {
-				$meta_box_tags_value = serialize( $_POST[ $fieldname ] );
+			if ( isset( $_POST[ $fieldname ] ) && is_array( $_POST[ $fieldname ] ) ) {
+				$meta_box_tags_value = serialize( array_map( 'sanitize_text_field', $_POST[ $fieldname ] ) );
 			}
 			update_post_meta( $post_id, $fieldname, $meta_box_tags_value );
 		}
