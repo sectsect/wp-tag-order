@@ -1,5 +1,22 @@
 # Changelog
 
+## [v3.7.0](https://github.com/sectsect/wp-tag-order/tree/v3.7.0) (2024-08-06)
+
+[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v3.6.0...v3.7.0)
+
+**Merged pull requests:**
+
+- chore\(deps-dev\): bump braces from 3.0.2 to 3.0.3 [\#64](https://github.com/sectsect/wp-tag-order/pull/64) ([dependabot[bot]](https://github.com/apps/dependabot))
+- make sanitization stricter [\#63](https://github.com/sectsect/wp-tag-order/pull/63) ([sectsect](https://github.com/sectsect))
+- test: add unit test [\#61](https://github.com/sectsect/wp-tag-order/pull/61) ([sectsect](https://github.com/sectsect))
+- refactor: code refactor [\#57](https://github.com/sectsect/wp-tag-order/pull/57) ([sectsect](https://github.com/sectsect))
+- test: code formatting with phpcs [\#55](https://github.com/sectsect/wp-tag-order/pull/55) ([sectsect](https://github.com/sectsect))
+- test: update config [\#54](https://github.com/sectsect/wp-tag-order/pull/54) ([sectsect](https://github.com/sectsect))
+- \[PHPUnit\] add `@covers` annotations to test classes and methods [\#53](https://github.com/sectsect/wp-tag-order/pull/53) ([sectsect](https://github.com/sectsect))
+- reafcor: improve PHPDocs and code refactor [\#52](https://github.com/sectsect/wp-tag-order/pull/52) ([sectsect](https://github.com/sectsect))
+- chore: add missing function return type hints [\#51](https://github.com/sectsect/wp-tag-order/pull/51) ([sectsect](https://github.com/sectsect))
+- test: add a test [\#50](https://github.com/sectsect/wp-tag-order/pull/50) ([sectsect](https://github.com/sectsect))
+
 ## [v3.6.0](https://github.com/sectsect/wp-tag-order/tree/v3.6.0) (2024-04-27)
 
 [Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v3.5.0...v3.6.0)
