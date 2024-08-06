@@ -10,6 +10,12 @@
 > This plugin is NOT compatible with Gutenberg on WordPress 5.x.
 > Consider using [Classic Editor Plugin](https://wordpress.org/plugins/classic-editor/).
 
+> [!IMPORTANT]
+> Mutation events will no longer be supported in Google Chrome and Edge in July 2024 (Google Chrome on July 23, 2024, and Microsoft Edge the week of July 25, 2024).
+> As a result, WP Tag Order versions 3.6.0 or less will not work with Chrome v127 and later, which will be released on **July 23, 2024**.
+> You have to update to **v3.7.0 or later**.
+> See [Chrome for Developers Blog](https://developer.chrome.com/blog/mutation-events-deprecation) for more details.
+
 ## Get Started
 
 1. Clone this Repo into your `wp-content/plugins` directory.
