@@ -64,7 +64,6 @@
     "postcss": "^8.4.41",
     "postcss-calc": "^10.0.1",
     "postcss-combine-duplicated-selectors": "^10.0.3",
-    "postcss-flexbugs-fixes": "^5.0.2",
     "postcss-hexrgba": "^2.1.0",
     "postcss-import": "^16.1.0",
     "postcss-loader": "^8.1.1",
