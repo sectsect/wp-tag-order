@@ -28,57 +28,69 @@ export const post = () => {
   ================================================== */
   let flag = '';
   setTimeout(() => {
-    jQuery("[id^='tagsdiv-']")
-      .find('.tagchecklist')
-      .on('DOMSubtreeModified propertychange', e => {
-        setTimeout(() => {
-          const cont = jQuery(e.currentTarget).html();
-          if (cont === flag && cont !== '') {
-            return; // prevent multiple simultaneous triggers
-          }
-          flag = cont;
+    const tagchecklists = document.querySelectorAll(
+      "[id^='tagsdiv-'] .tagchecklist",
+    );
 
-          const postboxid =
-            jQuery(e.currentTarget).closest('.postbox').attr('id') ?? '';
-          const t = postboxid.replace('tagsdiv-', '');
-          const s = jQuery(e.currentTarget)
-            .siblings()
-            .find('textarea.the-tags')
-            .val() as string;
-          jQuery
-            .ajax({
-              url,
-              dataType: 'json',
-              data: {
-                id,
-                nonce: nonceSync,
-                action: actionSync,
-                taxonomy: t,
-                tags: s,
-              },
-              type: 'post',
-              // eslint-disable-next-line prefer-arrow/prefer-arrow-functions
-              beforeSend() {
-                jQuery(`#tagsdiv-${t} h2, #wpto_meta_box-${t} h2`).addClass(
-                  'ready',
-                );
-              },
-            })
-            .done((data: HTMLElement) => {
-              jQuery(`#wpto_meta_box-${t} .inside .inner ul`).html(data);
-            })
-            .fail(() => {
-              alert('Load Error. Please Reload...');
-            })
-            .always(() => {
-              setTimeout(() => {
-                jQuery(`#tagsdiv-${t} h2, #wpto_meta_box-${t} h2`).removeClass(
-                  'ready',
-                );
-              }, 300);
-            });
-        }, 20);
+    const observer = new MutationObserver(mutations => {
+      mutations.forEach(mutation => {
+        if (mutation.type === 'childList') {
+          const target = mutation.target as HTMLElement;
+          setTimeout(() => {
+            const cont = target.innerHTML;
+            if (cont === flag && cont !== '') {
+              return; // prevent multiple simultaneous triggers
+            }
+            flag = cont;
+
+            const postboxid = target.closest('.postbox')?.id ?? '';
+            const t = postboxid.replace('tagsdiv-', '');
+            const s =
+              (
+                target.parentElement?.querySelector(
+                  'textarea.the-tags',
+                ) as HTMLTextAreaElement
+              )?.value ?? '';
+
+            jQuery
+              .ajax({
+                url,
+                dataType: 'json',
+                data: {
+                  id,
+                  nonce: nonceSync,
+                  action: actionSync,
+                  taxonomy: t,
+                  tags: s,
+                },
+                type: 'post',
+                beforeSend: () => {
+                  jQuery(`#tagsdiv-${t} h2, #wpto_meta_box-${t} h2`).addClass(
+                    'ready',
+                  );
+                },
+              })
+              .done((data: HTMLElement) => {
+                jQuery(`#wpto_meta_box-${t} .inside .inner ul`).html(data);
+              })
+              .fail(() => {
+                alert('Load Error. Please Reload...');
+              })
+              .always(() => {
+                setTimeout(() => {
+                  jQuery(
+                    `#tagsdiv-${t} h2, #wpto_meta_box-${t} h2`,
+                  ).removeClass('ready');
+                }, 300);
+              });
+          }, 20);
+        }
       });
+    });
+
+    tagchecklists.forEach(tagchecklist => {
+      observer.observe(tagchecklist, { childList: true, subtree: true });
+    });
   }, 400);
   /*= =================================================
   jQuery UI Sortable
