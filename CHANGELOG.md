@@ -1,5 +1,18 @@
 # Changelog
 
+## [v3.7.1](https://github.com/sectsect/wp-tag-order/tree/v3.7.1) (2024-08-25)
+
+[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v3.7.0...v3.7.1)
+
+**Closed issues:**
+
+- Issue with wp-tag-order Plugin and iThemes Security Proxy Detection [\#66](https://github.com/sectsect/wp-tag-order/issues/66)
+
+**Merged pull requests:**
+
+- refctor: code refactor [\#68](https://github.com/sectsect/wp-tag-order/pull/68) ([sectsect](https://github.com/sectsect))
+- Update dependencies [\#67](https://github.com/sectsect/wp-tag-order/pull/67) ([sectsect](https://github.com/sectsect))
+
 ## [v3.7.0](https://github.com/sectsect/wp-tag-order/tree/v3.7.0) (2024-08-06)
 
 [Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v3.6.0...v3.7.0)
