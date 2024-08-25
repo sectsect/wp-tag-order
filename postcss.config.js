@@ -23,9 +23,7 @@ const pxtorem = require('postcss-pxtorem')({
   replace: false,
 });
 const postcssCalc = require('postcss-calc');
-const postcssPseudoIs = require('postcss-pseudo-is');
 const postcssHexrgba = require('postcss-hexrgba');
-const postcssFlexbugsFixes = require('postcss-flexbugs-fixes');
 const postcssReporter = require('postcss-reporter')({
   positionless: 'last',
 });
@@ -40,8 +38,6 @@ module.exports = {
     pxtorem,
     postcssCalc,
     postcssHexrgba,
-    postcssPseudoIs,
-    postcssFlexbugsFixes,
     postcssReporter,
   ],
 };

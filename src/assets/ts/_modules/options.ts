@@ -17,7 +17,9 @@ interface WtoOptionsResponse {
 }
 
 export const options = (): void => {
-  const beforeSend = (): Promise<string> =>
+  const { nonce, action, ajax_url: url } = window.wto_options_data;
+
+  const beforeSend = () =>
     new Promise<string>(resolve => {
       jQuery('#wpbody-content form input[name=apply]').prop('disabled', true);
       const h = '<p><strong class="processing">Processing.</strong></p>';
@@ -26,33 +28,32 @@ export const options = (): void => {
       resolve('resolved');
     });
 
-  const asyncPreConfirm = async (): Promise<WtoOptionsResponse> => {
+  const asyncPreConfirm = async () => {
     await beforeSend();
 
-    return fetch(window.wto_options_data.ajax_url, {
-      method: 'POST',
-      credentials: 'same-origin',
-      headers: {
-        'X-Requested-With': 'XMLHttpRequest',
-        'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
-        'Cache-Control': 'no-cache',
-      },
-      // body: JSON.stringify({
-      //   nonce: window.wto_options_data.nonce,
-      //   action: window.wto_options_data.action,
-      // }),
-      body: `action=${window.wto_options_data.action}&nonce=${window.wto_options_data.nonce}`,
-    })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(response.statusText);
-        }
-        return response.json();
-      })
-      .catch(error => {
-        Swal.showValidationMessage(`Request failed: ${error}`);
-        console.log(error);
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest',
+          'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
+          'Cache-Control': 'no-cache',
+        },
+        body: `action=${action}&nonce=${nonce}`,
       });
+
+      if (!response.ok) {
+        throw new Error(response.statusText);
+      }
+
+      const data: WtoOptionsResponse = await response.json();
+      return data;
+    } catch (error) {
+      Swal.showValidationMessage(`Request failed: ${error}`);
+      console.log(error);
+      throw error;
+    }
   };
 
   jQuery('#wpbody-content form input[name=apply]').on('click', () => {
