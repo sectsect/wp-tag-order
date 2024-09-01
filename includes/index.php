@@ -464,8 +464,8 @@ function ajax_wto_options(): void {
 				foreach ( $taxonomies as $taxonomy ) {
 					if ( ! is_taxonomy_hierarchical( $taxonomy ) && 'post_format' !== $taxonomy && wto_has_enabled_taxonomy( $taxonomies ) ) {
 						$terms = get_the_terms( $postid, $taxonomy );
-						if ( ! is_array( $terms ) ) {
-							continue; // Skip if $terms is not an array.
+						if ( is_wp_error( $terms ) || false === $terms || ! is_array( $terms ) ) {
+							continue; // Skip if $terms is a WP_Error, false, null, or not an array.
 						}
 						$meta = get_post_meta( $postid, 'wp-tag-order-' . $taxonomy, true );
 						if ( ! empty( $terms ) && ! $meta ) {
