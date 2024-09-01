@@ -140,7 +140,7 @@ function add_metabox_classes_panel( array $classes ): array {
  * @return void
  */
 function save_wpto_meta_box( int $post_id, WP_Post $post, bool $update ): void {
-	$nonce = filter_input( INPUT_POST, 'wpto-meta-box-nonce', FILTER_SANITIZE_STRING );
+	$nonce = filter_input( INPUT_POST, 'wpto-meta-box-nonce', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
 	if ( ! $nonce || ! wp_verify_nonce( $nonce, basename( __FILE__ ) ) ) {
 		return;
 	}
@@ -247,11 +247,11 @@ add_action( 'admin_enqueue_scripts', 'load_wpto_admin_script', 10, 1 );
  * @return void
  */
 function ajax_wto_sync_tags(): void {
-	$id       = filter_input( INPUT_POST, 'id', FILTER_SANITIZE_STRING );
-	$nonce    = filter_input( INPUT_POST, 'nonce', FILTER_SANITIZE_STRING );
-	$action   = filter_input( INPUT_POST, 'action', FILTER_SANITIZE_STRING );
-	$taxonomy = filter_input( INPUT_POST, 'taxonomy', FILTER_SANITIZE_STRING );
-	$tags     = filter_input( INPUT_POST, 'tags', FILTER_SANITIZE_STRING );
+	$id       = filter_input( INPUT_POST, 'id', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
+	$nonce    = filter_input( INPUT_POST, 'nonce', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
+	$action   = filter_input( INPUT_POST, 'action', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
+	$taxonomy = filter_input( INPUT_POST, 'taxonomy', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
+	$tags     = filter_input( INPUT_POST, 'tags', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
 
 	if ( ! $id || ! $nonce || ! $action || ! wp_verify_nonce( $nonce, $action ) || ! check_ajax_referer( (string) $action, 'nonce', false ) || 'POST' !== $_SERVER['REQUEST_METHOD'] ) {
 		wp_safe_redirect( home_url( '/' ), 301 );
@@ -339,11 +339,11 @@ add_action( 'wp_ajax_nopriv_wto_sync_tags', 'ajax_wto_sync_tags' );
  * @return void Outputs true on success or false on failure.
  */
 function ajax_wto_update_tags(): void {
-	$id       = filter_input( INPUT_POST, 'id', FILTER_SANITIZE_STRING );
-	$nonce    = filter_input( INPUT_POST, 'nonce', FILTER_SANITIZE_STRING );
-	$action   = filter_input( INPUT_POST, 'action', FILTER_SANITIZE_STRING );
-	$taxonomy = filter_input( INPUT_POST, 'taxonomy', FILTER_SANITIZE_STRING );
-	$tags     = filter_input( INPUT_POST, 'tags', FILTER_SANITIZE_STRING );
+	$id       = filter_input( INPUT_POST, 'id', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
+	$nonce    = filter_input( INPUT_POST, 'nonce', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
+	$action   = filter_input( INPUT_POST, 'action', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
+	$taxonomy = filter_input( INPUT_POST, 'taxonomy', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
+	$tags     = filter_input( INPUT_POST, 'tags', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
 
 	if (
 		empty( $id ) ||
@@ -422,8 +422,8 @@ function wpto_admin_scripts(): void {
  * @return void
  */
 function ajax_wto_options(): void {
-	$nonce  = filter_input( INPUT_POST, 'nonce', FILTER_SANITIZE_STRING );
-	$action = filter_input( INPUT_POST, 'action', FILTER_SANITIZE_STRING );
+	$nonce  = filter_input( INPUT_POST, 'nonce', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
+	$action = filter_input( INPUT_POST, 'action', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
 
 	if (
 		empty( $nonce ) ||
