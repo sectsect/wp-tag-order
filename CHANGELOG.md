@@ -1,5 +1,14 @@
 # Changelog
 
+## [v3.7.2](https://github.com/sectsect/wp-tag-order/tree/v3.7.2) (2024-09-01)
+
+[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v3.7.1...v3.7.2)
+
+**Merged pull requests:**
+
+- fix: replace deprecated FILTER\_SANITIZE\_STRING \#71 [\#72](https://github.com/sectsect/wp-tag-order/pull/72) ([sectsect](https://github.com/sectsect))
+- chore\(deps-dev\): bump webpack from 5.93.0 to 5.94.0 [\#70](https://github.com/sectsect/wp-tag-order/pull/70) ([dependabot[bot]](https://github.com/apps/dependabot))
+
 ## [v3.7.1](https://github.com/sectsect/wp-tag-order/tree/v3.7.1) (2024-08-25)
 
 [Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v3.7.0...v3.7.1)
