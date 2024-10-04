@@ -1,4 +1,2 @@
-#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
-
-npx lint-staged
+# Disable concurent to run build-types after ESLint in lint-staged
+pnpx lint-staged --concurrent false

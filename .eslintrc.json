@@ -1,0 +1,185 @@
+{
+  "env": {
+    "es2021": true,
+    "browser": true,
+    "node": true,
+    "jquery": true
+  },
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "sourceType": "module",
+    "project": "./tsconfig.json"
+  },
+  "extends": [
+    "airbnb",
+    "airbnb-typescript",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended"
+  ],
+  "plugins": [
+    "prefer-arrow",
+    "@typescript-eslint",
+    "unused-imports",
+    "eslint-plugin-tsdoc"
+  ],
+  "globals": {
+    "window": true,
+    "lazySizes": true
+  },
+  "rules": {
+    "import/extensions": 0,
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies": true,
+        "optionalDependencies": false
+      }
+    ],
+    "sort-imports": 0,
+    "import/order": [
+      "error",
+      {
+        "groups": ["builtin", "external", "internal"],
+        "alphabetize": {
+          "order": "asc"
+        },
+        "newlines-between": "never"
+      }
+    ],
+    "import/prefer-default-export": "off",
+    "import/no-default-export": "error",
+    "prefer-arrow/prefer-arrow-functions": [
+      "warn",
+      {
+        "disallowPrototype": true,
+        "singleReturnOnly": false,
+        "classPropertiesAllowed": false
+      }
+    ],
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": "off",
+    "unused-imports/no-unused-imports": "error",
+    "unused-imports/no-unused-vars": [
+      "error",
+      {
+        "vars": "all",
+        "varsIgnorePattern": "^Window$",
+        "args": "after-used",
+        "argsIgnorePattern": "^_"
+      }
+    ],
+    "no-alert": 0,
+    "no-console": 0,
+    "tsdoc/syntax": "warn",
+    "@typescript-eslint/explicit-function-return-type": 0,
+    "@typescript-eslint/interface-name-prefix": 0,
+    "@typescript-eslint/naming-convention": [
+      "error",
+      {
+        "selector": ["variable", "function", "parameter"],
+        "format": ["camelCase"],
+        "leadingUnderscore": "allow"
+      },
+      {
+        "selector": "variable",
+        "types": ["boolean"],
+        "format": ["PascalCase"],
+        "prefix": ["is", "should"]
+      },
+      {
+        "selector": "class",
+        "format": ["PascalCase"]
+      },
+      {
+        "selector": "interface",
+        "format": ["PascalCase"]
+      },
+      {
+        "selector": "typeParameter",
+        "format": ["PascalCase"],
+        "prefix": ["T", "K"]
+      },
+      {
+        "selector": "enum",
+        "format": ["PascalCase"]
+      }
+    ],
+    "@typescript-eslint/no-explicit-any": 0,
+    "@typescript-eslint/prefer-nullish-coalescing": "error",
+    "@typescript-eslint/prefer-optional-chain": "error",
+    "prettier/prettier": "error"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    },
+    "import/extensions": [".js", ".jsx", ".json", ".ts", ".tsx"]
+    // "import/resolver": {
+    //   "webpack": {
+    //     "config": "webpack.config.js"
+    //   }
+    // }
+  },
+  "overrides": [
+    // Configuration for TypeScript files
+    {
+      "files": ["**/*.tsx"],
+      "plugins": ["react", "react-refresh", "jsx-a11y", "tailwindcss"],
+      "extends": [
+        "plugin:react-hooks/recommended",
+        "plugin:jsx-a11y/recommended",
+        "plugin:tailwindcss/recommended",
+        "plugin:@tanstack/eslint-plugin-query/recommended"
+      ],
+      "rules": {
+        "react/destructuring-assignment": "off", // Vscode doesn't support automatically destructuring, it's a pain to add a new variable
+        "jsx-a11y/anchor-is-valid": "off", // Next.js use his own internal link system
+        "jsx-a11y/label-has-associated-control": [
+          2,
+          {
+            "assert": "either" // either check for `htmlFor` or `nesting`
+          }
+        ],
+        "react/require-default-props": "off", // Allow non-defined react props as undefined
+        "react/jsx-props-no-spreading": "off", // _app.tsx uses spread operator and also, react-hook-form
+        // "react-hooks/exhaustive-deps": "off", // Incorrectly report needed dependency with Next.js router
+        "react/function-component-definition": [
+          2,
+          {
+            "namedComponents": "arrow-function",
+            "unnamedComponents": "arrow-function"
+          }
+        ],
+        "react/no-danger": "off", // Allow dangerouslySetInnerHTML
+        "react/react-in-jsx-scope": "off",
+        "react/jsx-uses-react": "off",
+        "react-refresh/only-export-components": [
+          "warn",
+          { "allowConstantExport": true }
+        ],
+        "import/no-default-export": "off",
+        "import/order": [
+          "error",
+          {
+            "groups": ["builtin", "external", "internal"],
+            "pathGroups": [
+              {
+                "pattern": "react",
+                "group": "external",
+                "position": "before"
+              }
+            ],
+            "pathGroupsExcludedImportTypes": ["react"],
+            "newlines-between": "always",
+            "alphabetize": {
+              "order": "asc",
+              "caseInsensitive": true
+            }
+          }
+        ],
+        "@typescript-eslint/naming-convention": "off",
+        "tailwindcss/no-custom-classname": "off"
+      }
+    }
+  ]
+}

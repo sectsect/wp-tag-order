@@ -1,0 +1,6 @@
+{
+  "src/**/*.{js,jsx,ts,tsx}": ["pnpm run lint:fix", "pnpm run lint"],
+  "src/**/*.ts?(x)": "tsc-files --noEmit",
+  "src/**/*{,.*}.{css,scss}": ["pnpm run lint:css"],
+  "*": ["secretlint"]
+}
