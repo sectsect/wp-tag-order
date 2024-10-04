@@ -218,8 +218,8 @@ function load_wpto_admin_script( string $hook ): void {
 		$taxonomies_attached = get_object_taxonomies( $post->post_type );
 		if ( in_array( $post->post_type, $pt, true ) && wto_has_enabled_taxonomy( $taxonomies_attached ) ) {
 			wp_enqueue_style( 'wto-style', plugin_dir_url( __DIR__ ) . 'assets/css/admin.css?v=' . $plugin_version, array() );
-			wp_enqueue_script( 'wto-commons', plugin_dir_url( __DIR__ ) . 'assets/js/commons.js?v=' . $plugin_version, array( 'jquery' ), null, true );
-			wp_enqueue_script( 'wto-script', plugin_dir_url( __DIR__ ) . 'assets/js/post.js?v=' . $plugin_version, array( 'wto-commons' ), null, true );
+			// wp_enqueue_script( 'wto-commons', plugin_dir_url( __DIR__ ) . 'assets/js/commons.js?v=' . $plugin_version, array( 'jquery' ), null, true ); // phpcs:ignore.
+			wp_enqueue_script( 'wto-script', plugin_dir_url( __DIR__ ) . 'assets/js/post.js?v=' . $plugin_version, array( 'jquery' ), null, true );
 			$post_id       = ( isset( $_GET['post'] ) ) ? wp_unslash( $_GET['post'] ) : null;
 			$action_sync   = 'wto_sync_tags';
 			$action_update = 'wto_update_tags';
@@ -402,8 +402,8 @@ function wpto_admin_styles(): void {
 function wpto_admin_scripts(): void {
 	$plugin_data    = wpto_get_plugin_data();
 	$plugin_version = $plugin_data['Version'];
-	wp_enqueue_script( 'wto-commons', plugin_dir_url( __DIR__ ) . 'assets/js/commons.js?v=' . $plugin_version, array( 'jquery' ), null, true );
-	wp_enqueue_script( 'wto-options-script', plugin_dir_url( __DIR__ ) . 'assets/js/options.js?v=' . $plugin_version, array( 'wto-commons' ), null, true );
+	// wp_enqueue_script( 'wto-commons', plugin_dir_url( __DIR__ ) . 'assets/js/commons.js?v=' . $plugin_version, array( 'jquery' ), null, true ); // phpcs:ignore.
+	wp_enqueue_script( 'wto-options-script', plugin_dir_url( __DIR__ ) . 'assets/js/options.js?v=' . $plugin_version, array( 'jquery' ), null, true );
 	$action = 'wto_options';
 	wp_localize_script(
 		'wto-options-script',

@@ -1,6 +1,8 @@
 {
   "extends": "@spotify/tsconfig",
   "compilerOptions": {
+    "module": "commonjs",
+    "moduleResolution": "node",
     "lib": ["dom", "dom.iterable", "esnext"],
     // "noImplicitThis": false,
     "target": "esnext",
@@ -16,10 +18,11 @@
   },
   "include": [
     "src/**/*",
-    "webpack.config.js",
-    ".eslintrc.js",
-    "prettier.config.js",
-    "postcss.config.js"
+    "rspack.config.ts",
+    "commitlint.config.ts",
+    "prettier.config.mjs",
+    "postcss.config.mjs",
+    "stylelint.config.mjs"
   ],
   "exclude": ["dist", "node_modules", "**/*.spec.ts"]
 }
