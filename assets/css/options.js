@@ -29,13 +29,13 @@ return module.exports;
 // webpack/runtime/rspack_version
 (() => {
 __webpack_require__.rv = function () {
-	return "1.0.8";
+	return "1.1.0";
 };
 
 })();
 // webpack/runtime/rspack_unique_id
 (() => {
-__webpack_require__.ruid = "bundler=rspack@1.0.8";
+__webpack_require__.ruid = "bundler=rspack@1.1.0";
 
 })();
 /************************************************************************/
