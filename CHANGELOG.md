@@ -1,5 +1,13 @@
 # Changelog
 
+## [v3.8.2](https://github.com/sectsect/wp-tag-order/tree/v3.8.2) (2024-11-16)
+
+[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v3.8.1...v3.8.2)
+
+**Merged pull requests:**
+
+- fix: fix wrong sanitization for ASCII characters for spanish letters … [\#75](https://github.com/sectsect/wp-tag-order/pull/75) ([sectsect](https://github.com/sectsect))
+
 ## [v3.8.1](https://github.com/sectsect/wp-tag-order/tree/v3.8.1) (2024-11-09)
 
 [Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v3.8.0...v3.8.1)
