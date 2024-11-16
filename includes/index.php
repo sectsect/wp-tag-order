@@ -251,7 +251,7 @@ function ajax_wto_sync_tags(): void {
 	$nonce    = filter_input( INPUT_POST, 'nonce', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
 	$action   = filter_input( INPUT_POST, 'action', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
 	$taxonomy = filter_input( INPUT_POST, 'taxonomy', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
-	$tags     = filter_input( INPUT_POST, 'tags', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
+	$tags     = isset( $_POST['tags'] ) ? sanitize_text_field( wp_unslash( $_POST['tags'] ) ) : '';
 
 	if ( ! $id || ! $nonce || ! $action || ! wp_verify_nonce( $nonce, $action ) || ! check_ajax_referer( (string) $action, 'nonce', false ) || 'POST' !== $_SERVER['REQUEST_METHOD'] ) {
 		wp_safe_redirect( home_url( '/' ), 301 );
@@ -261,7 +261,7 @@ function ajax_wto_sync_tags(): void {
 	$meta_box_tags_value = '';
 
 	if ( $tags && $taxonomy ) {
-		$newtags    = explode( ',', wp_unslash( $tags ) );
+		$newtags    = explode( ',', $tags );
 		$newtagsids = array();
 
 		foreach ( $newtags as $newtag ) {
