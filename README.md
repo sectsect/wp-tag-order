@@ -144,6 +144,14 @@ The WP Tag Order plugin provides two REST API endpoints for managing tag order:
 GET /wp-json/wp-tag-order/v1/tags/order/123
 ```
 
+<details>
+ <summary>w/ cURL</summary>
+
+```bash
+curl --location 'https://your-wordpress-site.com/wp-json/wp-tag-order/v1/tags/order/123'
+```
+</details>
+
 ### Update Tag Order
 - **Endpoint**: `/wp-json/wp-tag-order/v1/tags/order/{post_id}`
 - **Method**: `PUT` or `PATCH`
@@ -159,9 +167,20 @@ GET /wp-json/wp-tag-order/v1/tags/order/123
 PUT /wp-json/wp-tag-order/v1/tags/order/123
 {
   "taxonomy": "post_tag",
-  "tags": "45,67,89"
+  "tags": "5,3,1,4,2"
 }
 ```
+
+<details>
+ <summary>w/ cURL</summary>
+
+```bash
+curl --location --request PUT 'https://your-wordpress-site.com/wp-json/wp-tag-order/v1/tags/order/123' \
+  -d '{"taxonomy": "post_tag", "tags": "5,3,1,4,2"}' \
+  --header 'Content-Type: application/json' \
+  --header 'Authorization: Bearer YOUR_JWT_TOKEN'
+```
+</details>
 
 #### Example Response
 
