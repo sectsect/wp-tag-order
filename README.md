@@ -1,4 +1,4 @@
-# <img src="https://github-sect.s3-ap-northeast-1.amazonaws.com/logo.svg" width="28" height="auto"> WP Tag Order
+# WP Tag Order
 
 [![PHP Unit Tests](https://github.com/sectsect/wp-tag-order/actions/workflows/phpunit.yml/badge.svg)](https://github.com/sectsect/wp-tag-order/actions/workflows/phpunit.yml) [![PHPStan](https://github.com/sectsect/wp-tag-order/actions/workflows/phpstan.yml/badge.svg)](https://github.com/sectsect/wp-tag-order/actions/workflows/phpstan.yml) [![PHP Coding Standards](https://github.com/sectsect/wp-tag-order/actions/workflows/phpcs.yml/badge.svg)](https://github.com/sectsect/wp-tag-order/actions/workflows/phpcs.yml) [![Latest Stable Version](https://poser.pugx.org/sectsect/wp-tag-order/v)](//packagist.org/packages/sectsect/wp-tag-order)
 
@@ -21,17 +21,23 @@
 
 1. Clone this Repo into your `wp-content/plugins` directory.
   ```bash
-  $ cd /path-to-your/wp-content/plugins/
-  $ git clone git@github.com:sectsect/wp-tag-order.git
+  cd /path-to-your/wp-content/plugins
+  git clone git@github.com:sectsect/wp-tag-order.git
   ```
 2. Activate the plugin through the `Plugins` menu in WordPress.
 3. Go to `Settings` -> `WP Tag Order` page to select which taxonomies to enable ordering for.
 
 ## Features
 
-* Support `post_tag` and `non-hierarchical taxonomy`.
-* Support multiple `non-hierarchical taxonomies` in a post-type.
-* Support Multisite.
+- 🏷️ Custom tag ordering for posts
+- 🔍 Works with default WordPress tag and custom taxonomy systems
+- 🔢 Drag-and-Drop interface for easy tag reordering
+- 📊 Supports multiple post types and taxonomies
+- 🌐 **NEW: REST API Support**
+  - Retrieve ordered tags via GET endpoint
+  - Update tag order programmatically
+  - Supports authentication and permissions
+- 🚀 Lightweight and performance-optimized
 
 ## Notes
 
@@ -119,6 +125,59 @@ if ( $terms && ! is_wp_error( $terms ) ) :
 ```php
 <?php the_terms_ordered( $post->ID, 'post_tag' ); ?>
 ```
+
+## REST API
+
+The WP Tag Order plugin provides two REST API endpoints for managing tag order:
+
+### Get Tag Order
+- **Endpoint**: `/wp-json/wp-tag-order/v1/tags/order/{post_id}`
+- **Method**: `GET`
+- **Parameters**:
+  - `post_id` (required): The ID of the post
+  - `taxonomy` (optional): Taxonomy name (defaults to 'post_tag')
+- **Permissions**: Publicly accessible
+- **Response**: Array of ordered tags with full term details
+
+#### Example Request
+```
+GET /wp-json/wp-tag-order/v1/tags/order/123
+```
+
+### Update Tag Order
+- **Endpoint**: `/wp-json/wp-tag-order/v1/tags/order/{post_id}`
+- **Method**: `PUT` or `PATCH`
+- **Parameters**:
+  - `post_id` (required): The ID of the post
+  - `taxonomy` (required): Taxonomy name
+  - `tags` (required): Comma-separated list of tag IDs in desired order
+- **Permissions**: Requires user authentication and post edit capabilities
+- **Response**: Success status and message
+
+#### Example Request
+```
+PUT /wp-json/wp-tag-order/v1/tags/order/123
+{
+  "taxonomy": "post_tag",
+  "tags": "45,67,89"
+}
+```
+
+#### Example Response
+
+```json
+{
+  "success": true,
+  "message": "Tag order updated successfully"
+}
+```
+
+### Authentication
+- GET requests are publicly accessible
+- PUT/PATCH requests require:
+  - User to be logged in
+  - User to have edit permissions for the specific post
+  - Post must be of an allowed type (default: 'post' or 'page')
 
 ## For Developers
 
