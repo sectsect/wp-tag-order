@@ -79,4 +79,5 @@ if ( wptagorder_phpversioncheck() ) {
 	require_once plugin_dir_path( __FILE__ ) . 'includes/functions.php';
 	require_once plugin_dir_path( __FILE__ ) . 'includes/category-template.php';
 	require_once plugin_dir_path( __FILE__ ) . 'includes/index.php';
+	require_once plugin_dir_path( __FILE__ ) . 'includes/rest-api.php';
 }
