@@ -1,5 +1,13 @@
 # Changelog
 
+## [v3.9.1](https://github.com/sectsect/wp-tag-order/tree/v3.9.1) (2024-11-17)
+
+[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v3.9.0...v3.9.1)
+
+**Merged pull requests:**
+
+- fix: fix type annotations in doc comments [\#77](https://github.com/sectsect/wp-tag-order/pull/77) ([sectsect](https://github.com/sectsect))
+
 ## [v3.9.0](https://github.com/sectsect/wp-tag-order/tree/v3.9.0) (2024-11-17)
 
 [Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v3.8.2...v3.9.0)
