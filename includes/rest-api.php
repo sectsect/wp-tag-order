@@ -198,7 +198,7 @@ function wpto_rest_permission_check( \WP_REST_Request $request ): bool {
  * Get tag order for a specific post.
  *
  * @param \WP_REST_Request $request REST request object.
- * @return \WP_REST_Response|WP_Error
+ * @return \WP_REST_Response|\WP_Error
  *
  * @phpstan-param WP_REST_Request<array{post_id?: int, taxonomy?: string}> $request
  */
@@ -241,7 +241,7 @@ function wpto_get_post_tag_order( \WP_REST_Request $request ): \WP_REST_Response
  * Update tag order for a specific post.
  *
  * @param \WP_REST_Request $request REST request object.
- * @return \WP_REST_Response
+ * @return \WP_REST_Response|\WP_Error
  *
  * @phpstan-param WP_REST_Request<array{post_id?: int, taxonomy?: string, tags?: string}> $request
  */
