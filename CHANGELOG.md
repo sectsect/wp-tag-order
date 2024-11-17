@@ -1,5 +1,19 @@
 # Changelog
 
+## [v3.9.0](https://github.com/sectsect/wp-tag-order/tree/v3.9.0) (2024-11-17)
+
+[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v3.8.2...v3.9.0)
+
+**Closed issues:**
+
+- Special characters problem [\#74](https://github.com/sectsect/wp-tag-order/issues/74)
+- PHP 8.1 Deprecated: Constant FILTER\_SANITIZE\_STRING. [\#71](https://github.com/sectsect/wp-tag-order/issues/71)
+- Not show the taxonomies list. [\#69](https://github.com/sectsect/wp-tag-order/issues/69)
+
+**Merged pull requests:**
+
+- feat: add REST API support [\#76](https://github.com/sectsect/wp-tag-order/pull/76) ([sectsect](https://github.com/sectsect))
+
 ## [v3.8.2](https://github.com/sectsect/wp-tag-order/tree/v3.8.2) (2024-11-16)
 
 [Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v3.8.1...v3.8.2)
