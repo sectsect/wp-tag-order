@@ -190,7 +190,20 @@ curl --location --request PUT 'https://your-wordpress-site.com/wp-json/wp-tag-or
 ```json
 {
   "success": true,
-  "message": "Tag order updated successfully"
+  "code": "tags_order_updated",
+  "message": "Tag order updated successfully.",
+  "data": {
+    "status": 200,
+    "post_id": 123,
+    "taxonomy": "pickup_tag",
+    "tags": [
+      5,
+      3,
+      1,
+      4,
+      2
+    ]
+  }
 }
 ```
 
