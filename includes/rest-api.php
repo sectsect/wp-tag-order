@@ -52,12 +52,17 @@ function wpto_register_rest_endpoints(): void {
 				'taxonomy' => array(
 					'required'          => true,
 					'type'              => 'string',
-					'validate_callback' => 'wpto_validate_taxonomy',
+					'validate_callback' => function ( $value, $request, $key ) {
+						return wpto_validate_taxonomy( $value );
+					},
 				),
 				'tags'     => array(
 					'required'          => true,
 					'type'              => 'string',
-					'validate_callback' => 'wpto_validate_tag_ids',
+					'validate_callback' => function ( $value, $request, $key ) {
+						$taxonomy = $request->get_param( 'taxonomy' );
+						return wpto_validate_tag_ids( $value, $taxonomy );
+					},
 				),
 			),
 		)
@@ -177,12 +182,48 @@ function wpto_validate_taxonomy( string $taxonomy ): bool {
 /**
  * Validate tag IDs for REST API request.
  *
+ * Performs comprehensive checks to ensure tag IDs are valid:
+ * - Verifies all IDs are numeric
+ * - Checks if tags exist in the specified taxonomy
+ * - Ensures no duplicate tag IDs
+ *
  * @param string $tags Comma-separated tag IDs.
+ * @param string $taxonomy Taxonomy to validate tags against.
  * @return bool
  */
-function wpto_validate_tag_ids( string $tags ): bool {
-	$tag_array = explode( ',', $tags );
-	return count( array_filter( $tag_array, 'is_numeric' ) ) === count( $tag_array );
+function wpto_validate_tag_ids( string $tags, string $taxonomy ): bool {
+	// Split tags and convert to integers.
+	$tag_array = array_map( 'intval', explode( ',', $tags ) );
+
+	// Check for non-numeric values.
+	$non_numeric_tags = array_filter(
+		$tag_array,
+		function ( $tag ) {
+			return ! is_numeric( $tag ) || $tag <= 0;
+		}
+	);
+
+	if ( ! empty( $non_numeric_tags ) ) {
+		return false;
+	}
+
+	// Check for duplicate tag IDs.
+	if ( count( $tag_array ) !== count( array_unique( $tag_array ) ) ) {
+		return false;
+	}
+
+	// Validate each tag exists in the specified taxonomy.
+	$invalid_tags = array_filter(
+		$tag_array,
+		function ( $tag_id ) use ( $taxonomy ) {
+			// Check if the term exists in the specified taxonomy.
+			$term = get_term_by( 'id', $tag_id, $taxonomy );
+			return false === $term;
+		}
+	);
+
+	// Return true only if no invalid tags are found.
+	return empty( $invalid_tags );
 }
 
 /**
