@@ -240,48 +240,163 @@ function wpto_get_post_tag_order( \WP_REST_Request $request ): \WP_REST_Response
 /**
  * Update tag order for a specific post.
  *
+ * Handles the process of updating tag order for a given post and taxonomy.
+ * Performs comprehensive validation and provides detailed error responses.
+ *
  * @param \WP_REST_Request $request REST request object.
  * @return \WP_REST_Response|\WP_Error
  *
  * @phpstan-param WP_REST_Request<array{post_id?: int, taxonomy?: string, tags?: string}> $request
  */
 function wpto_update_post_tag_order( \WP_REST_Request $request ): \WP_REST_Response|\WP_Error {
-	$post_id  = wpto_cast_mixed_to_int( $request->get_param( 'post_id' ) );
-	$taxonomy = wpto_cast_mixed_to_string( $request->get_param( 'taxonomy' ) );
-	$tags     = explode( ',', wpto_cast_mixed_to_string( $request->get_param( 'tags' ) ) );
-	$tags     = wpto_cast_mixed_to_int_array( $tags );
+	try {
+		// Cast and validate input parameters.
+		$post_id  = wpto_cast_mixed_to_int( $request->get_param( 'post_id' ) );
+		$taxonomy = wpto_cast_mixed_to_string( $request->get_param( 'taxonomy' ) );
+		$tags     = explode( ',', wpto_cast_mixed_to_string( $request->get_param( 'tags' ) ) );
+		$tags     = wpto_cast_mixed_to_int_array( $tags );
 
-	// Get current saved tag order.
-	$current_tags_value = get_post_meta( $post_id, 'wp-tag-order-' . $taxonomy, true );
-	$current_tags       = wpto_cast_mixed_to_array(
-		is_string( $current_tags_value ) ? unserialize( $current_tags_value ) : $current_tags_value
-	);
+		// Validate taxonomy.
+		if ( ! wpto_validate_taxonomy( $taxonomy ) ) {
+			return rest_ensure_response(
+				array(
+					'success' => false,
+					'code'    => 'invalid_taxonomy',
+					'message' => __( 'Invalid or unsupported taxonomy.', 'wpto' ),
+					'data'    => array(
+						'status'   => 400,
+						'taxonomy' => $taxonomy,
+					),
+				)
+			);
+		}
 
-	// Check if tag order has changed.
-	$tags_unchanged = (
-		count( $current_tags ) === count( $tags ) &&
-		$current_tags === $tags
-	);
+		// Validate tag IDs exist in the specified taxonomy.
+		$invalid_tags = array_filter(
+			$tags,
+			function ( $tag_id ) use ( $taxonomy ) {
+				return ! term_exists( $tag_id, $taxonomy );
+			}
+		);
 
-	if ( $tags_unchanged ) {
+		if ( ! empty( $invalid_tags ) ) {
+			return rest_ensure_response(
+				array(
+					'success' => false,
+					'code'    => 'invalid_tags',
+					'message' => __( 'One or more tag IDs are invalid.', 'wpto' ),
+					'data'    => array(
+						'status'       => 400,
+						'invalid_tags' => $invalid_tags,
+						'taxonomy'     => $taxonomy,
+					),
+				)
+			);
+		}
+
+		// Retrieve current tag order.
+		$current_tags_value = get_post_meta( $post_id, 'wp-tag-order-' . $taxonomy, true );
+		$current_tags       = wpto_cast_mixed_to_array(
+			is_string( $current_tags_value ) ? unserialize( $current_tags_value ) : $current_tags_value
+		);
+
+		// Check if tag order remains unchanged.
+		$tags_unchanged = (
+			count( $current_tags ) === count( $tags ) &&
+			$current_tags === $tags
+		);
+
+		if ( $tags_unchanged ) {
+			return rest_ensure_response(
+				array(
+					'success' => true,
+					'code'    => 'no_changes',
+					'message' => __( 'No changes in tag order detected.', 'wpto' ),
+				)
+			);
+		}
+
+		// Prepare and update metadata.
+		$meta_box_tags_value = serialize( $tags );
+		$meta_result         = update_post_meta( $post_id, 'wp-tag-order-' . $taxonomy, $meta_box_tags_value );
+
+		// Update post terms.
+		$term_taxonomy_ids = wp_set_object_terms( $post_id, $tags, $taxonomy );
+
+		// Handle metadata update failure.
+		if ( false === $meta_result ) {
+			return rest_ensure_response(
+				array(
+					'success' => false,
+					'code'    => 'meta_update_failed',
+					'message' => __( 'Failed to update tag order metadata.', 'wpto' ),
+					'data'    => array(
+						'status'   => 500,
+						'post_id'  => $post_id,
+						'taxonomy' => $taxonomy,
+					),
+				)
+			);
+		}
+
+		// Handle term update failure.
+		if ( is_wp_error( $term_taxonomy_ids ) ) {
+			return rest_ensure_response(
+				array(
+					'success' => false,
+					'code'    => 'term_update_failed',
+					'message' => __( 'Failed to update post terms.', 'wpto' ),
+					'data'    => array(
+						'status'        => 500,
+						'post_id'       => $post_id,
+						'taxonomy'      => $taxonomy,
+						'error_message' => $term_taxonomy_ids->get_error_message(),
+						'error_code'    => $term_taxonomy_ids->get_error_code(),
+					),
+				)
+			);
+		}
+
+		// Successful update response.
 		return rest_ensure_response(
 			array(
 				'success' => true,
-				'message' => 'No changes in tag order detected',
+				'code'    => 'tags_order_updated',
+				'message' => __( 'Tag order updated successfully.', 'wpto' ),
+				'data'    => array(
+					'status'   => 200,
+					'post_id'  => $post_id,
+					'taxonomy' => $taxonomy,
+					'tags'     => $tags,
+				),
+			)
+		);
+
+	} catch ( InvalidArgumentException $e ) {
+		// Handle input parameter casting failures.
+		return rest_ensure_response(
+			array(
+				'success' => false,
+				'code'    => 'invalid_input',
+				'message' => __( 'Invalid input parameters.', 'wpto' ),
+				'data'    => array(
+					'status'        => 400,
+					'error_message' => $e->getMessage(),
+				),
+			)
+		);
+	} catch ( \Exception $e ) {
+		// Handle unexpected errors.
+		return rest_ensure_response(
+			array(
+				'success' => false,
+				'code'    => 'unexpected_error',
+				'message' => __( 'An unexpected error occurred.', 'wpto' ),
+				'data'    => array(
+					'status'        => 500,
+					'error_message' => $e->getMessage(),
+				),
 			)
 		);
 	}
-
-	$meta_box_tags_value = serialize( $tags );
-	$result              = update_post_meta( $post_id, 'wp-tag-order-' . $taxonomy, $meta_box_tags_value );
-
-	// Update post terms.
-	$term_taxonomy_ids = wp_set_object_terms( $post_id, $tags, $taxonomy );
-
-	return rest_ensure_response(
-		array(
-			'success' => false !== $result && ! is_wp_error( $term_taxonomy_ids ),
-			'message' => false !== $result ? 'Tag order updated successfully' : 'Failed to update tag order',
-		)
-	);
 }
