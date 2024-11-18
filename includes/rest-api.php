@@ -133,11 +133,45 @@ function wpto_cast_mixed_to_string( mixed $value ): string {
 /**
  * Validate taxonomy for REST API request.
  *
- * @param string $taxonomy Taxonomy name.
- * @return bool
+ * Performs comprehensive checks to ensure the taxonomy is valid:
+ * - Checks if the taxonomy is enabled for the plugin
+ * - Ensures the taxonomy is not hierarchical
+ * - Verifies the taxonomy actually exists in WordPress
+ * - Optionally checks for public visibility
+ *
+ * @param string $taxonomy Taxonomy name to validate.
+ * @return bool True if taxonomy is valid, false otherwise.
  */
 function wpto_validate_taxonomy( string $taxonomy ): bool {
-	return wto_is_enabled_taxonomy( $taxonomy ) && ! is_taxonomy_hierarchical( $taxonomy );
+	// Check if taxonomy exists in WordPress.
+	if ( ! taxonomy_exists( $taxonomy ) ) {
+		return false;
+	}
+
+	// Check if taxonomy is enabled for the plugin.
+	if ( ! wto_is_enabled_taxonomy( $taxonomy ) ) {
+		return false;
+	}
+
+	// Ensure taxonomy is not hierarchical.
+	if ( is_taxonomy_hierarchical( $taxonomy ) ) {
+		return false;
+	}
+
+	// Optional: Additional checks for taxonomy visibility.
+	$taxonomy_object = get_taxonomy( $taxonomy );
+
+	// Ensure taxonomy object is an instance of WP_Taxonomy.
+	if ( ! $taxonomy_object instanceof WP_Taxonomy ) {
+		return false;
+	}
+
+	// Ensure taxonomy is public or at least show_in_rest is true.
+	if ( ! $taxonomy_object->public && ! $taxonomy_object->show_in_rest ) {
+		return false;
+	}
+
+	return true;
 }
 
 /**
