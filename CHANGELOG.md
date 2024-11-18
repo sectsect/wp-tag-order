@@ -1,5 +1,13 @@
 # Changelog
 
+## [v3.9.2](https://github.com/sectsect/wp-tag-order/tree/v3.9.2) (2024-11-18)
+
+[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v3.9.1...v3.9.2)
+
+**Merged pull requests:**
+
+- feat\(rest-api\): Enhance REST API Error Handling, Taxonomy, and Tag Validation [\#78](https://github.com/sectsect/wp-tag-order/pull/78) ([sectsect](https://github.com/sectsect))
+
 ## [v3.9.1](https://github.com/sectsect/wp-tag-order/tree/v3.9.1) (2024-11-17)
 
 [Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v3.9.0...v3.9.1)
