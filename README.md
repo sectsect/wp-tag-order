@@ -176,9 +176,12 @@ PUT /wp-json/wp-tag-order/v1/tags/order/123
 
 ```bash
 curl --location --request PUT 'https://your-wordpress-site.com/wp-json/wp-tag-order/v1/tags/order/123' \
-  -d '{"taxonomy": "post_tag", "tags": "5,3,1,4,2"}' \
-  --header 'Content-Type: application/json' \
-  --header 'Authorization: Bearer YOUR_JWT_TOKEN'
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer YOUR_JWT_TOKEN' \
+--data '{
+  "taxonomy": "post_tag",
+  "tags": "5,3,1,4,2"
+}'
 ```
 </details>
 
