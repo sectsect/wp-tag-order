@@ -273,11 +273,11 @@ function wpto_rest_permission_check( \WP_REST_Request $request ): bool {
  * Get tag order for a specific post.
  *
  * @param \WP_REST_Request $request REST request object.
- * @return \WP_REST_Response
+ * @return \WP_REST_Response|\WP_Error
  *
  * @phpstan-param WP_REST_Request<array{post_id?: int, taxonomy?: string}> $request
  */
-function wpto_get_post_tag_order( \WP_REST_Request $request ): \WP_REST_Response {
+function wpto_get_post_tag_order( \WP_REST_Request $request ): \WP_REST_Response|\WP_Error {
 	$post_id  = wpto_cast_mixed_to_int( $request->get_param( 'post_id' ) );
 	$taxonomy = $request->get_param( 'taxonomy' ) ?? 'post_tag';
 
@@ -319,11 +319,11 @@ function wpto_get_post_tag_order( \WP_REST_Request $request ): \WP_REST_Response
  * Performs comprehensive validation and provides detailed error responses.
  *
  * @param \WP_REST_Request $request REST request object.
- * @return \WP_REST_Response
+ * @return \WP_REST_Response|\WP_Error
  *
  * @phpstan-param WP_REST_Request<array{post_id?: int, taxonomy?: string, tags?: string}> $request
  */
-function wpto_update_post_tag_order( \WP_REST_Request $request ): \WP_REST_Response {
+function wpto_update_post_tag_order( \WP_REST_Request $request ): \WP_REST_Response|\WP_Error {
 	try {
 		// Cast and validate input parameters.
 		$post_id  = wpto_cast_mixed_to_int( $request->get_param( 'post_id' ) );
