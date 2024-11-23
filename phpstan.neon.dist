@@ -4,3 +4,5 @@ parameters:
     - wp-tag-order.php
     - includes/
     - options/
+includes:
+  - phar://phpstan.phar/conf/bleedingEdge.neon

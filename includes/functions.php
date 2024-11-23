@@ -69,7 +69,7 @@ function wto_get_non_hierarchical_taxonomies(): array {
  */
 function wto_get_enabled_taxonomies(): array {
 	$option = get_option( 'wpto_enabled_taxonomies', array() );
-	return is_array( $option ) ? $option : array();
+	return array_filter( is_array( $option ) ? $option : array(), 'is_string' );
 }
 
 /**

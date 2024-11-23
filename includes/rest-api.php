@@ -199,10 +199,9 @@ function wpto_validate_tag_ids( string $tags, string $taxonomy ): bool {
 	$non_numeric_tags = array_filter(
 		$tag_array,
 		function ( $tag ) {
-			return ! is_numeric( $tag ) || $tag <= 0;
+			return $tag <= 0;
 		}
 	);
-
 	if ( ! empty( $non_numeric_tags ) ) {
 		return false;
 	}
@@ -278,17 +277,13 @@ function wpto_rest_permission_check( \WP_REST_Request $request ): bool {
  * @phpstan-param WP_REST_Request<array{post_id?: int, taxonomy?: string}> $request
  */
 function wpto_get_post_tag_order( \WP_REST_Request $request ): \WP_REST_Response|\WP_Error {
-	$post_id  = wpto_cast_mixed_to_int( $request->get_param( 'post_id' ) );
-	$taxonomy = $request->get_param( 'taxonomy' ) ?? 'post_tag';
-
+	$post_id      = wpto_cast_mixed_to_int( $request->get_param( 'post_id' ) );
+	$taxonomy     = $request->get_param( 'taxonomy' ) ?? 'post_tag';
 	$tags_value   = get_post_meta( $post_id, 'wp-tag-order-' . $taxonomy, true );
 	$tags         = is_string( $tags_value ) ? unserialize( $tags_value ) : array();
 	$ordered_tags = array_map(
-		function ( int $tag_id ) use ( $taxonomy ): ?array {
-			if ( ! is_string( $taxonomy ) ) {
-				return null;
-			}
-			$tag = get_term_by( 'id', $tag_id, $taxonomy );
+		function ( $tag_id ) use ( $taxonomy ): ?array {
+			$tag = get_term_by( 'id', wpto_cast_mixed_to_int( $tag_id ), is_string( $taxonomy ) ? $taxonomy : '' );
 			if ( ! $tag instanceof \WP_Term ) {
 				return null;
 			}

@@ -19,6 +19,26 @@ declare(strict_types=1);
 global $wpdb;
 
 /**
+ * Safely converts a mixed value to a string, defaulting to an empty string if null or not a string.
+ *
+ * @param mixed $value The value to convert to a string.
+ * @return string The converted string value.
+ */
+function wpto_sanitize_taxonomy_string( $value ): string {
+	return is_string( $value ) ? $value : '';
+}
+
+/**
+ * Safely converts a mixed value to a string representation of an integer.
+ *
+ * @param mixed $value The value to convert to a string.
+ * @return string The converted string value representing an integer.
+ */
+function wpto_sanitize_tag_id( $value ): string {
+	return is_numeric( $value ) ? (string) $value : '';
+}
+
+/**
  * Adds a meta box for tag ordering on post edit screens.
  * This function creates a meta box that allows users to order tags associated with a post.
  *
@@ -32,12 +52,16 @@ function wpto_meta_box_markup( WP_Post $obj, array $metabox ): void {
 <div class="inner">
 	<ul>
 	<?php
-	$taxonomy   = isset( $metabox['args'] ) && is_array( $metabox['args'] ) && isset( $metabox['args']['taxonomy'] ) ? $metabox['args']['taxonomy'] : '';
+	$taxonomy   = isset( $metabox['args'] ) && is_array( $metabox['args'] ) && isset( $metabox['args']['taxonomy'] )
+		? wpto_sanitize_taxonomy_string( $metabox['args']['taxonomy'] )
+		: '';
+	$meta_key   = 'wp-tag-order-' . $taxonomy;
 	$tags_value = get_post_meta( $obj->ID, 'wp-tag-order-' . $taxonomy, true );
 	$tags       = is_string( $tags_value ) ? unserialize( $tags_value ) : array();
 	if ( $tags && is_array( $tags ) ) :
 		foreach ( $tags as $tagid ) :
-			$tag = is_string( $taxonomy ) && ! empty( $taxonomy ) ? get_term_by( 'id', $tagid, $taxonomy ) : null;
+			$tagid = wpto_sanitize_tag_id( $tagid );
+			$tag   = ! empty( $taxonomy ) ? get_term_by( 'id', $tagid, $taxonomy ) : null;
 			if ( ! $tag instanceof WP_Term ) {
 				continue; // Skip if $tag is not a WP_Term object.
 			}
@@ -217,9 +241,10 @@ function load_wpto_admin_script( string $hook ): void {
 		$pt                  = wto_has_tag_posttype();
 		$taxonomies_attached = get_object_taxonomies( $post->post_type );
 		if ( in_array( $post->post_type, $pt, true ) && wto_has_enabled_taxonomy( $taxonomies_attached ) ) {
-			wp_enqueue_style( 'wto-style', plugin_dir_url( __DIR__ ) . 'assets/css/admin.css?v=' . $plugin_version, array() );
-			// wp_enqueue_script( 'wto-commons', plugin_dir_url( __DIR__ ) . 'assets/js/commons.js?v=' . $plugin_version, array( 'jquery' ), null, true ); // phpcs:ignore.
-			wp_enqueue_script( 'wto-script', plugin_dir_url( __DIR__ ) . 'assets/js/post.js?v=' . $plugin_version, array( 'jquery' ), null, true );
+			$version = is_string( $plugin_version ) ? $plugin_version : '';
+			wp_enqueue_style( 'wto-style', plugin_dir_url( __DIR__ ) . 'assets/css/admin.css?v=' . $version, array() );
+			// wp_enqueue_script( 'wto-commons', plugin_dir_url( __DIR__ ) . 'assets/js/commons.js?v=' . $version, array( 'jquery' ), null, true ); // phpcs:ignore.
+			wp_enqueue_script( 'wto-script', plugin_dir_url( __DIR__ ) . 'assets/js/post.js?v=' . $version, array( 'jquery' ), null, true );
 			$post_id       = ( isset( $_GET['post'] ) ) ? wp_unslash( $_GET['post'] ) : null;
 			$action_sync   = 'wto_sync_tags';
 			$action_update = 'wto_update_tags';
@@ -251,7 +276,9 @@ function ajax_wto_sync_tags(): void {
 	$nonce    = filter_input( INPUT_POST, 'nonce', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
 	$action   = filter_input( INPUT_POST, 'action', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
 	$taxonomy = filter_input( INPUT_POST, 'taxonomy', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
-	$tags     = isset( $_POST['tags'] ) ? sanitize_text_field( wp_unslash( $_POST['tags'] ) ) : '';
+	$tags     = isset( $_POST['tags'] ) && is_string( $_POST['tags'] )
+		? sanitize_text_field( wp_unslash( $_POST['tags'] ) )
+		: '';
 
 	if ( ! $id || ! $nonce || ! $action || ! wp_verify_nonce( $nonce, $action ) || ! check_ajax_referer( (string) $action, 'nonce', false ) || 'POST' !== $_SERVER['REQUEST_METHOD'] ) {
 		wp_safe_redirect( home_url( '/' ), 301 );
@@ -287,7 +314,7 @@ function ajax_wto_sync_tags(): void {
 			if ( is_array( $basetagsids ) ) {
 				$added = wto_array_diff_interactive( $newtagsids, $basetagsids );
 				foreach ( $added as $val ) {
-					if ( is_array( $basetagsids ) && ! in_array( $val, $basetagsids, true ) ) {
+					if ( ! in_array( $val, $basetagsids, true ) ) {
 						$basetagsids[] = $val;
 					} else {
 						$key = array_search( $val, $basetagsids, true );
@@ -391,7 +418,8 @@ add_action( 'admin_menu', 'wpto_menu' );
 function wpto_admin_styles(): void {
 	$plugin_data    = wpto_get_plugin_data();
 	$plugin_version = $plugin_data['Version'];
-	wp_enqueue_style( 'sweetalert2', plugin_dir_url( __DIR__ ) . 'assets/css/options.css?v=' . $plugin_version, array() );
+	$version        = is_string( $plugin_version ) ? $plugin_version : '';
+	wp_enqueue_style( 'sweetalert2', plugin_dir_url( __DIR__ ) . 'assets/css/options.css?v=' . $version, array() );
 }
 
 /**
@@ -402,8 +430,9 @@ function wpto_admin_styles(): void {
 function wpto_admin_scripts(): void {
 	$plugin_data    = wpto_get_plugin_data();
 	$plugin_version = $plugin_data['Version'];
+	$version        = is_string( $plugin_version ) ? $plugin_version : '';
 	// wp_enqueue_script( 'wto-commons', plugin_dir_url( __DIR__ ) . 'assets/js/commons.js?v=' . $plugin_version, array( 'jquery' ), null, true ); // phpcs:ignore.
-	wp_enqueue_script( 'wto-options-script', plugin_dir_url( __DIR__ ) . 'assets/js/options.js?v=' . $plugin_version, array( 'jquery' ), null, true );
+	wp_enqueue_script( 'wto-options-script', plugin_dir_url( __DIR__ ) . 'assets/js/options.js?v=' . $version, array( 'jquery' ), null, true );
 	$action = 'wto_options';
 	wp_localize_script(
 		'wto-options-script',
@@ -464,8 +493,8 @@ function ajax_wto_options(): void {
 				foreach ( $taxonomies as $taxonomy ) {
 					if ( ! is_taxonomy_hierarchical( $taxonomy ) && 'post_format' !== $taxonomy && wto_has_enabled_taxonomy( $taxonomies ) ) {
 						$terms = get_the_terms( $postid, $taxonomy );
-						if ( is_wp_error( $terms ) || false === $terms || ! is_array( $terms ) ) {
-							continue; // Skip if $terms is a WP_Error, false, null, or not an array.
+						if ( is_wp_error( $terms ) || false === $terms ) {
+							continue; // Skip if $terms is a WP_Error or false.
 						}
 						$meta = get_post_meta( $postid, 'wp-tag-order-' . $taxonomy, true );
 						if ( ! empty( $terms ) && ! $meta ) {
