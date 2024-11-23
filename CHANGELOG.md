@@ -1,5 +1,14 @@
 # Changelog
 
+## [v3.9.3](https://github.com/sectsect/wp-tag-order/tree/v3.9.3) (2024-11-23)
+
+[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v3.9.2...v3.9.3)
+
+**Merged pull requests:**
+
+- Revert "test: add unit test" [\#80](https://github.com/sectsect/wp-tag-order/pull/80) ([sectsect](https://github.com/sectsect))
+- test: add tests for REST API endpoints [\#79](https://github.com/sectsect/wp-tag-order/pull/79) ([sectsect](https://github.com/sectsect))
+
 ## [v3.9.2](https://github.com/sectsect/wp-tag-order/tree/v3.9.2) (2024-11-18)
 
 [Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v3.9.1...v3.9.2)
