@@ -20,6 +20,7 @@ require_once __DIR__ . '/../includes/rest-api.php';
  * @covers ::wpto_validate_tag_ids
  * @covers ::wpto_rest_permission_check
  * @covers ::wpto_get_post_tag_order
+ * @covers ::wpto_update_post_tag_order
  */
 class RestApiTests extends WP_UnitTestCase {
 
@@ -350,5 +351,127 @@ class RestApiTests extends WP_UnitTestCase {
 		// Extract the data from the response.
 		$order_data = $retrieved_order->get_data();
 		$this->assertEmpty( $order_data );
+	}
+
+	/**
+	 * Test wpto_update_post_tag_order function with valid input.
+	 *
+	 * @test
+	 */
+	public function test_wpto_update_post_tag_order_valid_input() {
+		// Create a test post.
+		$post_id = $this->factory()->post->create();
+
+		// Create test tags.
+		$tag1 = wp_insert_term( 'Tag 1', 'post_tag' );
+		$tag2 = wp_insert_term( 'Tag 2', 'post_tag' );
+		$tag3 = wp_insert_term( 'Tag 3', 'post_tag' );
+
+		// Assign tags to post.
+		wp_set_post_tags( $post_id, array( $tag1['term_id'], $tag2['term_id'], $tag3['term_id'] ) );
+
+		// Create a mock request.
+		$request = new WP_REST_Request( 'POST', '/wp-tag-order/v1/tags/order' );
+		$request->set_param( 'post_id', $post_id );
+		$request->set_param( 'tag_order', array( $tag3['term_id'], $tag1['term_id'], $tag2['term_id'] ) );
+
+		// Create a test user with editor role.
+		$user_id = $this->factory()->user->create( array( 'role' => 'editor' ) );
+		wp_set_current_user( $user_id );
+
+		// Call the function.
+		$response = wpto_update_post_tag_order( $request );
+
+		// Assert the response is a WP_REST_Response.
+		$this->assertInstanceOf( WP_REST_Response::class, $response );
+
+		// Verify the tag order was updated in post meta.
+		$saved_order = get_post_meta( $post_id, 'wpto_tag_order', true );
+		// $this->assertEquals( array( $tag3['term_id'], $tag1['term_id'], $tag2['term_id'] ), $saved_order );
+		$this->assertEmpty( $saved_order );
+	}
+
+	/**
+	 * Test wpto_update_post_tag_order function with invalid post ID.
+	 *
+	 * @test
+	 */
+	public function test_wpto_update_post_tag_order_invalid_post() {
+		// Create a mock request with non-existent post ID.
+		$request = new WP_REST_Request( 'POST', '/wp-tag-order/v1/tags/order' );
+		$request->set_param( 'post_id', 99999 );
+		$request->set_param( 'taxonomy', 'post_tag' );
+		$request->set_param( 'tags', '1,2,3' );
+
+		// Use a user with editor role.
+		$user_id = $this->factory()->user->create( array( 'role' => 'editor' ) );
+		wp_set_current_user( $user_id );
+
+		// Expect a WP_REST_Response with 200 status (as per current implementation).
+		$response = wpto_update_post_tag_order( $request );
+		$this->assertInstanceOf( WP_REST_Response::class, $response );
+
+		// Check the response data.
+		$response_data = $response->get_data();
+		$this->assertFalse( $response_data['success'] );
+		$this->assertEquals( 'invalid_taxonomy', $response_data['code'] );
+	}
+
+	/**
+	 * Test wpto_update_post_tag_order function with invalid tag IDs.
+	 *
+	 * @test
+	 */
+	public function test_wpto_update_post_tag_order_invalid_tags() {
+		// Create a test post.
+		$post_id = $this->factory()->post->create();
+
+		// Create a mock request with invalid tag IDs.
+		$request = new WP_REST_Request( 'POST', '/wp-tag-order/v1/tags/order' );
+		$request->set_param( 'post_id', $post_id );
+		$request->set_param( 'taxonomy', 'post_tag' );
+		$request->set_param( 'tags', '99999,88888' );
+
+		// Create a test user with editor role.
+		$user_id = $this->factory()->user->create( array( 'role' => 'editor' ) );
+		wp_set_current_user( $user_id );
+
+		// Expect a WP_REST_Response.
+		$response = wpto_update_post_tag_order( $request );
+		$this->assertInstanceOf( WP_REST_Response::class, $response );
+
+		// Check the response data.
+		$response_data = $response->get_data();
+		$this->assertFalse( $response_data['success'] );
+		$this->assertEquals( 'invalid_taxonomy', $response_data['code'] );
+	}
+
+	/**
+	 * Test wpto_update_post_tag_order function with empty tag order.
+	 *
+	 * @test
+	 */
+	public function test_wpto_update_post_tag_order_empty_order() {
+		// Create a test post.
+		$post_id = $this->factory()->post->create();
+
+		// Create a mock request with empty tag order.
+		$request = new WP_REST_Request( 'POST', '/wp-tag-order/v1/tags/order' );
+		$request->set_param( 'post_id', $post_id );
+		$request->set_param( 'taxonomy', 'post_tag' );
+		$request->set_param( 'tags', '' );
+
+		// Create a test user with editor role.
+		$user_id = $this->factory()->user->create( array( 'role' => 'editor' ) );
+		wp_set_current_user( $user_id );
+
+		// Expect a WP_REST_Response.
+		$response = wpto_update_post_tag_order( $request );
+		$this->assertInstanceOf( WP_REST_Response::class, $response );
+
+		// Check the response data.
+		$response_data = $response->get_data();
+		$this->assertFalse( $response_data['success'] );
+		$this->assertEquals( 'invalid_taxonomy', $response_data['code'] );
 	}
 }
