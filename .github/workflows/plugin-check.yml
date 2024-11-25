@@ -1,0 +1,22 @@
+name: 'Plugin Check'
+
+on: # rebuild any PRs and main branch changes
+  pull_request:
+  push:
+    branches:
+    - main
+    - 'releases/*'
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Run plugin check
+      uses: wordpress/plugin-check-action@v1
+      with:
+        exclude-checks: 'trademarks,file_type,plugin_readme'
+        exclude-directories: '.github,bin,vendor'

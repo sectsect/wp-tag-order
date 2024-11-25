@@ -118,16 +118,18 @@ function get_the_tag_list_ordered( string $before = '', string $sep = '', string
  */
 function the_tags_ordered( ?string $before = null, string $sep = ', ', string $after = '' ): bool {
 	if ( null === $before ) {
-		$before = __( 'Tags: ' );
+		$before = esc_html__( 'Tags: ', 'wp-tag-order' );
 	}
 	$tag_list = get_the_tag_list_ordered( $before, $sep, $after );
 
 	if ( is_string( $tag_list ) ) {
-		echo $tag_list;
+		echo esc_html( $tag_list );
 		return true;
 	} elseif ( is_wp_error( $tag_list ) ) {
-		// Log the error or display an error message.
-		error_log( 'Error retrieving tags: ' . $tag_list->get_error_message() );
+		// // Log the error or display an error message.
+		// if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+		// error_log( 'Error retrieving tags: ' . $tag_list->get_error_message() );
+		// }
 		return true;
 	} else {
 		// Handle the case where no tags are found. Based on `the_tags` -> `get_the_tag_list`.
@@ -207,7 +209,7 @@ function the_terms_ordered( int $id, string $taxonomy, string $before = '', stri
 	 * @param string $sep       String to use between the terms.
 	 * @param string $after     String to use after the terms.
 	 */
-	echo apply_filters( 'the_terms', $term_list, $taxonomy, $before, $sep, $after );
+	echo esc_html( apply_filters( 'the_terms', $term_list, $taxonomy, $before, $sep, $after ) );
 
 	return true; // Ensure the function returns true as expected.
 }
