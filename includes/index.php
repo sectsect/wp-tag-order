@@ -215,6 +215,7 @@ add_filter( 'get_edit_post_link', 'wpto_add_nonce_to_edit_link', 10, 2 );
  * This function loads necessary CSS and JavaScript files for the plugin's admin interface on applicable admin pages.
  *
  * @param string $hook The current admin page hook suffix.
+ * @throws Exception If an error occurs during script processing or localization.
  * @return void
  */
 function load_wpto_admin_script( string $hook ): void {
@@ -222,41 +223,93 @@ function load_wpto_admin_script( string $hook ): void {
 	$plugin_version = wpto_cast_mixed_to_string( $plugin_data['Version'] );
 	global $post;
 
-	if ( ! $post?->post_type ) {
+	// Early return for unsupported scenarios.
+	if ( ! $post?->post_type || ! in_array( $hook, array( 'post-new.php', 'post.php' ), true ) ) {
 		return;
 	}
 
-	if ( 'post-new.php' === $hook || 'post.php' === $hook ) {
-		$pt                  = wto_has_tag_posttype();
-		$taxonomies_attached = get_object_taxonomies( $post->post_type );
-		if ( in_array( $post->post_type, $pt, true ) && wto_has_enabled_taxonomy( $taxonomies_attached ) ) {
-			wp_enqueue_style( 'wto-style', plugin_dir_url( __DIR__ ) . 'assets/css/admin.css', array(), $plugin_version );
-			// wp_enqueue_script( 'wto-commons', plugin_dir_url( __DIR__ ) . 'assets/js/commons.js', array( 'jquery' ), $plugin_version, true ); // phpcs:ignore.
-			wp_enqueue_script( 'wto-script', plugin_dir_url( __DIR__ ) . 'assets/js/post.js', array( 'jquery' ), $plugin_version, true );
+	$pt = wto_has_tag_posttype();
 
-			$post_id  = null;
-			$nonce    = filter_input( INPUT_GET, '_wpnonce', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
-			$get_post = filter_input( INPUT_GET, 'post', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
+	// Early validation and error handling.
+	if ( ! in_array( $post->post_type, $pt, true ) ) {
+		wp_die(
+			sprintf(
+				/* translators: %s: Post type name */
+				__( 'Post type "%s" is not supported by WP Tag Order.', 'wp-tag-order' ),
+				esc_html( $post->post_type )
+			),
+			__( 'WP Tag Order Error', 'wp-tag-order' ),
+			array( 'response' => 403 )
+		);
+	}
 
-			if ( $get_post && $nonce && wp_verify_nonce( $nonce, 'edit-post_' . $post->ID ) ) {
-				$post_id = $get_post;
+	$taxonomies_attached = get_object_taxonomies( $post->post_type );
+
+	if ( ! wto_has_enabled_taxonomy( $taxonomies_attached ) ) {
+		wp_die(
+			sprintf(
+				/* translators: %s: Post type name */
+				__( 'No enabled taxonomies found for post type "%s".', 'wp-tag-order' ),
+				esc_html( $post->post_type )
+			),
+			__( 'WP Tag Order Error', 'wp-tag-order' ),
+			array( 'response' => 403 )
+		);
+	}
+
+	wp_enqueue_style( 'wto-style', plugin_dir_url( __DIR__ ) . 'assets/css/admin.css', array(), $plugin_version );
+	wp_enqueue_script( 'wto-script', plugin_dir_url( __DIR__ ) . 'assets/js/post.js', array( 'jquery' ), $plugin_version, true );
+
+	$post_id  = null;
+	$nonce    = filter_input( INPUT_GET, '_wpnonce', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
+	$get_post = filter_input( INPUT_GET, 'post', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
+
+	try {
+		if ( $get_post && $nonce ) {
+			// Verify nonce first.
+			if ( ! wp_verify_nonce( $nonce, 'edit-post_' . $post->ID ) ) {
+				wp_die(
+					__( 'Nonce verification failed. You do not have permission to edit this post.', 'wp-tag-order' ),
+					__( 'WP Tag Order Error', 'wp-tag-order' ),
+					array( 'response' => 403 )
+				);
 			}
 
-			$action_sync   = 'wto_sync_tags';
-			$action_update = 'wto_update_tags';
-			wp_localize_script(
-				'wto-script',
-				'wto_data',
-				array(
-					'post_id'       => $post_id,
-					'nonce_sync'    => wp_create_nonce( $action_sync ),
-					'action_sync'   => $action_sync,
-					'nonce_update'  => wp_create_nonce( $action_update ),
-					'action_update' => $action_update,
-					'ajax_url'      => admin_url( 'admin-ajax.php' ),
-				)
-			);
+			// Validate post ID.
+			$post_id = filter_var( $get_post, FILTER_VALIDATE_INT );
+			if ( false === $post_id ) {
+				wp_die(
+					__( 'Invalid post ID detected.', 'wp-tag-order' ),
+					__( 'WP Tag Order Error', 'wp-tag-order' ),
+					array( 'response' => 400 )
+				);
+			}
 		}
+
+		$action_sync   = 'wto_sync_tags';
+		$action_update = 'wto_update_tags';
+		wp_localize_script(
+			'wto-script',
+			'wto_data',
+			array(
+				'post_id'       => $post_id ?? 0,
+				'nonce_sync'    => wp_create_nonce( $action_sync ),
+				'action_sync'   => $action_sync,
+				'nonce_update'  => wp_create_nonce( $action_update ),
+				'action_update' => $action_update,
+				'ajax_url'      => admin_url( 'admin-ajax.php' ),
+			)
+		);
+	} catch ( Exception $e ) {
+		wp_die(
+			sprintf(
+				/* translators: %s: Error message */
+				__( 'WP Tag Order encountered an error: %s', 'wp-tag-order' ),
+				esc_html( $e->getMessage() )
+			),
+			__( 'WP Tag Order Error', 'wp-tag-order' ),
+			array( 'response' => 400 )
+		);
 	}
 }
 add_action( 'admin_enqueue_scripts', 'load_wpto_admin_script', 10, 1 );
