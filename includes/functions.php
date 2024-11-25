@@ -163,7 +163,7 @@ function wto_strposa( string $haystack, array|string $needles, int $offset = 0 )
 function wto_replace_script_tag( string $tag ): string {
 	$module = array( 'wp-tag-order/assets/js/' );
 	if ( wto_strposa( $tag, $module ) ) {
-		$tag = str_replace( array( " type='text/javascript'", '<script src=' ), array( '', '<script type="module" src=' ), $tag );
+		$tag = str_replace( array( " type='text/javascript'", 'src=' ), array( '', 'type="module" src=' ), $tag );
 	}
 	return $tag;
 }

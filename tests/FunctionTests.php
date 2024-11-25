@@ -169,8 +169,8 @@ class FunctionTests extends WP_UnitTestCase {
 	 * @covers wto_replace_script_tag
 	 */
 	public function testWtoReplaceScriptTag() {
-		$tag      = '<script src="wp-tag-order/assets/js/script.js"></script>';
-		$expected = '<script type="module" src="wp-tag-order/assets/js/script.js"></script>';
+		$tag      = 'src="wp-tag-order/assets/js/script.js"';
+		$expected = 'type="module" src="wp-tag-order/assets/js/script.js"';
 		$this->assertEquals( $expected, wto_replace_script_tag( $tag ) );
 	}
 
