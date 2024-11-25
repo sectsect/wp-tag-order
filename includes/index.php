@@ -233,7 +233,15 @@ function load_wpto_admin_script( string $hook ): void {
 			wp_enqueue_style( 'wto-style', plugin_dir_url( __DIR__ ) . 'assets/css/admin.css', array(), $plugin_version );
 			// wp_enqueue_script( 'wto-commons', plugin_dir_url( __DIR__ ) . 'assets/js/commons.js', array( 'jquery' ), $plugin_version, true ); // phpcs:ignore.
 			wp_enqueue_script( 'wto-script', plugin_dir_url( __DIR__ ) . 'assets/js/post.js', array( 'jquery' ), $plugin_version, true );
-			$post_id       = ( isset( $_GET['post'] ) && ! empty( sanitize_text_field( wp_unslash( $_GET['post'] ) ) ) && isset( $_GET['_wpnonce'] ) && wp_verify_nonce( wp_unslash( $_GET['_wpnonce'] ), 'edit-post_' . $post->ID ) ) ? sanitize_text_field( wp_unslash( $_GET['post'] ) ) : null;
+
+			$post_id  = null;
+			$nonce    = isset( $_GET['_wpnonce'] ) ? sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ) : null;
+			$get_post = isset( $_GET['post'] ) ? sanitize_text_field( wp_unslash( $_GET['post'] ) ) : null;
+
+			if ( $get_post && $nonce && wp_verify_nonce( $nonce, 'edit-post_' . $post->ID ) ) {
+				$post_id = $get_post;
+			}
+
 			$action_sync   = 'wto_sync_tags';
 			$action_update = 'wto_update_tags';
 			wp_localize_script(
