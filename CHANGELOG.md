@@ -1,5 +1,25 @@
 # Changelog
 
+## [v3.10.1](https://github.com/sectsect/wp-tag-order/tree/v3.10.1) (2024-11-25)
+
+[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v3.10.0...v3.10.1)
+
+**Merged pull requests:**
+
+- feat: remove nonce verification [\#83](https://github.com/sectsect/wp-tag-order/pull/83) ([sectsect](https://github.com/sectsect))
+
+## [v3.10.0](https://github.com/sectsect/wp-tag-order/tree/v3.10.0) (2024-11-25)
+
+[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v3.9.6...v3.10.0)
+
+**Closed issues:**
+
+- Tag order for hierarchical taxonomy [\#29](https://github.com/sectsect/wp-tag-order/issues/29)
+
+**Merged pull requests:**
+
+- ci: add Github Actions workflow for plugin check [\#82](https://github.com/sectsect/wp-tag-order/pull/82) ([sectsect](https://github.com/sectsect))
+
 ## [v3.9.6](https://github.com/sectsect/wp-tag-order/tree/v3.9.6) (2024-11-24)
 
 [Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v3.9.5...v3.9.6)
