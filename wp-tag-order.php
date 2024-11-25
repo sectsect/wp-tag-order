@@ -26,9 +26,9 @@ function wptagorder_noticephpversionwrong(): void {
 	// Ensure $wptagorder_minimalrequiredphpversion is not null and is a string.
 	$required_version = is_null( $wptagorder_minimalrequiredphpversion ) ? 'unknown' : $wptagorder_minimalrequiredphpversion;
 	echo '<div class="updated fade">' .
-	__( 'Error: plugin "WP Tag Order" requires a newer version of PHP to be running.', 'wp-tag-order' ) .
-		'<br/>' . __( 'Minimal version of PHP required: ', 'wp-tag-order' ) . '<strong>' . $required_version . '</strong>' .
-		'<br/>' . __( 'Your server\'s PHP version: ', 'wp-tag-order' ) . '<strong>' . phpversion() . '</strong>' .
+	esc_html__( 'Error: plugin "WP Tag Order" requires a newer version of PHP to be running.', 'wp-tag-order' ) .
+		'<br/>' . esc_html__( 'Minimal version of PHP required: ', 'wp-tag-order' ) . '<strong>' . esc_html( $required_version ) . '</strong>' .
+		'<br/>' . esc_html__( 'Your server\'s PHP version: ', 'wp-tag-order' ) . '<strong>' . esc_html( phpversion() ) . '</strong>' .
 	'</div>';
 }
 

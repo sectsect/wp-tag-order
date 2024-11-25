@@ -198,6 +198,19 @@ function wpto_get_plugin_data(): array {
 }
 
 /**
+ * Adds a nonce to the edit post link for additional security.
+ *
+ * @param string $link     The original edit post link.
+ * @param int    $post_id  The ID of the post being edited.
+ * @return string The edit post link with added nonce.
+ */
+function add_nonce_to_edit_link( string $link, int $post_id ): string {
+	$nonce = wp_create_nonce( 'edit-post_' . $post_id );
+	return add_query_arg( '_wpnonce', $nonce, $link );
+}
+add_filter( 'get_edit_post_link', 'add_nonce_to_edit_link', 10, 2 );
+
+/**
  * Enqueues admin-specific styles and scripts for the plugin.
  * This function loads necessary CSS and JavaScript files for the plugin's admin interface on applicable admin pages.
  *
@@ -220,15 +233,7 @@ function load_wpto_admin_script( string $hook ): void {
 			wp_enqueue_style( 'wto-style', plugin_dir_url( __DIR__ ) . 'assets/css/admin.css', array(), $plugin_version );
 			// wp_enqueue_script( 'wto-commons', plugin_dir_url( __DIR__ ) . 'assets/js/commons.js', array( 'jquery' ), $plugin_version, true ); // phpcs:ignore.
 			wp_enqueue_script( 'wto-script', plugin_dir_url( __DIR__ ) . 'assets/js/post.js', array( 'jquery' ), $plugin_version, true );
-
-			$post_id = null;
-			if ( isset( $_GET['post'] ) ) {
-				$nonce = filter_input( INPUT_GET, 'wpto_post_nonce', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
-				if ( $nonce && wp_verify_nonce( $nonce, 'wpto_get_post_action' ) ) {
-					$post_id = filter_input( INPUT_GET, 'post', FILTER_VALIDATE_INT );
-				}
-			}
-
+			$post_id       = ( isset( $_GET['post'] ) && ! empty( sanitize_text_field( wp_unslash( $_GET['post'] ) ) ) && isset( $_GET['_wpnonce'] ) && wp_verify_nonce( $_GET['_wpnonce'], 'edit-post_' . $post->ID ) ) ? sanitize_text_field( wp_unslash( $_GET['post'] ) ) : null;
 			$action_sync   = 'wto_sync_tags';
 			$action_update = 'wto_update_tags';
 			wp_localize_script(
@@ -342,7 +347,7 @@ function ajax_wto_sync_tags(): void {
 		$return = '';
 	}
 
-	echo json_encode( $return );
+	echo wp_json_encode( $return );
 	exit;
 }
 add_action( 'wp_ajax_wto_sync_tags', 'ajax_wto_sync_tags' );
@@ -380,7 +385,7 @@ function ajax_wto_update_tags(): void {
 	$meta_box_tags_value = serialize( $newordertags );
 	$result              = update_post_meta( intval( $id ), 'wp-tag-order-' . $taxonomy, $meta_box_tags_value );
 
-	echo json_encode( $result );
+	echo wp_json_encode( $result );
 	exit;
 }
 add_action( 'wp_ajax_wto_update_tags', 'ajax_wto_update_tags' );
@@ -504,7 +509,7 @@ function ajax_wto_options(): void {
 	}
 	$return = array( 'count' => $count );
 
-	echo json_encode( $return );
+	echo wp_json_encode( $return );
 	exit;
 }
 add_action( 'wp_ajax_wto_options', 'ajax_wto_options' );
