@@ -45,7 +45,7 @@ function wpto_meta_box_markup( WP_Post $obj, array $metabox ): void {
 			?>
 		<li>
 			<input type="text" readonly="readonly" value="<?php echo esc_attr( $tag->name ); ?>">
-			<input type="hidden" name="<?php echo esc_attr( $hidden_name ); ?>" value="<?php echo $tag->term_id; ?>">
+			<input type="hidden" name="<?php echo esc_attr( $hidden_name ); ?>" value="<?php echo esc_attr( wpto_cast_mixed_to_string( $tag->term_id ) ); ?>">
 		</li>
 			<?php
 		endforeach;
@@ -233,7 +233,7 @@ function load_wpto_admin_script( string $hook ): void {
 			wp_enqueue_style( 'wto-style', plugin_dir_url( __DIR__ ) . 'assets/css/admin.css', array(), $plugin_version );
 			// wp_enqueue_script( 'wto-commons', plugin_dir_url( __DIR__ ) . 'assets/js/commons.js', array( 'jquery' ), $plugin_version, true ); // phpcs:ignore.
 			wp_enqueue_script( 'wto-script', plugin_dir_url( __DIR__ ) . 'assets/js/post.js', array( 'jquery' ), $plugin_version, true );
-			$post_id       = ( isset( $_GET['post'] ) && ! empty( sanitize_text_field( wp_unslash( $_GET['post'] ) ) ) && isset( $_GET['_wpnonce'] ) && wp_verify_nonce( $_GET['_wpnonce'], 'edit-post_' . $post->ID ) ) ? sanitize_text_field( wp_unslash( $_GET['post'] ) ) : null;
+			$post_id       = ( isset( $_GET['post'] ) && ! empty( sanitize_text_field( wp_unslash( $_GET['post'] ) ) ) && isset( $_GET['_wpnonce'] ) && wp_verify_nonce( wp_unslash( $_GET['_wpnonce'] ), 'edit-post_' . $post->ID ) ) ? sanitize_text_field( wp_unslash( $_GET['post'] ) ) : null;
 			$action_sync   = 'wto_sync_tags';
 			$action_update = 'wto_update_tags';
 			wp_localize_script(

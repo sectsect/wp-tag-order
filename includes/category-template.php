@@ -127,9 +127,7 @@ function the_tags_ordered( ?string $before = null, string $sep = ', ', string $a
 		return true;
 	} elseif ( is_wp_error( $tag_list ) ) {
 		// Log the error or display an error message.
-		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-			error_log( 'Error retrieving tags: ' . $tag_list->get_error_message() );
-		}
+		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) { error_log( 'Error retrieving tags: ' . $tag_list->get_error_message() ); }
 		return true;
 	} else {
 		// Handle the case where no tags are found. Based on `the_tags` -> `get_the_tag_list`.
