@@ -198,19 +198,6 @@ function wpto_get_plugin_data(): array {
 }
 
 /**
- * Adds a nonce to the edit post link for additional security.
- *
- * @param string $link     The original edit post link.
- * @param int    $post_id  The ID of the post being edited.
- * @return string The edit post link with added nonce.
- */
-function wpto_add_nonce_to_edit_link( string $link, int $post_id ): string {
-	$nonce = wp_create_nonce( 'edit-post_' . $post_id );
-	return add_query_arg( '_wpnonce', $nonce, $link );
-}
-add_filter( 'get_edit_post_link', 'wpto_add_nonce_to_edit_link', 10, 2 );
-
-/**
  * Enqueues admin-specific styles and scripts for the plugin.
  * This function loads necessary CSS and JavaScript files for the plugin's admin interface on applicable admin pages.
  *
@@ -265,20 +252,10 @@ function load_wpto_admin_script( string $hook ): void {
 	wp_enqueue_script( 'wto-script', plugin_dir_url( __DIR__ ) . 'assets/js/post.js', array( 'jquery' ), $plugin_version, true );
 
 	$post_id  = null;
-	$nonce    = filter_input( INPUT_GET, '_wpnonce', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
 	$get_post = filter_input( INPUT_GET, 'post', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
 
 	try {
-		if ( $get_post && $nonce ) {
-			// Verify nonce first.
-			if ( ! wp_verify_nonce( $nonce, 'edit-post_' . $post->ID ) ) {
-				wp_die(
-					esc_html__( 'Nonce verification failed. You do not have permission to edit this post.', 'wp-tag-order' ),
-					esc_html__( 'WP Tag Order Error', 'wp-tag-order' ),
-					array( 'response' => 403 )
-				);
-			}
-
+		if ( $get_post ) {
 			// Validate post ID.
 			$post_id = filter_var( $get_post, FILTER_VALIDATE_INT );
 			if ( false === $post_id ) {
