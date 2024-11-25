@@ -15,6 +15,11 @@ require_once __DIR__ . '/../includes/functions.php';
  * Class FunctionTests
  *
  * @package Wp_Tag_Order
+ *
+ * @covers ::wpto_cast_mixed_to_int
+ * @covers ::wpto_cast_mixed_to_array
+ * @covers ::wpto_cast_mixed_to_int_array
+ * @covers ::wpto_cast_mixed_to_string
  */
 class FunctionTests extends WP_UnitTestCase {
 	/**
@@ -176,5 +181,139 @@ class FunctionTests extends WP_UnitTestCase {
 	 */
 	public function testWtoHasReorderControllerInMetaboxes() {
 		$this->assertTrue( wto_has_reorder_controller_in_metaboxes() );
+	}
+
+	/**
+	 * Test wpto_cast_mixed_to_int function.
+	 *
+	 * @test
+	 * @dataProvider cast_to_int_provider
+	 *
+	 * @param mixed $input Input value.
+	 * @param int   $expected Expected result.
+	 */
+	public function test_wpto_cast_mixed_to_int( $input, $expected ): void {
+		$this->assertSame( $expected, wpto_cast_mixed_to_int( $input ) );
+	}
+
+	/**
+	 * Data provider for wpto_cast_mixed_to_int.
+	 *
+	 * @return array
+	 */
+	public function cast_to_int_provider(): array {
+		return array(
+			'integer'        => array( 42, 42 ),
+			'numeric_string' => array( '123', 123 ),
+			'float_string'   => array( '45.67', 45 ),
+		);
+	}
+
+	/**
+	 * Test wpto_cast_mixed_to_int throws exception for non-numeric input.
+	 *
+	 * @test
+	 */
+	public function test_wpto_cast_mixed_to_int_throws_exception(): void {
+		$this->expectException( InvalidArgumentException::class );
+		wpto_cast_mixed_to_int( 'not_numeric' );
+	}
+
+	/**
+	 * Test wpto_cast_mixed_to_array function.
+	 *
+	 * @test
+	 * @dataProvider cast_to_array_provider
+	 *
+	 * @param mixed $input Input value.
+	 * @param array $expected Expected result.
+	 */
+	public function test_wpto_cast_mixed_to_array( $input, $expected ): void {
+		$this->assertSame( $expected, wpto_cast_mixed_to_array( $input ) );
+	}
+
+	/**
+	 * Data provider for wpto_cast_mixed_to_array.
+	 *
+	 * @return array
+	 */
+	public function cast_to_array_provider(): array {
+		return array(
+			'single_value'           => array( 'test', array( 'test' ) ),
+			'array_input'            => array( array( 'a', 'b' ), array( 'a', 'b' ) ),
+			'null_input'             => array( null, array() ),
+			'comma_separated_string' => array( 'a,b,c', array( 'a,b,c' ) ),
+		);
+	}
+
+	/**
+	 * Test wpto_cast_mixed_to_int_array function.
+	 *
+	 * @test
+	 * @dataProvider cast_to_int_array_provider
+	 *
+	 * @param mixed $input Input value.
+	 * @param array $expected Expected result.
+	 */
+	public function test_wpto_cast_mixed_to_int_array( $input, $expected ): void {
+		$this->assertSame( $expected, wpto_cast_mixed_to_int_array( $input ) );
+	}
+
+	/**
+	 * Data provider for wpto_cast_mixed_to_int_array.
+	 *
+	 * @return array
+	 */
+	public function cast_to_int_array_provider(): array {
+		return array(
+			'single_int'             => array( 42, array( 42 ) ),
+			'numeric_string'         => array( '123', array( 123 ) ),
+			'mixed_array'            => array( array( '42', '123', 45 ), array( 42, 123, 45 ) ),
+			'comma_separated_string' => array( '1,2,3', array() ),
+			'null_input'             => array( null, array() ),
+		);
+	}
+
+	/**
+	 * Test wpto_cast_mixed_to_string function.
+	 *
+	 * @test
+	 * @dataProvider cast_to_string_provider
+	 *
+	 * @param mixed  $input Input value.
+	 * @param string $expected Expected result.
+	 */
+	public function test_wpto_cast_mixed_to_string( $input, $expected ): void {
+		// Skip null and array inputs.
+		if ( null === $input || is_array( $input ) ) {
+			$this->markTestSkipped( 'Skipping null or array input' );
+			return;
+		}
+		$this->assertSame( $expected, wpto_cast_mixed_to_string( $input ) );
+	}
+
+	/**
+	 * Data provider for wpto_cast_mixed_to_string.
+	 *
+	 * @return array
+	 */
+	public function cast_to_string_provider(): array {
+		return array(
+			'string_input' => array( 'test', 'test' ),
+			'int_input'    => array( 42, '42' ),
+			'float_input'  => array( 3.14, '3.14' ),
+			'bool_true'    => array( true, '1' ),
+			'bool_false'   => array( false, '' ),
+		);
+	}
+
+	/**
+	 * Test wpto_cast_mixed_to_string throws exception for complex objects.
+	 *
+	 * @test
+	 */
+	public function test_wpto_cast_mixed_to_string_throws_exception(): void {
+		$this->expectException( InvalidArgumentException::class );
+		wpto_cast_mixed_to_string( new stdClass() );
 	}
 }
