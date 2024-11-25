@@ -204,11 +204,11 @@ function wpto_get_plugin_data(): array {
  * @param int    $post_id  The ID of the post being edited.
  * @return string The edit post link with added nonce.
  */
-function add_nonce_to_edit_link( string $link, int $post_id ): string {
+function wpto_add_nonce_to_edit_link( string $link, int $post_id ): string {
 	$nonce = wp_create_nonce( 'edit-post_' . $post_id );
 	return add_query_arg( '_wpnonce', $nonce, $link );
 }
-add_filter( 'get_edit_post_link', 'add_nonce_to_edit_link', 10, 2 );
+add_filter( 'get_edit_post_link', 'wpto_add_nonce_to_edit_link', 10, 2 );
 
 /**
  * Enqueues admin-specific styles and scripts for the plugin.
@@ -235,8 +235,8 @@ function load_wpto_admin_script( string $hook ): void {
 			wp_enqueue_script( 'wto-script', plugin_dir_url( __DIR__ ) . 'assets/js/post.js', array( 'jquery' ), $plugin_version, true );
 
 			$post_id  = null;
-			$nonce    = isset( $_GET['_wpnonce'] ) ? sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ) : null;
-			$get_post = isset( $_GET['post'] ) ? sanitize_text_field( wp_unslash( $_GET['post'] ) ) : null;
+			$nonce    = filter_input( INPUT_GET, '_wpnonce', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
+			$get_post = filter_input( INPUT_GET, 'post', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
 
 			if ( $get_post && $nonce && wp_verify_nonce( $nonce, 'edit-post_' . $post->ID ) ) {
 				$post_id = $get_post;
