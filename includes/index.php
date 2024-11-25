@@ -233,12 +233,14 @@ function load_wpto_admin_script( string $hook ): void {
 	// Early validation and error handling.
 	if ( ! in_array( $post->post_type, $pt, true ) ) {
 		wp_die(
-			sprintf(
+			esc_html(
+				sprintf(
 				/* translators: %s: Post type name */
-				__( 'Post type "%s" is not supported by WP Tag Order.', 'wp-tag-order' ),
-				esc_html( $post->post_type )
+					__( 'Post type "%s" is not supported by WP Tag Order.', 'wp-tag-order' ),
+					esc_html( $post->post_type )
+				)
 			),
-			__( 'WP Tag Order Error', 'wp-tag-order' ),
+			esc_html__( 'WP Tag Order Error', 'wp-tag-order' ),
 			array( 'response' => 403 )
 		);
 	}
@@ -247,12 +249,14 @@ function load_wpto_admin_script( string $hook ): void {
 
 	if ( ! wto_has_enabled_taxonomy( $taxonomies_attached ) ) {
 		wp_die(
-			sprintf(
+			esc_html(
+				sprintf(
 				/* translators: %s: Post type name */
-				__( 'No enabled taxonomies found for post type "%s".', 'wp-tag-order' ),
-				esc_html( $post->post_type )
+					__( 'No enabled taxonomies found for post type "%s".', 'wp-tag-order' ),
+					esc_html( $post->post_type )
+				)
 			),
-			__( 'WP Tag Order Error', 'wp-tag-order' ),
+			esc_html__( 'WP Tag Order Error', 'wp-tag-order' ),
 			array( 'response' => 403 )
 		);
 	}
@@ -269,8 +273,8 @@ function load_wpto_admin_script( string $hook ): void {
 			// Verify nonce first.
 			if ( ! wp_verify_nonce( $nonce, 'edit-post_' . $post->ID ) ) {
 				wp_die(
-					__( 'Nonce verification failed. You do not have permission to edit this post.', 'wp-tag-order' ),
-					__( 'WP Tag Order Error', 'wp-tag-order' ),
+					esc_html__( 'Nonce verification failed. You do not have permission to edit this post.', 'wp-tag-order' ),
+					esc_html__( 'WP Tag Order Error', 'wp-tag-order' ),
 					array( 'response' => 403 )
 				);
 			}
@@ -279,8 +283,8 @@ function load_wpto_admin_script( string $hook ): void {
 			$post_id = filter_var( $get_post, FILTER_VALIDATE_INT );
 			if ( false === $post_id ) {
 				wp_die(
-					__( 'Invalid post ID detected.', 'wp-tag-order' ),
-					__( 'WP Tag Order Error', 'wp-tag-order' ),
+					esc_html__( 'Invalid post ID detected.', 'wp-tag-order' ),
+					esc_html__( 'WP Tag Order Error', 'wp-tag-order' ),
 					array( 'response' => 400 )
 				);
 			}
@@ -302,12 +306,14 @@ function load_wpto_admin_script( string $hook ): void {
 		);
 	} catch ( Exception $e ) {
 		wp_die(
-			sprintf(
+			esc_html(
+				sprintf(
 				/* translators: %s: Error message */
-				__( 'WP Tag Order encountered an error: %s', 'wp-tag-order' ),
-				esc_html( $e->getMessage() )
+					__( 'WP Tag Order encountered an error: %s', 'wp-tag-order' ),
+					esc_html( $e->getMessage() )
+				)
 			),
-			__( 'WP Tag Order Error', 'wp-tag-order' ),
+			esc_html__( 'WP Tag Order Error', 'wp-tag-order' ),
 			array( 'response' => 400 )
 		);
 	}
