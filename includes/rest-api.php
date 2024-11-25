@@ -272,7 +272,7 @@ function wpto_update_post_tag_order( \WP_REST_Request $request ): \WP_REST_Respo
 				array(
 					'success' => false,
 					'code'    => 'invalid_taxonomy',
-					'message' => __( 'Invalid or unsupported taxonomy.', 'wpto' ),
+					'message' => __( 'Invalid or unsupported taxonomy.', 'wp-tag-order' ),
 					'data'    => array(
 						'status'   => 400,
 						'taxonomy' => $taxonomy,
@@ -294,7 +294,7 @@ function wpto_update_post_tag_order( \WP_REST_Request $request ): \WP_REST_Respo
 				array(
 					'success' => false,
 					'code'    => 'invalid_tags',
-					'message' => __( 'One or more tag IDs are invalid.', 'wpto' ),
+					'message' => __( 'One or more tag IDs are invalid.', 'wp-tag-order' ),
 					'data'    => array(
 						'status'       => 400,
 						'invalid_tags' => $invalid_tags,
@@ -321,7 +321,7 @@ function wpto_update_post_tag_order( \WP_REST_Request $request ): \WP_REST_Respo
 				array(
 					'success' => true,
 					'code'    => 'no_changes',
-					'message' => __( 'No changes in tag order detected.', 'wpto' ),
+					'message' => __( 'No changes in tag order detected.', 'wp-tag-order' ),
 				)
 			);
 		}
@@ -339,7 +339,7 @@ function wpto_update_post_tag_order( \WP_REST_Request $request ): \WP_REST_Respo
 				array(
 					'success' => false,
 					'code'    => 'meta_update_failed',
-					'message' => __( 'Failed to update tag order metadata.', 'wpto' ),
+					'message' => __( 'Failed to update tag order metadata.', 'wp-tag-order' ),
 					'data'    => array(
 						'status'   => 500,
 						'post_id'  => $post_id,
@@ -355,7 +355,7 @@ function wpto_update_post_tag_order( \WP_REST_Request $request ): \WP_REST_Respo
 				array(
 					'success' => false,
 					'code'    => 'term_update_failed',
-					'message' => __( 'Failed to update post terms.', 'wpto' ),
+					'message' => __( 'Failed to update post terms.', 'wp-tag-order' ),
 					'data'    => array(
 						'status'        => 500,
 						'post_id'       => $post_id,
@@ -372,7 +372,7 @@ function wpto_update_post_tag_order( \WP_REST_Request $request ): \WP_REST_Respo
 			array(
 				'success' => true,
 				'code'    => 'tags_order_updated',
-				'message' => __( 'Tag order updated successfully.', 'wpto' ),
+				'message' => __( 'Tag order updated successfully.', 'wp-tag-order' ),
 				'data'    => array(
 					'status'   => 200,
 					'post_id'  => $post_id,
@@ -388,7 +388,7 @@ function wpto_update_post_tag_order( \WP_REST_Request $request ): \WP_REST_Respo
 			array(
 				'success' => false,
 				'code'    => 'invalid_input',
-				'message' => __( 'Invalid input parameters.', 'wpto' ),
+				'message' => __( 'Invalid input parameters.', 'wp-tag-order' ),
 				'data'    => array(
 					'status'        => 400,
 					'error_message' => $e->getMessage(),
@@ -401,7 +401,7 @@ function wpto_update_post_tag_order( \WP_REST_Request $request ): \WP_REST_Respo
 			array(
 				'success' => false,
 				'code'    => 'unexpected_error',
-				'message' => __( 'An unexpected error occurred.', 'wpto' ),
+				'message' => __( 'An unexpected error occurred.', 'wp-tag-order' ),
 				'data'    => array(
 					'status'        => 500,
 					'error_message' => $e->getMessage(),

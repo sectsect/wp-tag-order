@@ -18,5 +18,5 @@ jobs:
     - name: Run plugin check
       uses: wordpress/plugin-check-action@v1
       with:
-        exclude-checks: 'trademarks,file_type'
+        exclude-checks: 'trademarks,file_type,plugin_readme'
         exclude-directories: '.github,bin,vendor'

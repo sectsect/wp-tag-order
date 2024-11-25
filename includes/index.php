@@ -220,7 +220,15 @@ function load_wpto_admin_script( string $hook ): void {
 			wp_enqueue_style( 'wto-style', plugin_dir_url( __DIR__ ) . 'assets/css/admin.css', array(), $plugin_version );
 			// wp_enqueue_script( 'wto-commons', plugin_dir_url( __DIR__ ) . 'assets/js/commons.js', array( 'jquery' ), $plugin_version, true ); // phpcs:ignore.
 			wp_enqueue_script( 'wto-script', plugin_dir_url( __DIR__ ) . 'assets/js/post.js', array( 'jquery' ), $plugin_version, true );
-			$post_id       = ( isset( $_GET['post'] ) && ! empty( sanitize_text_field( wp_unslash( $_GET['post'] ) ) ) ) ? sanitize_text_field( wp_unslash( $_GET['post'] ) ) : null;
+
+			$post_id = null;
+			if ( isset( $_GET['post'] ) ) {
+				$nonce = filter_input( INPUT_GET, 'wpto_post_nonce', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
+				if ( $nonce && wp_verify_nonce( $nonce, 'wpto_get_post_action' ) ) {
+					$post_id = filter_input( INPUT_GET, 'post', FILTER_VALIDATE_INT );
+				}
+			}
+
 			$action_sync   = 'wto_sync_tags';
 			$action_update = 'wto_update_tags';
 			wp_localize_script(
@@ -439,6 +447,7 @@ function ajax_wto_options(): void {
 		empty( $action ) ||
 		! wp_verify_nonce( $nonce, $action ) ||
 		! check_ajax_referer( $action, 'nonce', false ) ||
+		! isset( $_SERVER['REQUEST_METHOD'] ) ||
 		'POST' !== $_SERVER['REQUEST_METHOD']
 	) {
 		wp_safe_redirect( home_url( '/' ), 301 );
