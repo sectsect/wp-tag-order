@@ -1,5 +1,17 @@
 # Changelog
 
+## [v3.11.0](https://github.com/sectsect/wp-tag-order/tree/v3.11.0) (2024-11-26)
+
+[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v3.10.1...v3.11.0)
+
+**Closed issues:**
+
+- WP Sheet Editor - Post Types \(Premium\) update term taxonomy order [\#81](https://github.com/sectsect/wp-tag-order/issues/81)
+
+**Merged pull requests:**
+
+- feat: add support for programmatic tag order management [\#84](https://github.com/sectsect/wp-tag-order/pull/84) ([sectsect](https://github.com/sectsect))
+
 ## [v3.10.1](https://github.com/sectsect/wp-tag-order/tree/v3.10.1) (2024-11-25)
 
 [Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v3.10.0...v3.10.1)
