@@ -37,6 +37,7 @@ require_once "{$_tests_dir}/includes/functions.php";
  */
 function _manually_load_plugin() {
 	require dirname( __DIR__, 1 ) . '/wp-tag-order.php';
+	require_once dirname( __DIR__, 1 ) . '/includes/class-tag-updater.php';
 }
 
 tests_add_filter( 'muplugins_loaded', '_manually_load_plugin' );
