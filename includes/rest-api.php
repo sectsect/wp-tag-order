@@ -327,14 +327,14 @@ function wpto_update_post_tag_order( \WP_REST_Request $request ): \WP_REST_Respo
 		}
 
 		// Prepare and update metadata.
-		$meta_box_tags_value = serialize( $tags );
-		$meta_result         = update_post_meta( $post_id, 'wp-tag-order-' . $taxonomy, $meta_box_tags_value );
+		$tag_updater = new \WP_Tag_Order\Tag_Updater();
+		$result      = $tag_updater->update_tag_order( $post_id, $taxonomy, $tags );
 
 		// Update post terms.
 		$term_taxonomy_ids = wp_set_object_terms( $post_id, $tags, $taxonomy );
 
 		// Handle metadata update failure.
-		if ( false === $meta_result ) {
+		if ( false === $result ) {
 			return rest_ensure_response(
 				array(
 					'success' => false,

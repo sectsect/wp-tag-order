@@ -77,6 +77,7 @@ add_filter( 'plugin_row_meta', 'my_plugin_row_meta', 10, 4 );
 
 if ( wptagorder_phpversioncheck() ) {
 	require_once plugin_dir_path( __FILE__ ) . 'includes/functions.php';
+	require_once plugin_dir_path( __FILE__ ) . 'includes/class-tag-updater.php';
 	require_once plugin_dir_path( __FILE__ ) . 'includes/category-template.php';
 	require_once plugin_dir_path( __FILE__ ) . 'includes/index.php';
 	require_once plugin_dir_path( __FILE__ ) . 'includes/rest-api.php';
