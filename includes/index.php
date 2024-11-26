@@ -425,12 +425,18 @@ function ajax_wto_update_tags(): void {
 		exit;
 	}
 
-	$newordertags        = array_map( 'sanitize_text_field', explode( ',', wp_unslash( $tags ) ) );
-	$meta_box_tags_value = serialize( $newordertags );
-	$result              = update_post_meta( intval( $id ), 'wp-tag-order-' . $taxonomy, $meta_box_tags_value );
+	try {
+		$tag_updater = new \WP_Tag_Order\Tag_Updater();
+		$result      = $tag_updater->update_tag_order(
+			intval( $id ),
+			$taxonomy,
+			$tags
+		);
 
-	echo wp_json_encode( $result );
-	exit;
+		wp_send_json_success( $result );
+	} catch ( \InvalidArgumentException $e ) {
+		wp_send_json_error( $e->getMessage(), 400 );
+	}
 }
 add_action( 'wp_ajax_wto_update_tags', 'ajax_wto_update_tags' );
 add_action( 'wp_ajax_nopriv_wto_update_tags', 'ajax_wto_update_tags' );
