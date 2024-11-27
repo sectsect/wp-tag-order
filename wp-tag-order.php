@@ -7,7 +7,7 @@
  * Author URI:      https://github.com/sectsect
  * Text Domain:     wp-tag-order
  * Domain Path:     /languages
- * Version:         3.9.5
+ * Version:         3.11.0
  *
  * @package         WP_Tag_Order
  */
@@ -26,9 +26,9 @@ function wptagorder_noticephpversionwrong(): void {
 	// Ensure $wptagorder_minimalrequiredphpversion is not null and is a string.
 	$required_version = is_null( $wptagorder_minimalrequiredphpversion ) ? 'unknown' : $wptagorder_minimalrequiredphpversion;
 	echo '<div class="updated fade">' .
-	__( 'Error: plugin "WP Tag Order" requires a newer version of PHP to be running.', 'wp-tag-order' ) .
-		'<br/>' . __( 'Minimal version of PHP required: ', 'wp-tag-order' ) . '<strong>' . $required_version . '</strong>' .
-		'<br/>' . __( 'Your server\'s PHP version: ', 'wp-tag-order' ) . '<strong>' . phpversion() . '</strong>' .
+	esc_html__( 'Error: plugin "WP Tag Order" requires a newer version of PHP to be running.', 'wp-tag-order' ) .
+		'<br/>' . esc_html__( 'Minimal version of PHP required: ', 'wp-tag-order' ) . '<strong>' . esc_html( $required_version ) . '</strong>' .
+		'<br/>' . esc_html__( 'Your server\'s PHP version: ', 'wp-tag-order' ) . '<strong>' . esc_html( phpversion() ) . '</strong>' .
 	'</div>';
 }
 
@@ -77,6 +77,7 @@ add_filter( 'plugin_row_meta', 'my_plugin_row_meta', 10, 4 );
 
 if ( wptagorder_phpversioncheck() ) {
 	require_once plugin_dir_path( __FILE__ ) . 'includes/functions.php';
+	require_once plugin_dir_path( __FILE__ ) . 'includes/class-tag-updater.php';
 	require_once plugin_dir_path( __FILE__ ) . 'includes/category-template.php';
 	require_once plugin_dir_path( __FILE__ ) . 'includes/index.php';
 	require_once plugin_dir_path( __FILE__ ) . 'includes/rest-api.php';

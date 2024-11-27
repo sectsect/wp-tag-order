@@ -69,7 +69,7 @@ function wpto_meta_box_markup( WP_Post $obj, array $metabox ): void {
 			?>
 		<li>
 			<input type="text" readonly="readonly" value="<?php echo esc_attr( $tag->name ); ?>">
-			<input type="hidden" name="<?php echo esc_attr( $hidden_name ); ?>" value="<?php echo $tag->term_id; ?>">
+			<input type="hidden" name="<?php echo esc_attr( $hidden_name ); ?>" value="<?php echo esc_attr( wpto_cast_mixed_to_string( $tag->term_id ) ); ?>">
 		</li>
 			<?php
 		endforeach;
@@ -226,41 +226,97 @@ function wpto_get_plugin_data(): array {
  * This function loads necessary CSS and JavaScript files for the plugin's admin interface on applicable admin pages.
  *
  * @param string $hook The current admin page hook suffix.
+ * @throws Exception If an error occurs during script processing or localization.
  * @return void
  */
 function load_wpto_admin_script( string $hook ): void {
 	$plugin_data    = wpto_get_plugin_data();
-	$plugin_version = $plugin_data['Version'];
+	$plugin_version = wpto_cast_mixed_to_string( $plugin_data['Version'] );
 	global $post;
 
-	if ( ! $post?->post_type ) {
+	// Early return for unsupported scenarios.
+	if ( ! $post?->post_type || ! in_array( $hook, array( 'post-new.php', 'post.php' ), true ) ) {
 		return;
 	}
 
-	if ( 'post-new.php' === $hook || 'post.php' === $hook ) {
-		$pt                  = wto_has_tag_posttype();
-		$taxonomies_attached = get_object_taxonomies( $post->post_type );
-		if ( in_array( $post->post_type, $pt, true ) && wto_has_enabled_taxonomy( $taxonomies_attached ) ) {
-			$version = is_string( $plugin_version ) ? $plugin_version : '';
-			wp_enqueue_style( 'wto-style', plugin_dir_url( __DIR__ ) . 'assets/css/admin.css?v=' . $version, array() );
-			// wp_enqueue_script( 'wto-commons', plugin_dir_url( __DIR__ ) . 'assets/js/commons.js?v=' . $version, array( 'jquery' ), null, true ); // phpcs:ignore.
-			wp_enqueue_script( 'wto-script', plugin_dir_url( __DIR__ ) . 'assets/js/post.js?v=' . $version, array( 'jquery' ), null, true );
-			$post_id       = ( isset( $_GET['post'] ) ) ? wp_unslash( $_GET['post'] ) : null;
-			$action_sync   = 'wto_sync_tags';
-			$action_update = 'wto_update_tags';
-			wp_localize_script(
-				'wto-script',
-				'wto_data',
-				array(
-					'post_id'       => $post_id,
-					'nonce_sync'    => wp_create_nonce( $action_sync ),
-					'action_sync'   => $action_sync,
-					'nonce_update'  => wp_create_nonce( $action_update ),
-					'action_update' => $action_update,
-					'ajax_url'      => admin_url( 'admin-ajax.php' ),
+	$pt = wto_has_tag_posttype();
+
+	// Early validation and error handling.
+	if ( ! in_array( $post->post_type, $pt, true ) ) {
+		wp_die(
+			esc_html(
+				sprintf(
+				/* translators: %s: Post type name */
+					__( 'Post type "%s" is not supported by WP Tag Order.', 'wp-tag-order' ),
+					esc_html( $post->post_type )
 				)
-			);
+			),
+			esc_html__( 'WP Tag Order Error', 'wp-tag-order' ),
+			array( 'response' => 403 )
+		);
+	}
+
+	$taxonomies_attached = get_object_taxonomies( $post->post_type );
+
+	if ( ! wto_has_enabled_taxonomy( $taxonomies_attached ) ) {
+		wp_die(
+			esc_html(
+				sprintf(
+				/* translators: %s: Post type name */
+					__( 'No enabled taxonomies found for post type "%s".', 'wp-tag-order' ),
+					esc_html( $post->post_type )
+				)
+			),
+			esc_html__( 'WP Tag Order Error', 'wp-tag-order' ),
+			array( 'response' => 403 )
+		);
+	}
+
+	wp_enqueue_style( 'wto-style', plugin_dir_url( __DIR__ ) . 'assets/css/admin.css', array(), $plugin_version );
+	wp_enqueue_script( 'wto-script', plugin_dir_url( __DIR__ ) . 'assets/js/post.js', array( 'jquery' ), $plugin_version, true );
+
+	$post_id  = null;
+	$get_post = filter_input( INPUT_GET, 'post', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
+
+	try {
+		if ( $get_post ) {
+			// Validate post ID.
+			$post_id = filter_var( $get_post, FILTER_VALIDATE_INT );
+			if ( false === $post_id ) {
+				wp_die(
+					esc_html__( 'Invalid post ID detected.', 'wp-tag-order' ),
+					esc_html__( 'WP Tag Order Error', 'wp-tag-order' ),
+					array( 'response' => 400 )
+				);
+			}
 		}
+
+		$action_sync   = 'wto_sync_tags';
+		$action_update = 'wto_update_tags';
+		wp_localize_script(
+			'wto-script',
+			'wto_data',
+			array(
+				'post_id'       => $post_id ?? 0,
+				'nonce_sync'    => wp_create_nonce( $action_sync ),
+				'action_sync'   => $action_sync,
+				'nonce_update'  => wp_create_nonce( $action_update ),
+				'action_update' => $action_update,
+				'ajax_url'      => admin_url( 'admin-ajax.php' ),
+			)
+		);
+	} catch ( Exception $e ) {
+		wp_die(
+			esc_html(
+				sprintf(
+				/* translators: %s: Error message */
+					__( 'WP Tag Order encountered an error: %s', 'wp-tag-order' ),
+					esc_html( $e->getMessage() )
+				)
+			),
+			esc_html__( 'WP Tag Order Error', 'wp-tag-order' ),
+			array( 'response' => 400 )
+		);
 	}
 }
 add_action( 'admin_enqueue_scripts', 'load_wpto_admin_script', 10, 1 );
@@ -280,7 +336,15 @@ function ajax_wto_sync_tags(): void {
 		? sanitize_text_field( wp_unslash( $_POST['tags'] ) )
 		: '';
 
-	if ( ! $id || ! $nonce || ! $action || ! wp_verify_nonce( $nonce, $action ) || ! check_ajax_referer( (string) $action, 'nonce', false ) || 'POST' !== $_SERVER['REQUEST_METHOD'] ) {
+	if (
+		! $id ||
+		! $nonce ||
+		! $action ||
+		! wp_verify_nonce( $nonce, $action ) ||
+		! check_ajax_referer( (string) $action, 'nonce', false ) ||
+		! isset( $_SERVER['REQUEST_METHOD'] ) ||
+		'POST' !== $_SERVER['REQUEST_METHOD']
+	) {
 		wp_safe_redirect( home_url( '/' ), 301 );
 		exit;
 	}
@@ -353,7 +417,7 @@ function ajax_wto_sync_tags(): void {
 		$return = '';
 	}
 
-	echo json_encode( $return );
+	echo wp_json_encode( $return );
 	exit;
 }
 add_action( 'wp_ajax_wto_sync_tags', 'ajax_wto_sync_tags' );
@@ -380,18 +444,25 @@ function ajax_wto_update_tags(): void {
 		empty( $tags ) ||
 		! wp_verify_nonce( $nonce, $action ) ||
 		! check_ajax_referer( $action, 'nonce', false ) ||
+		! isset( $_SERVER['REQUEST_METHOD'] ) ||
 		'POST' !== $_SERVER['REQUEST_METHOD']
 	) {
 		wp_safe_redirect( home_url( '/' ), 301 );
 		exit;
 	}
 
-	$newordertags        = array_map( 'sanitize_text_field', explode( ',', wp_unslash( $tags ) ) );
-	$meta_box_tags_value = serialize( $newordertags );
-	$result              = update_post_meta( intval( $id ), 'wp-tag-order-' . $taxonomy, $meta_box_tags_value );
+	try {
+		$tag_updater = new \WP_Tag_Order\Tag_Updater();
+		$result      = $tag_updater->update_tag_order(
+			intval( $id ),
+			$taxonomy,
+			$tags
+		);
 
-	echo json_encode( $result );
-	exit;
+		wp_send_json_success( $result );
+	} catch ( \InvalidArgumentException $e ) {
+		wp_send_json_error( $e->getMessage(), 400 );
+	}
 }
 add_action( 'wp_ajax_wto_update_tags', 'ajax_wto_update_tags' );
 add_action( 'wp_ajax_nopriv_wto_update_tags', 'ajax_wto_update_tags' );
@@ -419,7 +490,7 @@ function wpto_admin_styles(): void {
 	$plugin_data    = wpto_get_plugin_data();
 	$plugin_version = $plugin_data['Version'];
 	$version        = is_string( $plugin_version ) ? $plugin_version : '';
-	wp_enqueue_style( 'sweetalert2', plugin_dir_url( __DIR__ ) . 'assets/css/options.css?v=' . $version, array() );
+	wp_enqueue_style( 'sweetalert2', plugin_dir_url( __DIR__ ) . 'assets/css/options.css', array(), $version );
 }
 
 /**
@@ -432,7 +503,7 @@ function wpto_admin_scripts(): void {
 	$plugin_version = $plugin_data['Version'];
 	$version        = is_string( $plugin_version ) ? $plugin_version : '';
 	// wp_enqueue_script( 'wto-commons', plugin_dir_url( __DIR__ ) . 'assets/js/commons.js?v=' . $plugin_version, array( 'jquery' ), null, true ); // phpcs:ignore.
-	wp_enqueue_script( 'wto-options-script', plugin_dir_url( __DIR__ ) . 'assets/js/options.js?v=' . $version, array( 'jquery' ), null, true );
+	wp_enqueue_script( 'wto-options-script', plugin_dir_url( __DIR__ ) . 'assets/js/options.js', array( 'jquery' ), $version, true );
 	$action = 'wto_options';
 	wp_localize_script(
 		'wto-options-script',
@@ -459,6 +530,7 @@ function ajax_wto_options(): void {
 		empty( $action ) ||
 		! wp_verify_nonce( $nonce, $action ) ||
 		! check_ajax_referer( $action, 'nonce', false ) ||
+		! isset( $_SERVER['REQUEST_METHOD'] ) ||
 		'POST' !== $_SERVER['REQUEST_METHOD']
 	) {
 		wp_safe_redirect( home_url( '/' ), 301 );
@@ -515,7 +587,7 @@ function ajax_wto_options(): void {
 	}
 	$return = array( 'count' => $count );
 
-	echo json_encode( $return );
+	echo wp_json_encode( $return );
 	exit;
 }
 add_action( 'wp_ajax_wto_options', 'ajax_wto_options' );

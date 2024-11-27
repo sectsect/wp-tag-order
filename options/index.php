@@ -16,14 +16,14 @@
 	<section>
 		<form method="post" action="options.php">
 			<hr />
-			<h3><?php _e( 'General Settings', 'wpto' ); ?></h3>
+			<h3><?php esc_html_e( 'General Settings', 'wp-tag-order' ); ?></h3>
 			<?php
 			settings_fields( 'wpto-settings-group' );
 			do_settings_sections( 'wpto-settings-group' );
 			?>
 
 			<fieldset>
-				<legend style="display: block; margin-bottom: 10px;"><?php _e( 'Enable for these taxonomies', 'wpto' ); ?></legend>
+				<legend style="display: block; margin-bottom: 10px;"><?php esc_html_e( 'Enable for these taxonomies', 'wp-tag-order' ); ?></legend>
 
 				<?php
 				$taxonomies = wto_get_non_hierarchical_taxonomies();
@@ -35,9 +35,9 @@
 						$is_checked = in_array( $taxonomy->name, (array) $enabled_taxonomies, true );
 						?>
 					<div style="margin-top: 5px;">
-						<input type="checkbox" id="<?php echo $taxonomy->name; ?>" name="wpto_enabled_taxonomies[]" value="<?php echo $taxonomy->name; ?>" <?php if ( $is_checked ) : ?>checked<?php endif; ?> />
-						<label for="<?php echo $taxonomy->name; ?>">
-							<?php echo $taxonomy->label; ?>
+						<input type="checkbox" id="<?php echo esc_attr( $taxonomy->name ); ?>" name="wpto_enabled_taxonomies[]" value="<?php echo esc_attr( $taxonomy->name ); ?>" <?php checked( $is_checked ); ?> />
+						<label for="<?php echo esc_attr( $taxonomy->name ); ?>">
+							<?php echo esc_html( $taxonomy->label ); ?>
 						</label>
 					</div>
 					<?php endforeach; ?>
@@ -49,23 +49,23 @@
 	</section>
 	<section>
 		<hr />
-		<h3><?php _e( 'Advance Settings', 'wpto' ); ?></h3>
+		<h3><?php esc_html_e( 'Advance Settings', 'wp-tag-order' ); ?></h3>
 		<form method="post" action="">
 			<table class="form-table">
 				<tbody>
 					<tr>
 						<th scope="row" style="width: 300px;">
-							<label for="apply" style="font-size: 14px; margin: 0;">Apply to all existing posts</label>
+							<label for="apply" style="font-size: 14px; margin: 0;"><?php esc_html_e( 'Apply to all existing posts', 'wp-tag-order' ); ?></label>
 							<p style="font-size: 10px;margin: 5px 0 0;">
-								This batch process respects the taxonomy specification in the general settings.
+								<?php esc_html_e( 'This batch process respects the taxonomy specification in the general settings.', 'wp-tag-order' ); ?>
 							</p>
 							<p style="font-size: 10px;color: #999;margin: 5px 0 0;">
-								⚠️ Please be sure to backup your database before running.<br>
-								This simple process may takes a few minutes and ensures that your website can be rolled back quickly and safely if any issues arise.
+								<?php esc_html_e( '⚠️ Please be sure to backup your database before running.', 'wp-tag-order' ); ?><br>
+								<?php esc_html_e( 'This simple process may takes a few minutes and ensures that your website can be rolled back quickly and safely if any issues arise.', 'wp-tag-order' ); ?>
 							</p>
 						</th>
 						<td style="vertical-align: top;">
-							<input name="apply" id="apply" class="button button-primary" type="submit" value="Apply">
+							<input name="apply" id="apply" class="button button-primary" type="submit" value="<?php esc_attr_e( 'Apply', 'wp-tag-order' ); ?>">
 						</td>
 					</tr>
 				</tbody>

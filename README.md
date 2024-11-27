@@ -1,6 +1,6 @@
 # WP Tag Order
 
-[![PHP Unit Tests](https://github.com/sectsect/wp-tag-order/actions/workflows/phpunit.yml/badge.svg)](https://github.com/sectsect/wp-tag-order/actions/workflows/phpunit.yml) [![PHPStan](https://github.com/sectsect/wp-tag-order/actions/workflows/phpstan.yml/badge.svg)](https://github.com/sectsect/wp-tag-order/actions/workflows/phpstan.yml) [![PHP Coding Standards](https://github.com/sectsect/wp-tag-order/actions/workflows/phpcs.yml/badge.svg)](https://github.com/sectsect/wp-tag-order/actions/workflows/phpcs.yml) [![Latest Stable Version](https://poser.pugx.org/sectsect/wp-tag-order/v)](//packagist.org/packages/sectsect/wp-tag-order)
+[![Plugin Check](https://github.com/sectsect/wp-tag-order/actions/workflows/plugin-check.yml/badge.svg)](https://github.com/sectsect/wp-tag-order/actions/workflows/plugin-check.yml) [![PHP Unit Tests](https://github.com/sectsect/wp-tag-order/actions/workflows/phpunit.yml/badge.svg)](https://github.com/sectsect/wp-tag-order/actions/workflows/phpunit.yml) [![PHPStan](https://github.com/sectsect/wp-tag-order/actions/workflows/phpstan.yml/badge.svg)](https://github.com/sectsect/wp-tag-order/actions/workflows/phpstan.yml) [![PHP Coding Standards](https://github.com/sectsect/wp-tag-order/actions/workflows/phpcs.yml/badge.svg)](https://github.com/sectsect/wp-tag-order/actions/workflows/phpcs.yml) [![Latest Stable Version](https://poser.pugx.org/sectsect/wp-tag-order/v)](//packagist.org/packages/sectsect/wp-tag-order)
 
 ### Order tags independently in each posts (not site-globally) on WordPress with simple Drag-and-Drop ↕︎ sortable feature.
 
@@ -33,6 +33,7 @@
 - 🔍 Works with default WordPress tag and custom taxonomy systems
 - 🔢 Drag-and-Drop interface for easy tag reordering
 - 📊 Supports multiple post types and taxonomies
+- 🔧 **NEW: Programmatic Tag Order Management**
 - 🌐 **NEW: REST API Support**
   - Retrieve ordered tags via GET endpoint
   - Update tag order programmatically
@@ -126,6 +127,35 @@ if ( $terms && ! is_wp_error( $terms ) ) :
 <?php the_terms_ordered( $post->ID, 'post_tag' ); ?>
 ```
 
+## Programmatic Tag Order Management
+
+The plugin provides a `Tag_Updater` class for developers to programmatically manage tag order:
+
+```php
+$tag_updater = new \WP_Tag_Order\Tag_Updater();
+
+try {
+    // Update tag order using an array or comma-separated string
+    $result = $tag_updater->update_tag_order(
+        get_the_ID(),   // Post ID
+        'post_tag',     // Taxonomy that enabled in plugin settings
+        [1, 2, 3]       // Tag IDs in desired order
+    );
+} catch ( \InvalidArgumentException $e ) {
+    // Error handling
+    error_log( $e->getMessage() );
+}
+```
+
+This class allows flexible tag order updates directly from your theme or custom plugin code, supporting both array and string inputs with robust validation.
+
+#### Return Value
+
+`update_tag_order()` returns: `int|bool`
+- `int`: Meta ID if the tag order meta key didn't previously exist
+- `true`: Successful update of existing meta
+- `false`: Update failed or the new tag order is identical to the existing order
+
 ## REST API
 
 The WP Tag Order plugin provides two REST API endpoints for managing tag order:
@@ -195,7 +225,7 @@ curl --location --request PUT 'https://your-wordpress-site.com/wp-json/wp-tag-or
   "data": {
     "status": 200,
     "post_id": 123,
-    "taxonomy": "pickup_tag",
+    "taxonomy": "post_tag",
     "tags": [
       5,
       3,

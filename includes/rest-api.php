@@ -71,71 +71,6 @@ function wpto_register_rest_endpoints(): void {
 add_action( 'rest_api_init', 'wpto_register_rest_endpoints' );
 
 /**
- * Cast mixed value to int.
- *
- * @param mixed $value Value to cast.
- * @return int
- * @throws InvalidArgumentException If the value is not numeric.
- */
-function wpto_cast_mixed_to_int( mixed $value ): int {
-	if ( is_numeric( $value ) ) {
-		return (int) $value;
-	}
-	throw new InvalidArgumentException( 'Value must be numeric' );
-}
-
-/**
- * Cast mixed value to array, returning an empty array if not an array.
- *
- * @param mixed $value Value to cast.
- * @return array<mixed>
- */
-function wpto_cast_mixed_to_array( mixed $value ): array {
-	if ( is_null( $value ) ) {
-		return array();
-	}
-
-	return is_array( $value ) ? $value : array( $value );
-}
-
-/**
- * Cast mixed value to array of integers.
- *
- * @param mixed $value Value to cast.
- * @return array<int>
- */
-function wpto_cast_mixed_to_int_array( mixed $value ): array {
-	if ( is_null( $value ) ) {
-		return array();
-	}
-
-	if ( ! is_array( $value ) ) {
-		$value = array( $value );
-	}
-
-	return array_map( 'intval', array_filter( $value, 'is_numeric' ) );
-}
-
-/**
- * Cast mixed value to string.
- *
- * @param mixed $value Value to cast.
- * @return string
- * @throws InvalidArgumentException If the value cannot be cast to a string.
- */
-function wpto_cast_mixed_to_string( mixed $value ): string {
-	if ( is_null( $value ) ) {
-		throw new InvalidArgumentException( 'Value cannot be null' );
-	}
-
-	if ( is_scalar( $value ) ) {
-		return (string) $value;
-	}
-
-	throw new InvalidArgumentException( 'Value must be a scalar type' );
-}
-
-/**
  * Validate taxonomy for REST API request.
  *
  * Performs comprehensive checks to ensure the taxonomy is valid:
@@ -332,7 +267,7 @@ function wpto_update_post_tag_order( \WP_REST_Request $request ): \WP_REST_Respo
 				array(
 					'success' => false,
 					'code'    => 'invalid_taxonomy',
-					'message' => __( 'Invalid or unsupported taxonomy.', 'wpto' ),
+					'message' => __( 'Invalid or unsupported taxonomy.', 'wp-tag-order' ),
 					'data'    => array(
 						'status'   => 400,
 						'taxonomy' => $taxonomy,
@@ -354,7 +289,7 @@ function wpto_update_post_tag_order( \WP_REST_Request $request ): \WP_REST_Respo
 				array(
 					'success' => false,
 					'code'    => 'invalid_tags',
-					'message' => __( 'One or more tag IDs are invalid.', 'wpto' ),
+					'message' => __( 'One or more tag IDs are invalid.', 'wp-tag-order' ),
 					'data'    => array(
 						'status'       => 400,
 						'invalid_tags' => $invalid_tags,
@@ -381,25 +316,25 @@ function wpto_update_post_tag_order( \WP_REST_Request $request ): \WP_REST_Respo
 				array(
 					'success' => true,
 					'code'    => 'no_changes',
-					'message' => __( 'No changes in tag order detected.', 'wpto' ),
+					'message' => __( 'No changes in tag order detected.', 'wp-tag-order' ),
 				)
 			);
 		}
 
 		// Prepare and update metadata.
-		$meta_box_tags_value = serialize( $tags );
-		$meta_result         = update_post_meta( $post_id, 'wp-tag-order-' . $taxonomy, $meta_box_tags_value );
+		$tag_updater = new \WP_Tag_Order\Tag_Updater();
+		$result      = $tag_updater->update_tag_order( $post_id, $taxonomy, $tags );
 
 		// Update post terms.
 		$term_taxonomy_ids = wp_set_object_terms( $post_id, $tags, $taxonomy );
 
 		// Handle metadata update failure.
-		if ( false === $meta_result ) {
+		if ( false === $result ) {
 			return rest_ensure_response(
 				array(
 					'success' => false,
 					'code'    => 'meta_update_failed',
-					'message' => __( 'Failed to update tag order metadata.', 'wpto' ),
+					'message' => __( 'Failed to update tag order metadata.', 'wp-tag-order' ),
 					'data'    => array(
 						'status'   => 500,
 						'post_id'  => $post_id,
@@ -415,7 +350,7 @@ function wpto_update_post_tag_order( \WP_REST_Request $request ): \WP_REST_Respo
 				array(
 					'success' => false,
 					'code'    => 'term_update_failed',
-					'message' => __( 'Failed to update post terms.', 'wpto' ),
+					'message' => __( 'Failed to update post terms.', 'wp-tag-order' ),
 					'data'    => array(
 						'status'        => 500,
 						'post_id'       => $post_id,
@@ -432,7 +367,7 @@ function wpto_update_post_tag_order( \WP_REST_Request $request ): \WP_REST_Respo
 			array(
 				'success' => true,
 				'code'    => 'tags_order_updated',
-				'message' => __( 'Tag order updated successfully.', 'wpto' ),
+				'message' => __( 'Tag order updated successfully.', 'wp-tag-order' ),
 				'data'    => array(
 					'status'   => 200,
 					'post_id'  => $post_id,
@@ -448,7 +383,7 @@ function wpto_update_post_tag_order( \WP_REST_Request $request ): \WP_REST_Respo
 			array(
 				'success' => false,
 				'code'    => 'invalid_input',
-				'message' => __( 'Invalid input parameters.', 'wpto' ),
+				'message' => __( 'Invalid input parameters.', 'wp-tag-order' ),
 				'data'    => array(
 					'status'        => 400,
 					'error_message' => $e->getMessage(),
@@ -461,7 +396,7 @@ function wpto_update_post_tag_order( \WP_REST_Request $request ): \WP_REST_Respo
 			array(
 				'success' => false,
 				'code'    => 'unexpected_error',
-				'message' => __( 'An unexpected error occurred.', 'wpto' ),
+				'message' => __( 'An unexpected error occurred.', 'wp-tag-order' ),
 				'data'    => array(
 					'status'        => 500,
 					'error_message' => $e->getMessage(),

@@ -163,7 +163,7 @@ function wto_strposa( string $haystack, array|string $needles, int $offset = 0 )
 function wto_replace_script_tag( string $tag ): string {
 	$module = array( 'wp-tag-order/assets/js/' );
 	if ( wto_strposa( $tag, $module ) ) {
-		$tag = str_replace( array( " type='text/javascript'", '<script src=' ), array( '', '<script type="module" src=' ), $tag );
+		$tag = str_replace( array( " type='text/javascript'", 'src=' ), array( '', 'type="module" src=' ), $tag );
 	}
 	return $tag;
 }
@@ -177,4 +177,98 @@ add_filter( 'script_loader_tag', 'wto_replace_script_tag', 10, 1 );
  */
 function wto_has_reorder_controller_in_metaboxes(): bool {
 	return version_compare( get_bloginfo( 'version' ), '5.5', '>=' );
+}
+
+/**
+ * Cast mixed value to int.
+ *
+ * @param mixed $value Value to cast.
+ * @return int
+ * @throws InvalidArgumentException If the value is not numeric.
+ */
+function wpto_cast_mixed_to_int( mixed $value ): int {
+	if ( is_numeric( $value ) ) {
+		return (int) $value;
+	}
+	throw new InvalidArgumentException( 'Value must be numeric' );
+}
+
+/**
+ * Cast mixed value to array, returning an empty array if not an array.
+ *
+ * @param mixed $value Value to cast.
+ * @return array<mixed>
+ */
+function wpto_cast_mixed_to_array( mixed $value ): array {
+	if ( is_null( $value ) ) {
+		return array();
+	}
+
+	return is_array( $value ) ? $value : array( $value );
+}
+
+/**
+ * Cast mixed value to array of integers.
+ *
+ * @param mixed $value Value to cast.
+ * @return array<int>
+ */
+function wpto_cast_mixed_to_int_array( mixed $value ): array {
+	if ( is_null( $value ) ) {
+		return array();
+	}
+
+	if ( ! is_array( $value ) ) {
+		$value = array( $value );
+	}
+
+	return array_map( 'intval', array_filter( $value, 'is_numeric' ) );
+}
+
+/**
+ * Cast mixed value to string.
+ *
+ * @param mixed $value Value to cast.
+ * @return string
+ * @throws InvalidArgumentException If the value cannot be cast to a string.
+ */
+function wpto_cast_mixed_to_string( mixed $value ): string {
+	if ( is_null( $value ) ) {
+		throw new InvalidArgumentException( 'Value cannot be null' );
+	}
+
+	if ( is_scalar( $value ) ) {
+		return (string) $value;
+	}
+
+	throw new InvalidArgumentException( 'Value must be a scalar type' );
+}
+
+/**
+ * Validate AJAX request with nonce verification and input sanitization
+ *
+ * @param string $action Nonce action name. Default is 'wpto_nonce_action'.
+ * @return int Sanitized post ID
+ */
+function wpto_validate_ajax_request( string $action = 'wpto_nonce_action' ): int {
+	// Validate request method.
+	if ( ! isset( $_SERVER['REQUEST_METHOD'] ) ) {
+		wp_send_json_error( 'Invalid request method', 400 );
+	}
+
+	// Verify nonce.
+	if ( ! check_ajax_referer( $action, 'nonce', false ) ) {
+		wp_send_json_error( 'Nonce verification failed', 403 );
+	}
+
+	// Sanitize and validate post ID.
+	$post_id = isset( $_GET['post'] )
+		? intval( sanitize_text_field( wp_unslash( $_GET['post'] ) ) )
+		: 0;
+
+	if ( $post_id <= 0 ) {
+		wp_send_json_error( 'Invalid post ID', 400 );
+	}
+
+	return $post_id;
 }
