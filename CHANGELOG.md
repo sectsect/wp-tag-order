@@ -1,5 +1,13 @@
 # Changelog
 
+## [v3.11.1](https://github.com/sectsect/wp-tag-order/tree/v3.11.1) (2024-11-27)
+
+[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v3.11.0...v3.11.1)
+
+**Merged pull requests:**
+
+- Upgrade to PHPStan 1.12 first to migrate to PHPStan 2.0 [\#85](https://github.com/sectsect/wp-tag-order/pull/85) ([sectsect](https://github.com/sectsect))
+
 ## [v3.11.0](https://github.com/sectsect/wp-tag-order/tree/v3.11.0) (2024-11-26)
 
 [Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v3.10.1...v3.11.0)
