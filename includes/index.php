@@ -32,12 +32,16 @@ function wpto_meta_box_markup( WP_Post $obj, array $metabox ): void {
 <div class="inner">
 	<ul>
 	<?php
-	$taxonomy   = isset( $metabox['args'] ) && is_array( $metabox['args'] ) && isset( $metabox['args']['taxonomy'] ) ? $metabox['args']['taxonomy'] : '';
+	$taxonomy   = isset( $metabox['args'] ) && is_array( $metabox['args'] ) && isset( $metabox['args']['taxonomy'] )
+		? wpto_cast_mixed_to_string( $metabox['args']['taxonomy'] )
+		: '';
+	$meta_key   = 'wp-tag-order-' . $taxonomy;
 	$tags_value = get_post_meta( $obj->ID, 'wp-tag-order-' . $taxonomy, true );
 	$tags       = is_string( $tags_value ) ? unserialize( $tags_value ) : array();
 	if ( $tags && is_array( $tags ) ) :
 		foreach ( $tags as $tagid ) :
-			$tag = is_string( $taxonomy ) && ! empty( $taxonomy ) ? get_term_by( 'id', $tagid, $taxonomy ) : null;
+			$tagid = wpto_cast_mixed_to_int( $tagid );
+			$tag   = ! empty( $taxonomy ) ? get_term_by( 'id', $tagid, $taxonomy ) : null;
 			if ( ! $tag instanceof WP_Term ) {
 				continue; // Skip if $tag is not a WP_Term object.
 			}
@@ -308,7 +312,9 @@ function ajax_wto_sync_tags(): void {
 	$nonce    = filter_input( INPUT_POST, 'nonce', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
 	$action   = filter_input( INPUT_POST, 'action', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
 	$taxonomy = filter_input( INPUT_POST, 'taxonomy', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
-	$tags     = isset( $_POST['tags'] ) ? sanitize_text_field( wp_unslash( $_POST['tags'] ) ) : '';
+	$tags     = isset( $_POST['tags'] ) && is_string( $_POST['tags'] )
+		? sanitize_text_field( wp_unslash( $_POST['tags'] ) )
+		: '';
 
 	if (
 		! $id ||
@@ -352,7 +358,7 @@ function ajax_wto_sync_tags(): void {
 			if ( is_array( $basetagsids ) ) {
 				$added = wto_array_diff_interactive( $newtagsids, $basetagsids );
 				foreach ( $added as $val ) {
-					if ( is_array( $basetagsids ) && ! in_array( $val, $basetagsids, true ) ) {
+					if ( ! in_array( $val, $basetagsids, true ) ) {
 						$basetagsids[] = $val;
 					} else {
 						$key = array_search( $val, $basetagsids, true );
@@ -462,8 +468,9 @@ add_action( 'admin_menu', 'wpto_menu' );
  */
 function wpto_admin_styles(): void {
 	$plugin_data    = wpto_get_plugin_data();
-	$plugin_version = wpto_cast_mixed_to_string( $plugin_data['Version'] );
-	wp_enqueue_style( 'sweetalert2', plugin_dir_url( __DIR__ ) . 'assets/css/options.css', array(), $plugin_version );
+	$plugin_version = $plugin_data['Version'];
+	$version        = is_string( $plugin_version ) ? $plugin_version : '';
+	wp_enqueue_style( 'sweetalert2', plugin_dir_url( __DIR__ ) . 'assets/css/options.css', array(), $version );
 }
 
 /**
@@ -473,9 +480,10 @@ function wpto_admin_styles(): void {
  */
 function wpto_admin_scripts(): void {
 	$plugin_data    = wpto_get_plugin_data();
-	$plugin_version = wpto_cast_mixed_to_string( $plugin_data['Version'] );
+	$plugin_version = $plugin_data['Version'];
+	$version        = is_string( $plugin_version ) ? $plugin_version : '';
 	// wp_enqueue_script( 'wto-commons', plugin_dir_url( __DIR__ ) . 'assets/js/commons.js?v=' . $plugin_version, array( 'jquery' ), null, true ); // phpcs:ignore.
-	wp_enqueue_script( 'wto-options-script', plugin_dir_url( __DIR__ ) . 'assets/js/options.js', array( 'jquery' ), $plugin_version, true );
+	wp_enqueue_script( 'wto-options-script', plugin_dir_url( __DIR__ ) . 'assets/js/options.js', array( 'jquery' ), $version, true );
 	$action = 'wto_options';
 	wp_localize_script(
 		'wto-options-script',
@@ -537,8 +545,8 @@ function ajax_wto_options(): void {
 				foreach ( $taxonomies as $taxonomy ) {
 					if ( ! is_taxonomy_hierarchical( $taxonomy ) && 'post_format' !== $taxonomy && wto_has_enabled_taxonomy( $taxonomies ) ) {
 						$terms = get_the_terms( $postid, $taxonomy );
-						if ( is_wp_error( $terms ) || false === $terms || ! is_array( $terms ) ) {
-							continue; // Skip if $terms is a WP_Error, false, null, or not an array.
+						if ( is_wp_error( $terms ) || false === $terms ) {
+							continue; // Skip if $terms is a WP_Error or false.
 						}
 						$meta = get_post_meta( $postid, 'wp-tag-order-' . $taxonomy, true );
 						if ( ! empty( $terms ) && ! $meta ) {

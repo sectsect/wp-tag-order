@@ -225,7 +225,7 @@ curl --location --request PUT 'https://your-wordpress-site.com/wp-json/wp-tag-or
   "data": {
     "status": 200,
     "post_id": 123,
-    "taxonomy": "pickup_tag",
+    "taxonomy": "post_tag",
     "tags": [
       5,
       3,

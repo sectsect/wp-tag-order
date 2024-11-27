@@ -134,7 +134,7 @@ function wpto_validate_tag_ids( string $tags, string $taxonomy ): bool {
 	$non_numeric_tags = array_filter(
 		$tag_array,
 		function ( $tag ) {
-			return ! is_numeric( $tag ) || $tag <= 0;
+			return $tag <= 0;
 		}
 	);
 
@@ -208,19 +208,18 @@ function wpto_rest_permission_check( \WP_REST_Request $request ): bool {
  * Get tag order for a specific post.
  *
  * @param \WP_REST_Request $request REST request object.
- * @return \WP_REST_Response|\WP_Error
+ * @return \WP_REST_Response
  *
  * @phpstan-param WP_REST_Request<array{post_id?: int, taxonomy?: string}> $request
  */
-function wpto_get_post_tag_order( \WP_REST_Request $request ): \WP_REST_Response|\WP_Error {
-	$post_id  = wpto_cast_mixed_to_int( $request->get_param( 'post_id' ) );
-	$taxonomy = $request->get_param( 'taxonomy' ) ?? 'post_tag';
-
+function wpto_get_post_tag_order( \WP_REST_Request $request ): \WP_REST_Response {
+	$post_id      = wpto_cast_mixed_to_int( $request->get_param( 'post_id' ) );
+	$taxonomy     = $request->get_param( 'taxonomy' ) ?? 'post_tag';
 	$tags_value   = get_post_meta( $post_id, 'wp-tag-order-' . $taxonomy, true );
 	$tags         = is_string( $tags_value ) ? unserialize( $tags_value ) : array();
 	$ordered_tags = array_map(
-		function ( int $tag_id ) use ( $taxonomy ): ?array {
-			if ( ! is_string( $taxonomy ) ) {
+		function ( $tag_id ) use ( $taxonomy ): ?array {
+			if ( ! is_int( $tag_id ) ) {
 				return null;
 			}
 			$tag = get_term_by( 'id', $tag_id, $taxonomy );
@@ -254,11 +253,11 @@ function wpto_get_post_tag_order( \WP_REST_Request $request ): \WP_REST_Response
  * Performs comprehensive validation and provides detailed error responses.
  *
  * @param \WP_REST_Request $request REST request object.
- * @return \WP_REST_Response|\WP_Error
+ * @return \WP_REST_Response
  *
  * @phpstan-param WP_REST_Request<array{post_id?: int, taxonomy?: string, tags?: string}> $request
  */
-function wpto_update_post_tag_order( \WP_REST_Request $request ): \WP_REST_Response|\WP_Error {
+function wpto_update_post_tag_order( \WP_REST_Request $request ): \WP_REST_Response {
 	try {
 		// Cast and validate input parameters.
 		$post_id  = wpto_cast_mixed_to_int( $request->get_param( 'post_id' ) );

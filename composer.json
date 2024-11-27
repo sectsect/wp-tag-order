@@ -1,25 +1,34 @@
 {
   "name": "sectsect/wp-tag-order",
   "description": "Sort the tags manually in individual posts on wordpress.",
-  "keywords": ["github", "wordpress", "plugin", "tags", "order"],
+  "keywords": [
+    "github",
+    "wordpress",
+    "plugin",
+    "tags",
+    "order"
+  ],
   "type": "wordpress-plugin",
   "require": {
     "php": ">=8.0"
   },
-  "require-dev":{
+  "require-dev": {
     "phpunit/phpunit": "^7.5 || ^9.5",
-    "yoast/phpunit-polyfills" : "^2.0",
+    "yoast/phpunit-polyfills": "^2.0",
     "squizlabs/php_codesniffer": "^3.7",
     "wp-coding-standards/wpcs": "^3.0",
-    "phpstan/phpstan": "^1.10",
+    "phpstan/phpstan": "^1.12",
     "szepeviktor/phpstan-wordpress": "^1.3",
-    "phpstan/extension-installer": "^1.3"
+    "phpstan/extension-installer": "^1.3",
+    "phpstan/phpstan-deprecation-rules": "^1.2"
   },
   "license": "GPL-3.0+",
-  "authors": [{
-    "name": "SECT WEB INTERACTIVE",
-    "homepage": "https://www.ilovesect.com/"
-  }],
+  "authors": [
+    {
+      "name": "sect",
+      "homepage": "https://github.com/sectsect"
+    }
+  ],
   "config": {
     "allow-plugins": {
       "dealerdirect/phpcodesniffer-composer-installer": true,
