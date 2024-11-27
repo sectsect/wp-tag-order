@@ -19,26 +19,6 @@ declare(strict_types=1);
 global $wpdb;
 
 /**
- * Safely converts a mixed value to a string, defaulting to an empty string if null or not a string.
- *
- * @param mixed $value The value to convert to a string.
- * @return string The converted string value.
- */
-function wpto_sanitize_taxonomy_string( $value ): string {
-	return is_string( $value ) ? $value : '';
-}
-
-/**
- * Safely converts a mixed value to a string representation of an integer.
- *
- * @param mixed $value The value to convert to a string.
- * @return string The converted string value representing an integer.
- */
-function wpto_sanitize_tag_id( $value ): string {
-	return is_numeric( $value ) ? (string) $value : '';
-}
-
-/**
  * Adds a meta box for tag ordering on post edit screens.
  * This function creates a meta box that allows users to order tags associated with a post.
  *
@@ -53,14 +33,14 @@ function wpto_meta_box_markup( WP_Post $obj, array $metabox ): void {
 	<ul>
 	<?php
 	$taxonomy   = isset( $metabox['args'] ) && is_array( $metabox['args'] ) && isset( $metabox['args']['taxonomy'] )
-		? wpto_sanitize_taxonomy_string( $metabox['args']['taxonomy'] )
+		? wpto_cast_mixed_to_string( $metabox['args']['taxonomy'] )
 		: '';
 	$meta_key   = 'wp-tag-order-' . $taxonomy;
 	$tags_value = get_post_meta( $obj->ID, 'wp-tag-order-' . $taxonomy, true );
 	$tags       = is_string( $tags_value ) ? unserialize( $tags_value ) : array();
 	if ( $tags && is_array( $tags ) ) :
 		foreach ( $tags as $tagid ) :
-			$tagid = wpto_sanitize_tag_id( $tagid );
+			$tagid = wpto_cast_mixed_to_int( $tagid );
 			$tag   = ! empty( $taxonomy ) ? get_term_by( 'id', $tagid, $taxonomy ) : null;
 			if ( ! $tag instanceof WP_Term ) {
 				continue; // Skip if $tag is not a WP_Term object.
