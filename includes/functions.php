@@ -261,12 +261,19 @@ function wpto_validate_ajax_request( string $action = 'wpto_nonce_action' ): int
 		wp_send_json_error( 'Nonce verification failed', 403 );
 	}
 
-	// Sanitize and validate post ID.
-	$post_id = isset( $_GET['post'] )
-		? intval( sanitize_text_field( wp_unslash( $_GET['post'] ) ) )
-		: 0;
+	// Sanitize and validate post ID using filter_input().
+	$post_id = filter_input(
+		INPUT_GET,
+		'post',
+		FILTER_VALIDATE_INT,
+		array(
+			'options' => array(
+				'min_range' => 1, // Ensures positive integer.
+			),
+		)
+	);
 
-	if ( $post_id <= 0 ) {
+	if ( false === $post_id || null === $post_id ) {
 		wp_send_json_error( 'Invalid post ID', 400 );
 	}
 
