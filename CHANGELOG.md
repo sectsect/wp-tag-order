@@ -1,5 +1,14 @@
 # Changelog
 
+## [v3.11.3](https://github.com/sectsect/wp-tag-order/tree/v3.11.3) (2024-12-17)
+
+[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v3.11.2...v3.11.3)
+
+**Merged pull requests:**
+
+- ci: add SVN installation step for WordPress test suite in GitHub Actions [\#88](https://github.com/sectsect/wp-tag-order/pull/88) ([sectsect](https://github.com/sectsect))
+- chore\(deps\): bump nanoid from 3.3.7 to 3.3.8 [\#87](https://github.com/sectsect/wp-tag-order/pull/87) ([dependabot[bot]](https://github.com/apps/dependabot))
+
 ## [v3.11.2](https://github.com/sectsect/wp-tag-order/tree/v3.11.2) (2024-11-27)
 
 [Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v3.11.1...v3.11.2)
