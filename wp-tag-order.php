@@ -8,6 +8,8 @@
  * Text Domain:     wp-tag-order
  * Domain Path:     /languages
  * Version:         3.11.2
+ * License:         GPL-3.0-or-later
+ * License URI:     https://www.gnu.org/licenses/gpl-3.0.html
  *
  * @package         WP_Tag_Order
  */
