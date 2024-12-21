@@ -1,5 +1,17 @@
 # Changelog
 
+## [v3.11.4](https://github.com/sectsect/wp-tag-order/tree/v3.11.4) (2024-12-21)
+
+[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v3.11.3...v3.11.4)
+
+**Closed issues:**
+
+- terms repeated in all entries [\#89](https://github.com/sectsect/wp-tag-order/issues/89)
+
+**Merged pull requests:**
+
+- chore: update dependencies [\#90](https://github.com/sectsect/wp-tag-order/pull/90) ([sectsect](https://github.com/sectsect))
+
 ## [v3.11.3](https://github.com/sectsect/wp-tag-order/tree/v3.11.3) (2024-12-17)
 
 [Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v3.11.2...v3.11.3)
