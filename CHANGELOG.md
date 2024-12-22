@@ -1,5 +1,13 @@
 # Changelog
 
+## [v3.11.5](https://github.com/sectsect/wp-tag-order/tree/v3.11.5) (2024-12-22)
+
+[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v3.11.4...v3.11.5)
+
+**Merged pull requests:**
+
+- refactor: rename function [\#91](https://github.com/sectsect/wp-tag-order/pull/91) ([sectsect](https://github.com/sectsect))
+
 ## [v3.11.4](https://github.com/sectsect/wp-tag-order/tree/v3.11.4) (2024-12-21)
 
 [Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v3.11.3...v3.11.4)
