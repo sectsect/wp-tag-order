@@ -60,7 +60,7 @@ function wptagorder_load_textdomain(): void {
 add_action( 'plugins_loaded', 'wptagorder_load_textdomain' );
 
 /**
- * Adds custom meta data to the plugin's row in the plugins list table.
+ * Adds custom GitHub link to the WP Tag Order plugin's row in the plugins list table.
  *
  * @param string[]             $plugin_meta An array of the plugin's metadata.
  * @param string               $plugin_file Path to the plugin file relative to the plugins directory.
@@ -69,13 +69,13 @@ add_action( 'plugins_loaded', 'wptagorder_load_textdomain' );
  *
  * @return string[] The modified plugin metadata array.
  */
-function my_plugin_row_meta( array $plugin_meta, string $plugin_file, array $plugin_data, string $status ): array {
+function wptagorder_add_github_link( array $plugin_meta, string $plugin_file, array $plugin_data, string $status ): array {
 	if ( plugin_basename( __FILE__ ) === $plugin_file ) {
 		$plugin_meta[] = '<a href="https://github.com/sectsect/wp-tag-order" target="_blank"><span class="dashicons dashicons-randomize"></span> GitHub</a>';
 	}
 	return $plugin_meta;
 }
-add_filter( 'plugin_row_meta', 'my_plugin_row_meta', 10, 4 );
+add_filter( 'plugin_row_meta', 'wptagorder_add_github_link', 10, 4 );
 
 if ( wptagorder_phpversioncheck() ) {
 	require_once plugin_dir_path( __FILE__ ) . 'includes/functions.php';
