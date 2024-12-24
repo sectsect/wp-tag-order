@@ -1,5 +1,21 @@
 # Changelog
 
+## [Unreleased](https://github.com/sectsect/wp-tag-order/tree/HEAD)
+
+[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v3.11.6...HEAD)
+
+**Closed issues:**
+
+- I can´t add or edit post [\#92](https://github.com/sectsect/wp-tag-order/issues/92)
+
+## [v3.11.6](https://github.com/sectsect/wp-tag-order/tree/v3.11.6) (2024-12-24)
+
+[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v3.11.5...v3.11.6)
+
+**Merged pull requests:**
+
+- refactor\(admin-script\): remove redundant wp\_die\(\) for taxonomy valida… [\#93](https://github.com/sectsect/wp-tag-order/pull/93) ([sectsect](https://github.com/sectsect))
+
 ## [v3.11.5](https://github.com/sectsect/wp-tag-order/tree/v3.11.5) (2024-12-22)
 
 [Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v3.11.4...v3.11.5)
