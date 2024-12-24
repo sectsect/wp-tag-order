@@ -221,7 +221,7 @@ function load_wpto_admin_script( string $hook ): void {
 
 	$pt = wto_has_tag_posttype();
 
-	// Early validation and error handling.
+	// Early validation and error handling for unsupported post types.
 	if ( ! in_array( $post->post_type, $pt, true ) ) {
 		wp_die(
 			esc_html(
@@ -238,18 +238,9 @@ function load_wpto_admin_script( string $hook ): void {
 
 	$taxonomies_attached = get_object_taxonomies( $post->post_type );
 
+	// Simply return if no enabled taxonomies are found.
 	if ( ! wto_has_enabled_taxonomy( $taxonomies_attached ) ) {
-		wp_die(
-			esc_html(
-				sprintf(
-				/* translators: %s: Post type name */
-					__( 'No enabled taxonomies found for post type "%s".', 'wp-tag-order' ),
-					esc_html( $post->post_type )
-				)
-			),
-			esc_html__( 'WP Tag Order Error', 'wp-tag-order' ),
-			array( 'response' => 403 )
-		);
+		return;
 	}
 
 	wp_enqueue_style( 'wto-style', plugin_dir_url( __DIR__ ) . 'assets/css/admin.css', array(), $plugin_version );
