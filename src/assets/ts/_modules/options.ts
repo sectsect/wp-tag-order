@@ -51,6 +51,7 @@ export const options = (): void => {
       return data;
     } catch (error) {
       Swal.showValidationMessage(`Request failed: ${error}`);
+      // eslint-disable-next-line no-console
       console.log(error);
       throw error;
     }
