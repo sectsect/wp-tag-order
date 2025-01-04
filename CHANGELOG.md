@@ -1,12 +1,16 @@
 # Changelog
 
-## [Unreleased](https://github.com/sectsect/wp-tag-order/tree/HEAD)
+## [v3.11.7](https://github.com/sectsect/wp-tag-order/tree/v3.11.7) (2025-01-04)
 
-[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v3.11.6...HEAD)
+[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v3.11.6...v3.11.7)
 
 **Closed issues:**
 
 - I can´t add or edit post [\#92](https://github.com/sectsect/wp-tag-order/issues/92)
+
+**Merged pull requests:**
+
+- chore: migrate ESLint config to flat config [\#94](https://github.com/sectsect/wp-tag-order/pull/94) ([sectsect](https://github.com/sectsect))
 
 ## [v3.11.6](https://github.com/sectsect/wp-tag-order/tree/v3.11.6) (2024-12-24)
 
