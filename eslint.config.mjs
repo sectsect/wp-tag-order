@@ -2,14 +2,10 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable import/no-anonymous-default-export */
 
-// Node.js path and URL utilities
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-
 // ESLint core and compatibility utilities
 import js from '@eslint/js';
 import { FlatCompat } from '@eslint/eslintrc';
-import { fixupPluginRules } from '@eslint/compat';
+// import { fixupPluginRules } from '@eslint/compat';
 import globals from 'globals';
 
 // ESLint plugins for various technologies and best practices
@@ -26,15 +22,12 @@ import prettier from 'eslint-plugin-prettier';
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
 import testingLibrary from 'eslint-plugin-testing-library';
 import vitest from 'eslint-plugin-vitest';
-import deprecationPlugin from 'eslint-plugin-deprecation';
+import deprecation from 'eslint-plugin-deprecation';
 // import nextPlugin from '@next/eslint-plugin-next';
 import pluginQuery from '@tanstack/eslint-plugin-query';
 
-// Resolve current file and directory paths
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 const compat = new FlatCompat({
-  baseDirectory: __dirname,
+  baseDirectory: import.meta.dirname, // Added in: v21.2.0, v20.11.0 @ https://nodejs.org/api/esm.html#importmetadirname
   recommendedConfig: js.configs.recommended,
   allConfig: js.configs.all,
 });
@@ -72,7 +65,8 @@ export default [
       // '@next/next': nextPlugin,
       'unused-imports': unusedImports,
       '@tanstack/query': pluginQuery,
-      deprecation: fixupPluginRules(deprecationPlugin),
+      // deprecation: fixupPluginRules(deprecationPlugin),
+      deprecation,
       tailwindcss,
       tsdoc,
       import: _import,
@@ -118,6 +112,8 @@ export default [
           unnamedComponents: 'arrow-function',
         },
       ],
+      // Performance and optimization rules
+      'react/jsx-no-useless-fragment': 'error',
 
       // Accessibility rules
       'jsx-a11y/anchor-is-valid': 'off',
@@ -153,12 +149,16 @@ export default [
         },
       ],
       'import/prefer-default-export': 'off',
+      'import/no-duplicates': 'error',
 
       // TypeScript rules
       '@typescript-eslint/comma-dangle': 'off',
       '@typescript-eslint/consistent-type-imports': 'error',
       '@typescript-eslint/no-unnecessary-condition': 'error',
+      // '@typescript-eslint/strict-boolean-expressions': 'error',
+      '@typescript-eslint/no-explicit-any': 'error',
       '@typescript-eslint/no-unused-vars': 'off',
+      '@typescript-eslint/prefer-optional-chain': 'error',
 
       // Unused imports/variables rules
       'unused-imports/no-unused-imports': 'error',
@@ -168,6 +168,7 @@ export default [
       'no-underscore-dangle': 'off',
       'tailwindcss/no-custom-classname': 'off',
       'tsdoc/syntax': 'warn',
+      'no-console': ['warn', { allow: ['warn', 'error'] }],
     },
   },
 
