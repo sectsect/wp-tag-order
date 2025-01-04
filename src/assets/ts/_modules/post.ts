@@ -49,7 +49,7 @@ export const post = () => {
               (
                 target.parentElement?.querySelector(
                   'textarea.the-tags',
-                ) as HTMLTextAreaElement
+                ) as HTMLTextAreaElement | null
               )?.value ?? '';
 
             jQuery
@@ -74,6 +74,7 @@ export const post = () => {
                 jQuery(`#wpto_meta_box-${t} .inside .inner ul`).html(data);
               })
               .fail(() => {
+                // eslint-disable-next-line no-alert
                 alert('Load Error. Please Reload...');
               })
               .always(() => {
@@ -119,13 +120,13 @@ export const post = () => {
             taxonomy: t,
             tags: s,
           },
-          // eslint-disable-next-line prefer-arrow/prefer-arrow-functions
           beforeSend() {
             jQuery(`#wpto_meta_box-${t} h2`).addClass('ready');
           },
         })
         .done(() => {})
         .fail(() => {
+          // eslint-disable-next-line no-alert
           alert('Load Error. Please Reload...');
         })
         .always(() => {
