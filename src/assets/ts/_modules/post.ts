@@ -4,6 +4,12 @@ declare global {
   }
 }
 
+/**
+ * Represents the global data structure for WordPress post operations
+ *
+ * @remarks
+ * Contains essential information for AJAX synchronization and updates
+ */
 interface WtoData {
   post_id: string;
   nonce_sync: string;
@@ -22,10 +28,15 @@ const {
   action_update: actionUpdate,
 } = window.wto_data;
 
+/**
+ * Manages post-related tag synchronization and UI interactions
+ *
+ * @remarks
+ * Handles two primary functionalities:
+ * 1. Synchronizes tags across different taxonomy boxes
+ * 2. Enables drag-and-drop sorting of tags with AJAX updates
+ */
 export const post = () => {
-  /*= =================================================
-  Sync Tags to "#tagsdiv-post_tag" box
-  ================================================== */
   let flag = '';
   setTimeout(() => {
     const tagchecklists = document.querySelectorAll(
@@ -93,9 +104,7 @@ export const post = () => {
       observer.observe(tagchecklist, { childList: true, subtree: true });
     });
   }, 400);
-  /*= =================================================
-  jQuery UI Sortable
-  ================================================== */
+
   jQuery('.wpto_meta_box_panel .inside .inner ul').sortable({
     update() {
       const postboxid = jQuery(this).closest('.postbox').attr('id') ?? '';

@@ -16,9 +16,28 @@ interface WtoOptionsResponse {
   count: number;
 }
 
-export const options = (): void => {
+/**
+ * Handles options page interaction and settings application
+ *
+ * @remarks
+ * Manages the process of applying settings with a confirmation dialog
+ * and AJAX request handling
+ *
+ * @example
+ * // Automatically initialized on options page load
+ * options();
+ */
+export const options = () => {
   const { nonce, action, ajax_url: url } = window.wto_options_data;
 
+  /**
+   * Prepares the UI before sending settings
+   *
+   * @remarks
+   * Disables the apply button and shows a processing message
+   *
+   * @returns A promise that resolves when preparation is complete
+   */
   const beforeSend = () =>
     new Promise<string>(resolve => {
       jQuery('#wpbody-content form input[name=apply]').prop('disabled', true);
@@ -28,6 +47,14 @@ export const options = (): void => {
       resolve('resolved');
     });
 
+  /**
+   * Performs asynchronous pre-confirmation request
+   *
+   * @remarks
+   * Sends an AJAX request to apply settings with error handling
+   *
+   * @returns Processed response data or throws an error
+   */
   const asyncPreConfirm = async () => {
     await beforeSend();
 
