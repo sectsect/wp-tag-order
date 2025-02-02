@@ -565,13 +565,44 @@ add_action( 'wp_ajax_wto_options', 'ajax_wto_options' );
 add_action( 'wp_ajax_nopriv_wto_options', 'ajax_wto_options' );
 
 /**
+ * Sanitizes the enabled taxonomies setting.
+ *
+ * @param mixed $value The value to sanitize.
+ * @return array<string> Sanitized array of taxonomy names.
+ */
+function wpto_sanitize_enabled_taxonomies( $value ): array {
+	if ( ! is_array( $value ) ) {
+		return array();
+	}
+
+	$sanitized = array();
+	foreach ( $value as $taxonomy ) {
+		$taxonomy = wpto_cast_mixed_to_string( $taxonomy );
+		// Ensure the taxonomy exists and is registered.
+		if ( taxonomy_exists( sanitize_key( $taxonomy ) ) ) {
+			$sanitized[] = sanitize_key( $taxonomy );
+		}
+	}
+
+	return $sanitized;
+}
+
+/**
  * Registers the plugin settings.
  * This function registers settings that can be configured from the plugin's options page.
  *
  * @return void
  */
 function register_wpto_settings(): void {
-	register_setting( 'wpto-settings-group', 'wpto_enabled_taxonomies' );
+	register_setting(
+		'wpto-settings-group',
+		'wpto_enabled_taxonomies',
+		array(
+			'type'              => 'array',
+			'sanitize_callback' => 'wpto_sanitize_enabled_taxonomies',
+			'default'           => array(),
+		)
+	);
 }
 
 /**
