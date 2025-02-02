@@ -1,5 +1,22 @@
 # Changelog
 
+## [v3.11.9](https://github.com/sectsect/wp-tag-order/tree/v3.11.9) (2025-02-02)
+
+[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v3.11.8...v3.11.9)
+
+**Merged pull requests:**
+
+- chore: replace renamed package eslint-plugin-vitest with @vitest/eslint-plugin [\#97](https://github.com/sectsect/wp-tag-order/pull/97) ([sectsect](https://github.com/sectsect))
+
+## [v3.11.8](https://github.com/sectsect/wp-tag-order/tree/v3.11.8) (2025-01-06)
+
+[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v3.11.7...v3.11.8)
+
+**Merged pull requests:**
+
+- chore: migrate ESLint config to flat config [\#96](https://github.com/sectsect/wp-tag-order/pull/96) ([sectsect](https://github.com/sectsect))
+- chore\(deps-dev\): update development dependencies [\#95](https://github.com/sectsect/wp-tag-order/pull/95) ([sectsect](https://github.com/sectsect))
+
 ## [v3.11.7](https://github.com/sectsect/wp-tag-order/tree/v3.11.7) (2025-01-04)
 
 [Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v3.11.6...v3.11.7)
