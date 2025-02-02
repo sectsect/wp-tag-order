@@ -16,7 +16,7 @@
 
 declare(strict_types=1);
 
-$wptagorder_minimalrequiredphpversion = '8.0';
+const WPTAGORDER_MINIMAL_REQUIRED_PHP_VERSION = '8.0';
 
 /**
  * Displays an admin notice if the PHP version is less than the required version.
@@ -24,9 +24,8 @@ $wptagorder_minimalrequiredphpversion = '8.0';
  * @return void
  */
 function wptagorder_noticephpversionwrong(): void {
-	global $wptagorder_minimalrequiredphpversion;
-	// Ensure $wptagorder_minimalrequiredphpversion is not null and is a string.
-	$required_version = is_null( $wptagorder_minimalrequiredphpversion ) ? 'unknown' : $wptagorder_minimalrequiredphpversion;
+	// Ensure constant is defined.
+	$required_version = defined( 'WPTAGORDER_MINIMAL_REQUIRED_PHP_VERSION' ) ? WPTAGORDER_MINIMAL_REQUIRED_PHP_VERSION : 'unknown';
 	echo '<div class="updated fade">' .
 	esc_html__( 'Error: plugin "WP Tag Order" requires a newer version of PHP to be running.', 'wp-tag-order' ) .
 		'<br/>' . esc_html__( 'Minimal version of PHP required: ', 'wp-tag-order' ) . '<strong>' . esc_html( $required_version ) . '</strong>' .
@@ -40,9 +39,7 @@ function wptagorder_noticephpversionwrong(): void {
  * @return bool True if the PHP version is sufficient, false otherwise.
  */
 function wptagorder_phpversioncheck(): bool {
-	global $wptagorder_minimalrequiredphpversion;
-	// Ensure $wptagorder_minimalrequiredphpversion is not null before comparison.
-	if ( null === $wptagorder_minimalrequiredphpversion || version_compare( phpversion(), $wptagorder_minimalrequiredphpversion ) < 0 ) {
+	if ( version_compare( phpversion(), WPTAGORDER_MINIMAL_REQUIRED_PHP_VERSION ) < 0 ) {
 		add_action( 'admin_notices', 'wptagorder_noticephpversionwrong' );
 		return false;
 	}
