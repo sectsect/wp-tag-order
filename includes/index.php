@@ -574,17 +574,15 @@ function wpto_sanitize_enabled_taxonomies( $value ): array {
 	if ( ! is_array( $value ) ) {
 		return array();
 	}
-
-	$sanitized = array();
-	foreach ( $value as $taxonomy ) {
-		$taxonomy = wpto_cast_mixed_to_string( $taxonomy );
-		// Ensure the taxonomy exists and is registered.
-		if ( taxonomy_exists( sanitize_key( $taxonomy ) ) ) {
-			$sanitized[] = sanitize_key( $taxonomy );
-		}
-	}
-
-	return $sanitized;
+	// Map each value to a sanitized key.
+	$taxonomies = array_map(
+		function ( $item ) {
+			return sanitize_key( wpto_cast_mixed_to_string( $item ) );
+		},
+		$value
+	);
+	// Filter only taxonomies that exist.
+	return array_values( array_filter( $taxonomies, 'taxonomy_exists' ) );
 }
 
 /**
