@@ -1,5 +1,13 @@
 # Changelog
 
+## [v3.11.11](https://github.com/sectsect/wp-tag-order/tree/v3.11.11) (2025-02-05)
+
+[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v3.11.10...v3.11.11)
+
+**Merged pull requests:**
+
+- ci: resolve Plugin Check warning [\#101](https://github.com/sectsect/wp-tag-order/pull/101) ([sectsect](https://github.com/sectsect))
+
 ## [v3.11.10](https://github.com/sectsect/wp-tag-order/tree/v3.11.10) (2025-02-05)
 
 [Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v3.11.9...v3.11.10)
