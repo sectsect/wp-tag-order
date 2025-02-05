@@ -223,17 +223,7 @@ function load_wpto_admin_script( string $hook ): void {
 
 	// Early validation and error handling for unsupported post types.
 	if ( ! in_array( $post->post_type, $pt, true ) ) {
-		wp_die(
-			esc_html(
-				sprintf(
-				/* translators: %s: Post type name */
-					__( 'Post type "%s" is not supported by WP Tag Order.', 'wp-tag-order' ),
-					esc_html( $post->post_type )
-				)
-			),
-			esc_html__( 'WP Tag Order Error', 'wp-tag-order' ),
-			array( 'response' => 403 )
-		);
+		return;
 	}
 
 	$taxonomies_attached = get_object_taxonomies( $post->post_type );
