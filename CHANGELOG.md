@@ -1,5 +1,13 @@
 # Changelog
 
+## [v3.11.10](https://github.com/sectsect/wp-tag-order/tree/v3.11.10) (2025-02-05)
+
+[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v3.11.9...v3.11.10)
+
+**Merged pull requests:**
+
+- fix\(admin-script\): replace wp\_die with silent return for unsupported post types \#99 [\#100](https://github.com/sectsect/wp-tag-order/pull/100) ([sectsect](https://github.com/sectsect))
+
 ## [v3.11.9](https://github.com/sectsect/wp-tag-order/tree/v3.11.9) (2025-02-02)
 
 [Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v3.11.8...v3.11.9)
