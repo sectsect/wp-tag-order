@@ -18,6 +18,13 @@ declare(strict_types=1);
  */
 global $wpdb;
 
+// Add a constant for the register_setting arguments at the top of the file.
+const WTO_SETTING_ARGS = array(
+	'type'              => 'array',
+	'sanitize_callback' => 'wpto_sanitize_enabled_taxonomies',
+	'default'           => array(),
+);
+
 /**
  * Adds a meta box for tag ordering on post edit screens.
  * This function creates a meta box that allows users to order tags associated with a post.
@@ -587,11 +594,7 @@ function register_wpto_settings(): void {
 	register_setting(
 		'wpto-settings-group',
 		'wpto_enabled_taxonomies',
-		array(
-			'type'              => 'array',
-			'sanitize_callback' => 'wpto_sanitize_enabled_taxonomies',
-			'default'           => array(),
-		)
+		WTO_SETTING_ARGS
 	);
 }
 
