@@ -28,14 +28,11 @@ return module.exports;
 /************************************************************************/
 // webpack/runtime/rspack_version
 (() => {
-__webpack_require__.rv = function () {
-	return "1.2.2";
-};
-
+__webpack_require__.rv = () => ("1.3.8")
 })();
 // webpack/runtime/rspack_unique_id
 (() => {
-__webpack_require__.ruid = "bundler=rspack@1.2.2";
+__webpack_require__.ruid = "bundler=rspack@1.3.8";
 
 })();
 /************************************************************************/
