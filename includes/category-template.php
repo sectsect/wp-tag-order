@@ -43,8 +43,8 @@ function get_the_terms_ordered( int|WP_Post $post, string $taxonomy ): array|fal
 			continue; // Ensure that $tagid is an int or string numeric before passing to get_term_by.
 		}
 		$tag = get_term_by( 'id', (int) $tagid, $taxonomy );
-		if ( ! $tag || is_wp_error( $tag ) ) {
-			continue; // Skip if the term is not found or an error occurred.
+		if ( ! $tag ) {
+			continue; // Skip if the term is not found.
 		}
 		$return[] = (object) array(
 			'term_id'          => $tag->term_id,

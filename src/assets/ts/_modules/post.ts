@@ -17,6 +17,9 @@ interface WtoData {
   nonce_update: string;
   action_update: string;
   ajax_url: string;
+  taxonomies: {
+    enabled: string[];
+  };
 }
 
 const {

@@ -34,7 +34,14 @@ const WTO_SETTING_ARGS = array(
  * @return void
  */
 function wpto_meta_box_markup( WP_Post $obj, array $metabox ): void {
-	wp_nonce_field( basename( __FILE__ ), 'wpto-meta-box-nonce' );
+	// Use static variable to ensure nonce is only generated once per page load.
+	static $nonce_generated = false;
+
+	// Only generate nonce field in the first meta box to avoid duplication.
+	if ( ! $nonce_generated ) {
+		wp_nonce_field( basename( __FILE__ ), 'wpto-meta-box-nonce' );
+		$nonce_generated = true;
+	}
 	?>
 <div class="inner">
 	<ul>
@@ -226,6 +233,12 @@ function load_wpto_admin_script( string $hook ): void {
 		return;
 	}
 
+	// Prevent multiple executions for the same post.
+	static $processed_posts = array();
+	if ( isset( $processed_posts[ $post->ID ] ) ) {
+		return;
+	}
+
 	$pt = wto_has_tag_posttype();
 
 	// Early validation and error handling for unsupported post types.
@@ -239,6 +252,9 @@ function load_wpto_admin_script( string $hook ): void {
 	if ( ! wto_has_enabled_taxonomy( $taxonomies_attached ) ) {
 		return;
 	}
+
+	// Mark this post as processed to prevent multiple runs.
+	$processed_posts[ $post->ID ] = true;
 
 	wp_enqueue_style( 'wto-style', plugin_dir_url( __DIR__ ) . 'assets/css/admin.css', array(), $plugin_version );
 	wp_enqueue_script( 'wto-script', plugin_dir_url( __DIR__ ) . 'assets/js/post.js', array( 'jquery' ), $plugin_version, true );
@@ -259,8 +275,11 @@ function load_wpto_admin_script( string $hook ): void {
 			}
 		}
 
-		$action_sync   = 'wto_sync_tags';
-		$action_update = 'wto_update_tags';
+		$action_sync        = 'wto_sync_tags';
+		$action_update      = 'wto_update_tags';
+		$taxonomies_enabled = wto_get_enabled_taxonomies();
+
+		// Use wp_localize_script with consolidated data to minimize AJAX nonce generation.
 		wp_localize_script(
 			'wto-script',
 			'wto_data',
@@ -271,6 +290,9 @@ function load_wpto_admin_script( string $hook ): void {
 				'nonce_update'  => wp_create_nonce( $action_update ),
 				'action_update' => $action_update,
 				'ajax_url'      => admin_url( 'admin-ajax.php' ),
+				'taxonomies'    => array(
+					'enabled' => $taxonomies_enabled,
+				),
 			)
 		);
 	} catch ( Exception $e ) {

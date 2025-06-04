@@ -1,5 +1,7 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import path from 'path';
-import { Configuration } from '@rspack/cli';
+
+import type { Configuration } from '@rspack/cli';
 import * as rspack from '@rspack/core';
 import type { SwcLoaderOptions } from '@rspack/core';
 import { WebpackSweetEntry } from '@sect/webpack-sweet-entry';
@@ -11,6 +13,7 @@ import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 import notifier from 'node-notifier';
 import StyleLintPlugin from 'stylelint-webpack-plugin';
 // import SVGSpritemapPlugin from 'svg-spritemap-webpack-plugin';
+import type { WebpackError } from 'webpack/types';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import RemoveEmptyScriptsPlugin from 'webpack-remove-empty-scripts';
 
@@ -43,6 +46,8 @@ const getJSPlugins = () => {
       fix: true,
       emitError: true,
       lintDirtyModulesOnly: true,
+      configType: 'flat',
+      eslintPath: require.resolve('eslint/use-at-your-own-risk'),
     }),
   );
   // plugins.push(
@@ -112,7 +117,7 @@ const getJSPlugins = () => {
 
   plugins.push(
     new NotifierPlugin({
-      onErrors: (severity: string, errors: any[]) => {
+      onErrors: (severity: string, errors: WebpackError[]) => {
         if (severity !== 'error') return;
         const error = errors[0];
         notifier.notify({
@@ -149,7 +154,7 @@ const getCSSPlugins = () => {
 
   plugins.push(
     new NotifierPlugin({
-      onErrors: (severity: string, errors: any[]) => {
+      onErrors: (severity: string, errors: WebpackError[]) => {
         if (severity !== 'error') return;
         const error = errors[0];
         notifier.notify({

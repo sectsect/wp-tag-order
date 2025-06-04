@@ -14,18 +14,8 @@
 > Mutation events will no longer be supported in Google Chrome and Edge in July 2024 (Google Chrome on July 23, 2024, and Microsoft Edge the week of July 25, 2024).
 > As a result, WP Tag Order versions 3.6.0 or less will not work with Chrome v127 and later, which will be released on **July 23, 2024**.  
 > You have to update to **v3.7.0 or later**.  
-> If you still need PHP7 support, see Troubleshooting below.  
-> See [Chrome for Developers Blog](https://developer.chrome.com/blog/mutation-events-deprecation) for more details.
-
-## Get Started
-
-1. Clone this Repo into your `wp-content/plugins` directory.
-  ```bash
-  cd /path-to-your/wp-content/plugins
-  git clone git@github.com:sectsect/wp-tag-order.git
-  ```
-2. Activate the plugin through the `Plugins` menu in WordPress.
-3. Go to `Settings` -> `WP Tag Order` page to select which taxonomies to enable ordering for.
+> See [Chrome for Developers Blog](https://developer.chrome.com/blog/mutation-events-deprecation) for more details.  
+> If you still need PHP7 support, see Troubleshooting below.
 
 ## Features
 
@@ -39,6 +29,16 @@
   - Update tag order programmatically
   - Supports authentication and permissions
 - 🚀 Lightweight and performance-optimized
+
+## Get Started
+
+1. Clone this Repo into your `wp-content/plugins` directory.
+  ```bash
+  cd /path-to-your/wp-content/plugins
+  git clone git@github.com:sectsect/wp-tag-order.git
+  ```
+2. Activate the plugin through the `Plugins` menu in WordPress.
+3. Go to `Settings` -> `WP Tag Order` page to select which taxonomies to enable ordering for.
 
 ## Notes
 
