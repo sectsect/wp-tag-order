@@ -1,5 +1,17 @@
 # Changelog
 
+## [v3.11.12](https://github.com/sectsect/wp-tag-order/tree/v3.11.12) (2025-06-04)
+
+[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v3.11.11...v3.11.12)
+
+**Closed issues:**
+
+- Unsupported post types don't fail gracefully. [\#99](https://github.com/sectsect/wp-tag-order/issues/99)
+
+**Merged pull requests:**
+
+- fix: resolve duplicate DOM ID errors in multi-taxonomy scenarios  [\#102](https://github.com/sectsect/wp-tag-order/pull/102) ([sectsect](https://github.com/sectsect))
+
 ## [v3.11.11](https://github.com/sectsect/wp-tag-order/tree/v3.11.11) (2025-02-05)
 
 [Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v3.11.10...v3.11.11)
