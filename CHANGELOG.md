@@ -1,5 +1,24 @@
 # Changelog
 
+## [v3.11.14](https://github.com/sectsect/wp-tag-order/tree/v3.11.14) (2025-08-08)
+
+[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v3.11.13...v3.11.14)
+
+**Merged pull requests:**
+
+- refactor: centralize meta key prefix with constants and helpers [\#107](https://github.com/sectsect/wp-tag-order/pull/107) ([sectsect](https://github.com/sectsect))
+
+## [v3.11.13](https://github.com/sectsect/wp-tag-order/tree/v3.11.13) (2025-07-13)
+
+[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v3.11.12...v3.11.13)
+
+**Merged pull requests:**
+
+- Potential fix for code scanning alert no. 1: Workflow does not contain permissions [\#106](https://github.com/sectsect/wp-tag-order/pull/106) ([sectsect](https://github.com/sectsect))
+- Potential fix for code scanning alert no. 2: Workflow does not contain permissions [\#105](https://github.com/sectsect/wp-tag-order/pull/105) ([sectsect](https://github.com/sectsect))
+- Potential fix for code scanning alert no. 3: Workflow does not contain permissions [\#104](https://github.com/sectsect/wp-tag-order/pull/104) ([sectsect](https://github.com/sectsect))
+- Potential fix for code scanning alert no. 4: Workflow does not contain permissions [\#103](https://github.com/sectsect/wp-tag-order/pull/103) ([sectsect](https://github.com/sectsect))
+
 ## [v3.11.12](https://github.com/sectsect/wp-tag-order/tree/v3.11.12) (2025-06-04)
 
 [Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v3.11.11...v3.11.12)
