@@ -10,6 +10,34 @@
 
 declare(strict_types=1);
 
+// Global constants for meta keys and other identifiers.
+const WPTAGORDER_META_KEY_PREFIX           = 'wp-tag-order-';
+const WPTAGORDER_REST_NAMESPACE            = 'wp-tag-order/v1';
+const WPTAGORDER_OPTION_ENABLED_TAXONOMIES = 'wpto_enabled_taxonomies';
+const WPTAGORDER_ACTION_SYNC_TAGS          = 'wto_sync_tags';
+const WPTAGORDER_ACTION_UPDATE_TAGS        = 'wto_update_tags';
+const WPTAGORDER_ACTION_OPTIONS            = 'wto_options';
+
+/**
+ * Builds post meta key for the given taxonomy.
+ *
+ * @param string $taxonomy The taxonomy name.
+ * @return string The complete meta key for storing tag order.
+ */
+function wto_meta_key( string $taxonomy ): string {
+	return WPTAGORDER_META_KEY_PREFIX . $taxonomy;
+}
+
+/**
+ * Builds form field name for the given taxonomy.
+ *
+ * @param string $taxonomy The taxonomy name.
+ * @return string The complete field name for form inputs.
+ */
+function wto_form_field_name( string $taxonomy ): string {
+	return WPTAGORDER_META_KEY_PREFIX . $taxonomy . '[]';
+}
+
 /**
  * Checks if an array is empty.
  *
@@ -68,7 +96,7 @@ function wto_get_non_hierarchical_taxonomies(): array {
  * @return array<string> The value of the "wpto_enabled_taxonomies" option.
  */
 function wto_get_enabled_taxonomies(): array {
-	$option = get_option( 'wpto_enabled_taxonomies', array() );
+	$option = get_option( WPTAGORDER_OPTION_ENABLED_TAXONOMIES, array() );
 	return array_filter( is_array( $option ) ? $option : array(), 'is_string' );
 }
 

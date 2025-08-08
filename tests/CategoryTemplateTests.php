@@ -61,7 +61,7 @@ class CategoryTemplateTests extends WP_UnitTestCase {
 		$serialized_tag_ids = serialize( $tag_ids );
 
 		// Insert the serialized tag IDs into the wp_postmeta table with a custom key.
-		add_post_meta( $this->post_id, 'wp-tag-order-post_tag', $serialized_tag_ids );
+		add_post_meta( $this->post_id, wto_meta_key( 'post_tag' ), $serialized_tag_ids );
 	}
 
 	/**

@@ -16,7 +16,7 @@ declare(strict_types=1);
  */
 function wpto_register_rest_endpoints(): void {
 	register_rest_route(
-		'wp-tag-order/v1',
+		WPTAGORDER_REST_NAMESPACE,
 		'/tags/order/(?P<post_id>\d+)',
 		array(
 			'methods'             => \WP_REST_Server::READABLE,
@@ -35,7 +35,7 @@ function wpto_register_rest_endpoints(): void {
 	);
 
 	register_rest_route(
-		'wp-tag-order/v1',
+		WPTAGORDER_REST_NAMESPACE,
 		'/tags/order/(?P<post_id>\d+)',
 		array(
 			'methods'             => \WP_REST_Server::EDITABLE,
@@ -218,7 +218,7 @@ function wpto_rest_permission_check( \WP_REST_Request $request ): bool {
 function wpto_get_post_tag_order( \WP_REST_Request $request ): \WP_REST_Response {
 	$post_id      = wpto_cast_mixed_to_int( $request->get_param( 'post_id' ) );
 	$taxonomy     = $request->get_param( 'taxonomy' ) ?? 'post_tag';
-	$tags_value   = get_post_meta( $post_id, 'wp-tag-order-' . $taxonomy, true );
+	$tags_value   = get_post_meta( $post_id, wto_meta_key( $taxonomy ), true );
 	$tags         = is_string( $tags_value ) ? unserialize( $tags_value ) : array();
 	$ordered_tags = array_map(
 		function ( $tag_id ) use ( $taxonomy ): ?array {
@@ -307,7 +307,7 @@ function wpto_update_post_tag_order( \WP_REST_Request $request ): \WP_REST_Respo
 		}
 
 		// Retrieve current tag order.
-		$current_tags_value = get_post_meta( $post_id, 'wp-tag-order-' . $taxonomy, true );
+		$current_tags_value = get_post_meta( $post_id, wto_meta_key( $taxonomy ), true );
 		$current_tags       = wpto_cast_mixed_to_array(
 			is_string( $current_tags_value ) ? unserialize( $current_tags_value ) : $current_tags_value
 		);
