@@ -91,16 +91,6 @@ function wptagorder_phpversioncheck(): bool {
 }
 
 /**
- * Loads the plugin's text domain for localization.
- *
- * @return void
- */
-function wptagorder_load_textdomain(): void {
-	load_plugin_textdomain( 'wp-tag-order', false, plugin_basename( __DIR__ ) . '/languages' );
-}
-add_action( 'plugins_loaded', 'wptagorder_load_textdomain' );
-
-/**
  * Adds custom GitHub link to the WP Tag Order plugin's row in the plugins list table.
  *
  * @param array<string>        $plugin_meta An array of the plugin's metadata.
