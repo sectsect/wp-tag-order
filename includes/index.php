@@ -49,8 +49,8 @@ function wpto_meta_box_markup( WP_Post $obj, array $metabox ): void {
 	$taxonomy   = isset( $metabox['args'] ) && is_array( $metabox['args'] ) && isset( $metabox['args']['taxonomy'] )
 		? wpto_cast_mixed_to_string( $metabox['args']['taxonomy'] )
 		: '';
-	$meta_key   = 'wp-tag-order-' . $taxonomy;
-	$tags_value = get_post_meta( $obj->ID, 'wp-tag-order-' . $taxonomy, true );
+	$meta_key   = wto_meta_key( $taxonomy );
+	$tags_value = get_post_meta( $obj->ID, wto_meta_key( $taxonomy ), true );
 	$tags       = is_string( $tags_value ) ? unserialize( $tags_value ) : array();
 	if ( $tags && is_array( $tags ) ) :
 		foreach ( $tags as $tagid ) :
@@ -59,7 +59,7 @@ function wpto_meta_box_markup( WP_Post $obj, array $metabox ): void {
 			if ( ! $tag instanceof WP_Term ) {
 				continue; // Skip if $tag is not a WP_Term object.
 			}
-			$hidden_name = 'wp-tag-order-' . $taxonomy . '[]';
+			$hidden_name = wto_form_field_name( $taxonomy );
 			?>
 		<li>
 			<input type="text" readonly="readonly" value="<?php echo esc_attr( $tag->name ); ?>">
@@ -190,7 +190,7 @@ function save_wpto_meta_box( int $post_id, WP_Post $post, bool $update ): void {
 	foreach ( $taxonomies as $taxonomy ) {
 		$taxonomy = sanitize_key( $taxonomy );
 		if ( ! is_taxonomy_hierarchical( $taxonomy ) && wto_is_enabled_taxonomy( $taxonomy ) ) {
-			$fieldname = 'wp-tag-order-' . $taxonomy;
+			$fieldname = wto_meta_key( $taxonomy );
 			$tags      = filter_input( INPUT_POST, $fieldname, FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
 
 			$meta_box_tags_value = '';
@@ -198,7 +198,7 @@ function save_wpto_meta_box( int $post_id, WP_Post $post, bool $update ): void {
 				$meta_box_tags_value = serialize( array_map( 'sanitize_text_field', $tags ) );
 			}
 
-			update_post_meta( $post_id, $fieldname, $meta_box_tags_value );
+			update_post_meta( $post_id, wto_meta_key( $taxonomy ), $meta_box_tags_value );
 		}
 	}
 }
@@ -275,8 +275,8 @@ function load_wpto_admin_script( string $hook ): void {
 			}
 		}
 
-		$action_sync        = 'wto_sync_tags';
-		$action_update      = 'wto_update_tags';
+		$action_sync        = WPTAGORDER_ACTION_SYNC_TAGS;
+		$action_update      = WPTAGORDER_ACTION_UPDATE_TAGS;
 		$taxonomies_enabled = wto_get_enabled_taxonomies();
 
 		// Use wp_localize_script with consolidated data to minimize AJAX nonce generation.
@@ -361,7 +361,7 @@ function ajax_wto_sync_tags(): void {
 		}
 
 		$savedata = array();
-		$tags_val = get_post_meta( absint( $id ), 'wp-tag-order-' . $taxonomy, true );
+		$tags_val = get_post_meta( absint( $id ), wto_meta_key( $taxonomy ), true );
 
 		if ( $tags_val ) {
 			$basetagsids = is_string( $tags_val ) ? unserialize( $tags_val ) : array();
@@ -384,7 +384,7 @@ function ajax_wto_sync_tags(): void {
 		}
 
 		$meta_box_tags_value = serialize( $savedata );
-		update_post_meta( absint( $id ), 'wp-tag-order-' . $taxonomy, $meta_box_tags_value );
+		update_post_meta( absint( $id ), wto_meta_key( $taxonomy ), $meta_box_tags_value );
 
 		$newtagsids_int    = array_map( 'intval', $newtagsids );
 		$term_taxonomy_ids = wp_set_object_terms( absint( $id ), $newtagsids_int, $taxonomy );
@@ -399,11 +399,11 @@ function ajax_wto_sync_tags(): void {
 				if ( ! $tag instanceof WP_Term ) {
 					continue;
 				}
-				$return .= '<li><input type="text" readonly="readonly" value="' . esc_attr( $tag->name ) . '"><input type="hidden" name="wp-tag-order-' . esc_attr( $taxonomy ) . '[]" value="' . esc_attr( (string) $tag->term_id ) . '"></li>';
+				$return .= '<li><input type="text" readonly="readonly" value="' . esc_attr( $tag->name ) . '"><input type="hidden" name="' . esc_attr( wto_form_field_name( $taxonomy ) ) . '" value="' . esc_attr( (string) $tag->term_id ) . '"></li>';
 			}
 		}
 	} else {
-		delete_post_meta( absint( $id ), 'wp-tag-order-' . $taxonomy );
+		delete_post_meta( absint( $id ), wto_meta_key( $taxonomy ) );
 		$return = '';
 	}
 
@@ -494,7 +494,7 @@ function wpto_admin_scripts(): void {
 	$version        = is_string( $plugin_version ) ? $plugin_version : '';
 	// wp_enqueue_script( 'wto-commons', plugin_dir_url( __DIR__ ) . 'assets/js/commons.js?v=' . $plugin_version, array( 'jquery' ), null, true ); // phpcs:ignore.
 	wp_enqueue_script( 'wto-options-script', plugin_dir_url( __DIR__ ) . 'assets/js/options.js', array( 'jquery' ), $version, true );
-	$action = 'wto_options';
+	$action = WPTAGORDER_ACTION_OPTIONS;
 	wp_localize_script(
 		'wto-options-script',
 		'wto_options_data',
@@ -558,14 +558,14 @@ function ajax_wto_options(): void {
 						if ( is_wp_error( $terms ) || false === $terms ) {
 							continue; // Skip if $terms is a WP_Error or false.
 						}
-						$meta = get_post_meta( $postid, 'wp-tag-order-' . $taxonomy, true );
+													$meta = get_post_meta( $postid, wto_meta_key( $taxonomy ), true );
 						if ( ! empty( $terms ) && ! $meta ) {
 							$term_ids = array();
 							foreach ( $terms as $term ) {
 								array_push( $term_ids, $term->term_id );
 							}
 							$meta_box_tags_value = serialize( $term_ids );
-							$return              = update_post_meta( $postid, 'wp-tag-order-' . $taxonomy, $meta_box_tags_value );
+							$return              = update_post_meta( $postid, wto_meta_key( $taxonomy ), $meta_box_tags_value );
 							if ( $return ) {
 								++$count;
 							}
@@ -584,26 +584,24 @@ add_action( 'wp_ajax_wto_options', 'ajax_wto_options' );
 add_action( 'wp_ajax_nopriv_wto_options', 'ajax_wto_options' );
 
 /**
- * Sanitizes the enabled taxonomies setting.
+ * Sanitizes the enabled taxonomies option value.
  *
  * @param mixed $value The value to sanitize.
- * @return array<string> Sanitized array of taxonomy names.
+ * @return array<string> The sanitized array of taxonomy names.
  */
-function wpto_sanitize_enabled_taxonomies( $value ): array {
+function wpto_sanitize_enabled_taxonomies( mixed $value ): array {
 	if ( ! is_array( $value ) ) {
 		return array();
 	}
 
-	$sanitized = array();
+	$sanitized_taxonomies = array();
 	foreach ( $value as $taxonomy ) {
-		$taxonomy = wpto_cast_mixed_to_string( $taxonomy );
-		// Ensure the taxonomy exists and is registered.
-		if ( taxonomy_exists( sanitize_key( $taxonomy ) ) ) {
-			$sanitized[] = sanitize_key( $taxonomy );
+		if ( is_string( $taxonomy ) && taxonomy_exists( $taxonomy ) ) {
+			$sanitized_taxonomies[] = sanitize_key( $taxonomy );
 		}
 	}
 
-	return $sanitized;
+	return array_unique( $sanitized_taxonomies );
 }
 
 /**
@@ -615,7 +613,7 @@ function wpto_sanitize_enabled_taxonomies( $value ): array {
 function register_wpto_settings(): void {
 	register_setting(
 		'wpto-settings-group',
-		'wpto_enabled_taxonomies',
+		WPTAGORDER_OPTION_ENABLED_TAXONOMIES,
 		WTO_SETTING_ARGS
 	);
 }

@@ -84,6 +84,6 @@ class Tag_Updater {
 		$meta_box_tags_value = serialize( $sanitized_tag_ids );
 
 		// Update post meta.
-		return update_post_meta( $post_id, 'wp-tag-order-' . $taxonomy, $meta_box_tags_value );
+		return update_post_meta( $post_id, wto_meta_key( $taxonomy ), $meta_box_tags_value );
 	}
 }

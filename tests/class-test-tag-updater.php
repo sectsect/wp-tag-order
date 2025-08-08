@@ -99,7 +99,7 @@ class Test_Tag_Updater extends WP_UnitTestCase {
 		$this->assertNotFalse( $result, 'Failed to update metadata for tag order' );
 
 		// Verify meta was saved correctly.
-		$saved_tags = unserialize( get_post_meta( $post_id, 'wp-tag-order-' . $this->test_taxonomy, true ) );
+		$saved_tags = unserialize( get_post_meta( $post_id, wto_meta_key( $this->test_taxonomy ), true ) );
 		$this->assertSame( $tag_ids, $saved_tags );
 	}
 
@@ -126,7 +126,7 @@ class Test_Tag_Updater extends WP_UnitTestCase {
 		$this->assertNotFalse( $result, 'Failed to update metadata for tag order' );
 
 		// Verify meta was saved correctly.
-		$saved_tags = unserialize( get_post_meta( $post_id, 'wp-tag-order-' . $this->test_taxonomy, true ) );
+		$saved_tags = unserialize( get_post_meta( $post_id, wto_meta_key( $this->test_taxonomy ), true ) );
 		$this->assertSame( $tag_ids, $saved_tags );
 	}
 
