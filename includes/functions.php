@@ -36,7 +36,7 @@ function wto_array_diff_interactive( array $array_1, array $array_2 ): array {
 /**
  * Retrieves all non-hierarchical taxonomies in WordPress, excluding the built-in `post_format` taxonomy.
  *
- * @return list<WP_Taxonomy> An array of non-hierarchical taxonomies.
+ * @return array<WP_Taxonomy> An array of non-hierarchical taxonomies.
  */
 function wto_get_non_hierarchical_taxonomies(): array {
 	$args               = array(

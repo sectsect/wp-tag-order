@@ -207,6 +207,9 @@ function wpto_rest_permission_check( \WP_REST_Request $request ): bool {
 /**
  * Get tag order for a specific post.
  *
+ * Retrieves the ordered tags for a given post and taxonomy.
+ * Returns detailed tag information including term_id, name, slug, etc.
+ *
  * @param \WP_REST_Request $request REST request object.
  * @return \WP_REST_Response
  *
