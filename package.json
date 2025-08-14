@@ -92,6 +92,6 @@
     "dotenv": "^16.5.0",
     "jquery": "^3.7.1",
     "node-notifier": "^10.0.1",
-    "sweetalert2": "^11.22.0"
+    "sweetalert2": "^11.22.4"
   }
 }
