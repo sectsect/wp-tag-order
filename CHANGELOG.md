@@ -1,5 +1,13 @@
 # Changelog
 
+## [v3.11.15](https://github.com/sectsect/wp-tag-order/tree/v3.11.15) (2025-08-27)
+
+[Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v3.11.14...v3.11.15)
+
+**Merged pull requests:**
+
+- chore\(deps\): update dependencies [\#109](https://github.com/sectsect/wp-tag-order/pull/109) ([sectsect](https://github.com/sectsect))
+
 ## [v3.11.14](https://github.com/sectsect/wp-tag-order/tree/v3.11.14) (2025-08-08)
 
 [Full Changelog](https://github.com/sectsect/wp-tag-order/compare/v3.11.13...v3.11.14)
