@@ -399,14 +399,14 @@ class RestApiTests extends WP_UnitTestCase {
 
 		// Use WordPress filters to override the data during testing.
 		add_filter(
-			'wpto_test_enabled_taxonomies',
+			'wpto_enabled_taxonomies',
 			function () use ( $expected_enabled ) {
 				return $expected_enabled;
 			}
 		);
 
 		add_filter(
-			'wpto_test_non_hierarchical_taxonomies',
+			'wpto_non_hierarchical_taxonomies',
 			function () use ( $expected_available ) {
 				return $expected_available;
 			}
@@ -419,8 +419,8 @@ class RestApiTests extends WP_UnitTestCase {
 		$response = wpto_get_enabled_taxonomies_endpoint( $request );
 
 		// Clean up filters.
-		remove_all_filters( 'wpto_test_enabled_taxonomies' );
-		remove_all_filters( 'wpto_test_non_hierarchical_taxonomies' );
+		remove_all_filters( 'wpto_enabled_taxonomies' );
+		remove_all_filters( 'wpto_non_hierarchical_taxonomies' );
 
 		// Verify response type.
 		$this->assertInstanceOf( WP_REST_Response::class, $response );
@@ -465,14 +465,14 @@ class RestApiTests extends WP_UnitTestCase {
 
 		// Use WordPress filters to override the data during testing.
 		add_filter(
-			'wpto_test_enabled_taxonomies',
+			'wpto_enabled_taxonomies',
 			function () use ( $expected_enabled ) {
 				return $expected_enabled;
 			}
 		);
 
 		add_filter(
-			'wpto_test_non_hierarchical_taxonomies',
+			'wpto_non_hierarchical_taxonomies',
 			function () use ( $expected_available ) {
 				return $expected_available;
 			}
@@ -485,8 +485,8 @@ class RestApiTests extends WP_UnitTestCase {
 		$response = wpto_get_enabled_taxonomies_endpoint( $request );
 
 		// Clean up filters.
-		remove_all_filters( 'wpto_test_enabled_taxonomies' );
-		remove_all_filters( 'wpto_test_non_hierarchical_taxonomies' );
+		remove_all_filters( 'wpto_enabled_taxonomies' );
+		remove_all_filters( 'wpto_non_hierarchical_taxonomies' );
 
 		// Verify response type.
 		$this->assertInstanceOf( WP_REST_Response::class, $response );
@@ -522,14 +522,14 @@ class RestApiTests extends WP_UnitTestCase {
 
 		// Use WordPress filters to override the data during testing.
 		add_filter(
-			'wpto_test_enabled_taxonomies',
+			'wpto_enabled_taxonomies',
 			function () use ( $expected_enabled ) {
 				return $expected_enabled;
 			}
 		);
 
 		add_filter(
-			'wpto_test_non_hierarchical_taxonomies',
+			'wpto_non_hierarchical_taxonomies',
 			function () use ( $expected_available ) {
 				return $expected_available;
 			}
@@ -542,8 +542,8 @@ class RestApiTests extends WP_UnitTestCase {
 		$response = wpto_get_enabled_taxonomies_endpoint( $request );
 
 		// Clean up filters.
-		remove_all_filters( 'wpto_test_enabled_taxonomies' );
-		remove_all_filters( 'wpto_test_non_hierarchical_taxonomies' );
+		remove_all_filters( 'wpto_enabled_taxonomies' );
+		remove_all_filters( 'wpto_non_hierarchical_taxonomies' );
 
 		// Get response data.
 		$data = $response->get_data();

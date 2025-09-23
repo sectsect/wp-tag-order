@@ -452,14 +452,18 @@ function wpto_rest_taxonomies_permission_check( \WP_REST_Request $request ): boo
 function wpto_get_enabled_taxonomies_endpoint( \WP_REST_Request $request ): \WP_REST_Response {
 	try {
 		// Get enabled taxonomies.
-		$enabled_taxonomies = apply_filters( 'wpto_test_enabled_taxonomies', wto_get_enabled_taxonomies() );
+		$enabled_taxonomies = apply_filters( 'wpto_enabled_taxonomies', wto_get_enabled_taxonomies() );
 
 		// Get all non-hierarchical taxonomies for reference.
-		$available_taxonomies     = apply_filters( 'wpto_test_non_hierarchical_taxonomies', wto_get_non_hierarchical_taxonomies() );
+		$available_taxonomies     = apply_filters( 'wpto_non_hierarchical_taxonomies', wto_get_non_hierarchical_taxonomies() );
 		$available_taxonomy_names = array_values(
 			array_filter(
 				array_map(
 					function ( $taxonomy ) {
+						// Validate that $taxonomy is an object with a name property.
+						if ( ! is_object( $taxonomy ) || ! isset( $taxonomy->name ) ) {
+							return null;
+						}
 						return $taxonomy->name;
 					},
 					$available_taxonomies
