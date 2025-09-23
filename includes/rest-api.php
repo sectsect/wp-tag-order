@@ -67,6 +67,16 @@ function wpto_register_rest_endpoints(): void {
 			),
 		)
 	);
+
+	register_rest_route(
+		WPTAGORDER_REST_NAMESPACE,
+		'/taxonomies/enabled',
+		array(
+			'methods'             => \WP_REST_Server::READABLE,
+			'callback'            => 'wpto_get_enabled_taxonomies_endpoint',
+			'permission_callback' => 'wpto_rest_taxonomies_permission_check',
+		)
+	);
 }
 add_action( 'rest_api_init', 'wpto_register_rest_endpoints' );
 
@@ -404,6 +414,79 @@ function wpto_update_post_tag_order( \WP_REST_Request $request ): \WP_REST_Respo
 				'success' => false,
 				'code'    => 'unexpected_error',
 				'message' => __( 'An unexpected error occurred.', 'wp-tag-order' ),
+				'data'    => array(
+					'status'        => 500,
+					'error_message' => $e->getMessage(),
+				),
+			)
+		);
+	}
+}
+
+/**
+ * Permission check for taxonomies REST API endpoints.
+ *
+ * @param \WP_REST_Request $request REST request object.
+ * @return bool
+ *
+ * @phpstan-param WP_REST_Request<array<string, mixed>> $request
+ */
+function wpto_rest_taxonomies_permission_check( \WP_REST_Request $request ): bool {
+	// Allow read access to enabled taxonomies for all users.
+	// This is safe as it only exposes which taxonomies have tag ordering enabled,
+	// which is not sensitive information.
+	return true;
+}
+
+/**
+ * Get enabled taxonomies endpoint.
+ *
+ * Retrieves the list of taxonomies that have tag ordering enabled.
+ * Returns both enabled taxonomies and additional metadata.
+ *
+ * @param \WP_REST_Request $request REST request object.
+ * @return \WP_REST_Response
+ *
+ * @phpstan-param WP_REST_Request<array<string, mixed>> $request
+ */
+function wpto_get_enabled_taxonomies_endpoint( \WP_REST_Request $request ): \WP_REST_Response {
+	try {
+		// Get enabled taxonomies.
+		$enabled_taxonomies = wto_get_enabled_taxonomies();
+
+		// Get all non-hierarchical taxonomies for reference.
+		$available_taxonomies     = wto_get_non_hierarchical_taxonomies();
+		$available_taxonomy_names = array_values(
+			array_filter(
+				array_map(
+					function ( $taxonomy ) {
+						return $taxonomy->name;
+					},
+					$available_taxonomies
+				)
+			)
+		);
+
+		// Build response.
+		$response_data = array(
+			'enabled_taxonomies'   => $enabled_taxonomies,
+			'available_taxonomies' => $available_taxonomy_names,
+			'meta'                 => array(
+				'enabled_count'   => count( $enabled_taxonomies ),
+				'available_count' => count( $available_taxonomy_names ),
+				'timestamp'       => gmdate( 'c' ),
+			),
+		);
+
+		return rest_ensure_response( $response_data );
+
+	} catch ( \Exception $e ) {
+		// Handle unexpected errors.
+		return rest_ensure_response(
+			array(
+				'success' => false,
+				'code'    => 'unexpected_error',
+				'message' => __( 'Failed to retrieve enabled taxonomies.', 'wp-tag-order' ),
 				'data'    => array(
 					'status'        => 500,
 					'error_message' => $e->getMessage(),

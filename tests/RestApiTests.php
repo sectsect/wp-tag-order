@@ -17,6 +17,8 @@ require_once __DIR__ . '/../includes/rest-api.php';
  * @covers ::wpto_rest_permission_check
  * @covers ::wpto_get_post_tag_order
  * @covers ::wpto_update_post_tag_order
+ * @covers ::wpto_rest_taxonomies_permission_check
+ * @covers ::wpto_get_enabled_taxonomies_endpoint
  */
 class RestApiTests extends WP_UnitTestCase {
 	/**
@@ -334,5 +336,209 @@ class RestApiTests extends WP_UnitTestCase {
 		$response_data = $response->get_data();
 		$this->assertFalse( $response_data['success'] );
 		$this->assertEquals( 'invalid_taxonomy', $response_data['code'] );
+	}
+
+	/**
+	 * Test wpto_rest_taxonomies_permission_check function.
+	 *
+	 * @test
+	 */
+	public function test_wpto_rest_taxonomies_permission_check(): void {
+		// Create a mock request for the taxonomies endpoint.
+		$request = new WP_REST_Request( 'GET', '/wp-tag-order/v1/taxonomies/enabled' );
+
+		// Test that the permission check always returns true for read access.
+		$this->assertTrue( wpto_rest_taxonomies_permission_check( $request ) );
+
+		// Test with different user states.
+		$user_id = $this->factory()->user->create( array( 'role' => 'subscriber' ) );
+		wp_set_current_user( $user_id );
+		$this->assertTrue( wpto_rest_taxonomies_permission_check( $request ) );
+
+		// Test with no logged-in user.
+		wp_set_current_user( 0 );
+		$this->assertTrue( wpto_rest_taxonomies_permission_check( $request ) );
+	}
+
+	/**
+	 * Test wpto_get_enabled_taxonomies_endpoint with enabled taxonomies.
+	 *
+	 * @test
+	 */
+	public function test_wpto_get_enabled_taxonomies_endpoint_success(): void {
+		// Register test taxonomies.
+		register_taxonomy(
+			'test_enabled_taxonomy',
+			'post',
+			array(
+				'public'       => true,
+				'show_in_rest' => true,
+				'hierarchical' => false,
+			)
+		);
+
+		register_taxonomy(
+			'test_disabled_taxonomy',
+			'post',
+			array(
+				'public'       => true,
+				'show_in_rest' => true,
+				'hierarchical' => false,
+			)
+		);
+
+		// Mock the wto_get_enabled_taxonomies function.
+		$this->mockFunction(
+			'wto_get_enabled_taxonomies',
+			function () {
+				return array( 'post_tag', 'test_enabled_taxonomy' );
+			}
+		);
+
+		// Mock the wto_get_non_hierarchical_taxonomies function.
+		$this->mockFunction(
+			'wto_get_non_hierarchical_taxonomies',
+			function () {
+				return array(
+					(object) array( 'name' => 'post_tag' ),
+					(object) array( 'name' => 'test_enabled_taxonomy' ),
+					(object) array( 'name' => 'test_disabled_taxonomy' ),
+				);
+			}
+		);
+
+		// Create mock request.
+		$request = new WP_REST_Request( 'GET', '/wp-tag-order/v1/taxonomies/enabled' );
+
+		// Call the endpoint.
+		$response = wpto_get_enabled_taxonomies_endpoint( $request );
+
+		// Verify response type.
+		$this->assertInstanceOf( WP_REST_Response::class, $response );
+
+		// Get response data.
+		$data = $response->get_data();
+
+		// Verify response structure.
+		$this->assertArrayHasKey( 'enabled_taxonomies', $data );
+		$this->assertArrayHasKey( 'available_taxonomies', $data );
+		$this->assertArrayHasKey( 'meta', $data );
+
+		// Verify enabled taxonomies.
+		$mock_enabled = $GLOBALS['__test_mock_functions']['wto_get_enabled_taxonomies']();
+		$this->assertEquals( $mock_enabled, $data['enabled_taxonomies'] );
+
+		// Verify meta information.
+		$this->assertArrayHasKey( 'enabled_count', $data['meta'] );
+		$this->assertArrayHasKey( 'available_count', $data['meta'] );
+		$this->assertArrayHasKey( 'timestamp', $data['meta'] );
+		$this->assertEquals( 2, $data['meta']['enabled_count'] );
+		$this->assertEquals( 3, $data['meta']['available_count'] );
+	}
+
+	/**
+	 * Test wpto_get_enabled_taxonomies_endpoint with no enabled taxonomies.
+	 *
+	 * @test
+	 */
+	public function test_wpto_get_enabled_taxonomies_endpoint_empty(): void {
+		// Mock the wto_get_enabled_taxonomies function to return empty array.
+		$this->mockFunction(
+			'wto_get_enabled_taxonomies',
+			function () {
+				return array();
+			}
+		);
+
+		// Mock the wto_get_non_hierarchical_taxonomies function.
+		$this->mockFunction(
+			'wto_get_non_hierarchical_taxonomies',
+			function () {
+				return array(
+					(object) array( 'name' => 'post_tag' ),
+				);
+			}
+		);
+
+		// Create mock request.
+		$request = new WP_REST_Request( 'GET', '/wp-tag-order/v1/taxonomies/enabled' );
+
+		// Call the endpoint.
+		$response = wpto_get_enabled_taxonomies_endpoint( $request );
+
+		// Verify response type.
+		$this->assertInstanceOf( WP_REST_Response::class, $response );
+
+		// Get response data.
+		$data = $response->get_data();
+
+		// Verify empty enabled taxonomies.
+		$this->assertEmpty( $data['enabled_taxonomies'] );
+		$this->assertEquals( 0, $data['meta']['enabled_count'] );
+		$this->assertEquals( 1, $data['meta']['available_count'] );
+	}
+
+	/**
+	 * Test wpto_get_enabled_taxonomies_endpoint response structure.
+	 *
+	 * @test
+	 */
+	public function test_wpto_get_enabled_taxonomies_endpoint_response_structure(): void {
+		// Mock functions with test data.
+		$this->mockFunction(
+			'wto_get_enabled_taxonomies',
+			function () {
+				return array( 'post_tag' );
+			}
+		);
+
+		$this->mockFunction(
+			'wto_get_non_hierarchical_taxonomies',
+			function () {
+				return array(
+					(object) array( 'name' => 'post_tag' ),
+					(object) array( 'name' => 'product_tag' ),
+				);
+			}
+		);
+
+		// Create mock request.
+		$request = new WP_REST_Request( 'GET', '/wp-tag-order/v1/taxonomies/enabled' );
+
+		// Call the endpoint.
+		$response = wpto_get_enabled_taxonomies_endpoint( $request );
+
+		// Get response data.
+		$data = $response->get_data();
+
+		// Verify complete response structure.
+		$this->assertArrayHasKey( 'enabled_taxonomies', $data );
+		$this->assertArrayHasKey( 'available_taxonomies', $data );
+		$this->assertArrayHasKey( 'meta', $data );
+
+		// Verify data types.
+		$this->assertIsArray( $data['enabled_taxonomies'] );
+		$this->assertIsArray( $data['available_taxonomies'] );
+		$this->assertIsArray( $data['meta'] );
+
+		// Verify meta structure.
+		$this->assertArrayHasKey( 'enabled_count', $data['meta'] );
+		$this->assertArrayHasKey( 'available_count', $data['meta'] );
+		$this->assertArrayHasKey( 'timestamp', $data['meta'] );
+
+		// Verify meta data types.
+		$this->assertIsInt( $data['meta']['enabled_count'] );
+		$this->assertIsInt( $data['meta']['available_count'] );
+		$this->assertIsString( $data['meta']['timestamp'] );
+
+		// Verify timestamp format (ISO 8601).
+		$this->assertMatchesRegularExpression(
+			'/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[+-]\d{2}:\d{2}$/',
+			$data['meta']['timestamp']
+		);
+
+		// Verify counts match actual data.
+		$this->assertEquals( count( $data['enabled_taxonomies'] ), $data['meta']['enabled_count'] );
+		$this->assertEquals( count( $data['available_taxonomies'] ), $data['meta']['available_count'] );
 	}
 }
