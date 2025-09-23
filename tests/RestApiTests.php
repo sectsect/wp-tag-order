@@ -389,23 +389,26 @@ class RestApiTests extends WP_UnitTestCase {
 			)
 		);
 
-		// Mock the wto_get_enabled_taxonomies function.
-		$this->mockFunction(
-			'wto_get_enabled_taxonomies',
-			function () {
-				return array( 'post_tag', 'test_enabled_taxonomy' );
+		// Set up test data.
+		$expected_enabled   = array( 'post_tag', 'test_enabled_taxonomy' );
+		$expected_available = array(
+			(object) array( 'name' => 'post_tag' ),
+			(object) array( 'name' => 'test_enabled_taxonomy' ),
+			(object) array( 'name' => 'test_disabled_taxonomy' ),
+		);
+
+		// Use WordPress filters to override the data during testing.
+		add_filter(
+			'wpto_test_enabled_taxonomies',
+			function () use ( $expected_enabled ) {
+				return $expected_enabled;
 			}
 		);
 
-		// Mock the wto_get_non_hierarchical_taxonomies function.
-		$this->mockFunction(
-			'wto_get_non_hierarchical_taxonomies',
-			function () {
-				return array(
-					(object) array( 'name' => 'post_tag' ),
-					(object) array( 'name' => 'test_enabled_taxonomy' ),
-					(object) array( 'name' => 'test_disabled_taxonomy' ),
-				);
+		add_filter(
+			'wpto_test_non_hierarchical_taxonomies',
+			function () use ( $expected_available ) {
+				return $expected_available;
 			}
 		);
 
@@ -414,6 +417,10 @@ class RestApiTests extends WP_UnitTestCase {
 
 		// Call the endpoint.
 		$response = wpto_get_enabled_taxonomies_endpoint( $request );
+
+		// Clean up filters.
+		remove_all_filters( 'wpto_test_enabled_taxonomies' );
+		remove_all_filters( 'wpto_test_non_hierarchical_taxonomies' );
 
 		// Verify response type.
 		$this->assertInstanceOf( WP_REST_Response::class, $response );
@@ -427,13 +434,11 @@ class RestApiTests extends WP_UnitTestCase {
 		$this->assertArrayHasKey( 'meta', $data );
 
 		// Verify enabled taxonomies.
-		if ( isset( $GLOBALS['__test_mock_functions']['wto_get_enabled_taxonomies'] ) ) {
-			$mock_enabled = $GLOBALS['__test_mock_functions']['wto_get_enabled_taxonomies']();
-			$this->assertEquals( $mock_enabled, $data['enabled_taxonomies'] );
-		} else {
-			// Fallback: verify structure and that enabled taxonomies is an array.
-			$this->assertIsArray( $data['enabled_taxonomies'] );
-		}
+		$this->assertEquals( $expected_enabled, $data['enabled_taxonomies'] );
+
+		// Verify available taxonomies.
+		$expected_available_names = array( 'post_tag', 'test_enabled_taxonomy', 'test_disabled_taxonomy' );
+		$this->assertEquals( $expected_available_names, $data['available_taxonomies'] );
 
 		// Verify meta information.
 		$this->assertArrayHasKey( 'enabled_count', $data['meta'] );
@@ -452,21 +457,24 @@ class RestApiTests extends WP_UnitTestCase {
 	 * @preserveGlobalState disabled
 	 */
 	public function test_wpto_get_enabled_taxonomies_endpoint_empty(): void {
-		// Mock the wto_get_enabled_taxonomies function to return empty array.
-		$this->mockFunction(
-			'wto_get_enabled_taxonomies',
-			function () {
-				return array();
+		// Set up test data.
+		$expected_enabled   = array();
+		$expected_available = array(
+			(object) array( 'name' => 'post_tag' ),
+		);
+
+		// Use WordPress filters to override the data during testing.
+		add_filter(
+			'wpto_test_enabled_taxonomies',
+			function () use ( $expected_enabled ) {
+				return $expected_enabled;
 			}
 		);
 
-		// Mock the wto_get_non_hierarchical_taxonomies function.
-		$this->mockFunction(
-			'wto_get_non_hierarchical_taxonomies',
-			function () {
-				return array(
-					(object) array( 'name' => 'post_tag' ),
-				);
+		add_filter(
+			'wpto_test_non_hierarchical_taxonomies',
+			function () use ( $expected_available ) {
+				return $expected_available;
 			}
 		);
 
@@ -475,6 +483,10 @@ class RestApiTests extends WP_UnitTestCase {
 
 		// Call the endpoint.
 		$response = wpto_get_enabled_taxonomies_endpoint( $request );
+
+		// Clean up filters.
+		remove_all_filters( 'wpto_test_enabled_taxonomies' );
+		remove_all_filters( 'wpto_test_non_hierarchical_taxonomies' );
 
 		// Verify response type.
 		$this->assertInstanceOf( WP_REST_Response::class, $response );
@@ -501,21 +513,25 @@ class RestApiTests extends WP_UnitTestCase {
 	 * @preserveGlobalState disabled
 	 */
 	public function test_wpto_get_enabled_taxonomies_endpoint_response_structure(): void {
-		// Mock functions with test data.
-		$this->mockFunction(
-			'wto_get_enabled_taxonomies',
-			function () {
-				return array( 'post_tag' );
+		// Set up test data.
+		$expected_enabled   = array( 'post_tag' );
+		$expected_available = array(
+			(object) array( 'name' => 'post_tag' ),
+			(object) array( 'name' => 'product_tag' ),
+		);
+
+		// Use WordPress filters to override the data during testing.
+		add_filter(
+			'wpto_test_enabled_taxonomies',
+			function () use ( $expected_enabled ) {
+				return $expected_enabled;
 			}
 		);
 
-		$this->mockFunction(
-			'wto_get_non_hierarchical_taxonomies',
-			function () {
-				return array(
-					(object) array( 'name' => 'post_tag' ),
-					(object) array( 'name' => 'product_tag' ),
-				);
+		add_filter(
+			'wpto_test_non_hierarchical_taxonomies',
+			function () use ( $expected_available ) {
+				return $expected_available;
 			}
 		);
 
@@ -524,6 +540,10 @@ class RestApiTests extends WP_UnitTestCase {
 
 		// Call the endpoint.
 		$response = wpto_get_enabled_taxonomies_endpoint( $request );
+
+		// Clean up filters.
+		remove_all_filters( 'wpto_test_enabled_taxonomies' );
+		remove_all_filters( 'wpto_test_non_hierarchical_taxonomies' );
 
 		// Get response data.
 		$data = $response->get_data();
