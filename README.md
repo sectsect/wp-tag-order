@@ -237,6 +237,47 @@ curl --location --request PUT 'https://your-wordpress-site.com/wp-json/wp-tag-or
 }
 ```
 
+### Get Enabled Taxonomies
+- **Endpoint**: `/wp-json/wp-tag-order/v1/taxonomies/enabled`
+- **Method**: `GET`
+- **Parameters**: None
+- **Permissions**: Publicly accessible
+- **Response**: Array of enabled taxonomies with metadata
+
+#### Example Request
+```
+GET /wp-json/wp-tag-order/v1/taxonomies/enabled
+```
+
+<details>
+ <summary>w/ cURL</summary>
+
+```bash
+curl --location 'https://your-wordpress-site.com/wp-json/wp-tag-order/v1/taxonomies/enabled'
+```
+</details>
+
+#### Example Response
+
+```json
+{
+  "enabled_taxonomies": [
+    "post_tag",
+    "product_tag"
+  ],
+  "available_taxonomies": [
+    "post_tag",
+    "product_tag",
+    "event_tag"
+  ],
+  "meta": {
+    "enabled_count": 2,
+    "available_count": 3,
+    "timestamp": "2025-09-23T04:58:23+00:00"
+  }
+}
+```
+
 ### Authentication
 - GET requests are publicly accessible
 - PUT/PATCH requests require:
