@@ -195,7 +195,21 @@ function save_wpto_meta_box( int $post_id, WP_Post $post, bool $update ): void {
 
 			$meta_box_tags_value = '';
 			if ( $tags ) {
-				$meta_box_tags_value = serialize( array_map( 'sanitize_text_field', $tags ) );
+				// Filter out false values and sanitize remaining strings.
+				$sanitized_tags = array_map(
+					function ( $tag ) {
+						return is_string( $tag ) ? sanitize_text_field( $tag ) : '';
+					},
+					$tags
+				);
+				// Remove empty strings.
+				$filtered_tags       = array_filter(
+					$sanitized_tags,
+					function ( $tag ) {
+						return '' !== $tag;
+					}
+				);
+				$meta_box_tags_value = serialize( $filtered_tags );
 			}
 
 			update_post_meta( $post_id, wto_meta_key( $taxonomy ), $meta_box_tags_value );
