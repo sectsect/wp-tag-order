@@ -19,7 +19,7 @@ declare(strict_types=1);
 global $wpdb;
 
 // Add a constant for the register_setting arguments at the top of the file.
-const WTO_SETTING_ARGS = array(
+const WP_TAG_ORDER_SETTING_ARGS = array(
 	'type'              => 'array',
 	'sanitize_callback' => 'wpto_sanitize_enabled_taxonomies',
 	'default'           => array(),
@@ -289,8 +289,8 @@ function load_wpto_admin_script( string $hook ): void {
 			}
 		}
 
-		$action_sync        = WPTAGORDER_ACTION_SYNC_TAGS;
-		$action_update      = WPTAGORDER_ACTION_UPDATE_TAGS;
+		$action_sync        = WP_TAG_ORDER_ACTION_SYNC_TAGS;
+		$action_update      = WP_TAG_ORDER_ACTION_UPDATE_TAGS;
 		$taxonomies_enabled = wto_get_enabled_taxonomies();
 
 		// Use wp_localize_script with consolidated data to minimize AJAX nonce generation.
@@ -508,7 +508,7 @@ function wpto_admin_scripts(): void {
 	$version        = is_string( $plugin_version ) ? $plugin_version : '';
 	// wp_enqueue_script( 'wto-commons', plugin_dir_url( __DIR__ ) . 'assets/js/commons.js?v=' . $plugin_version, array( 'jquery' ), null, true ); // phpcs:ignore.
 	wp_enqueue_script( 'wto-options-script', plugin_dir_url( __DIR__ ) . 'assets/js/options.js', array( 'jquery' ), $version, true );
-	$action = WPTAGORDER_ACTION_OPTIONS;
+	$action = WP_TAG_ORDER_ACTION_OPTIONS;
 	wp_localize_script(
 		'wto-options-script',
 		'wto_options_data',
@@ -627,8 +627,8 @@ function wpto_sanitize_enabled_taxonomies( mixed $value ): array {
 function register_wpto_settings(): void {
 	register_setting(
 		'wpto-settings-group',
-		WPTAGORDER_OPTION_ENABLED_TAXONOMIES,
-		WTO_SETTING_ARGS
+		WP_TAG_ORDER_OPTION_ENABLED_TAXONOMIES,
+		WP_TAG_ORDER_SETTING_ARGS
 	);
 }
 

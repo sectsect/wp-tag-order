@@ -35,7 +35,7 @@
 						$is_checked = in_array( $taxonomy->name, (array) $enabled_taxonomies, true );
 						?>
 					<div style="margin-top: 5px;">
-						<input type="checkbox" id="<?php echo esc_attr( $taxonomy->name ); ?>" name="<?php echo esc_attr( WPTAGORDER_OPTION_ENABLED_TAXONOMIES ); ?>[]" value="<?php echo esc_attr( $taxonomy->name ); ?>" <?php checked( $is_checked ); ?> />
+						<input type="checkbox" id="<?php echo esc_attr( $taxonomy->name ); ?>" name="<?php echo esc_attr( WP_TAG_ORDER_OPTION_ENABLED_TAXONOMIES ); ?>[]" value="<?php echo esc_attr( $taxonomy->name ); ?>" <?php checked( $is_checked ); ?> />
 						<label for="<?php echo esc_attr( $taxonomy->name ); ?>">
 							<?php echo esc_html( $taxonomy->label ); ?>
 						</label>

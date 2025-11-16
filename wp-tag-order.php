@@ -16,7 +16,7 @@
 
 declare(strict_types=1);
 
-const WPTAGORDER_MINIMAL_REQUIRED_PHP_VERSION = '8.0';
+const WP_TAG_ORDER_MINIMAL_REQUIRED_PHP_VERSION = '8.0';
 
 /**
  * Displays an admin notice if the PHP version is less than the required version.
@@ -25,8 +25,8 @@ const WPTAGORDER_MINIMAL_REQUIRED_PHP_VERSION = '8.0';
  */
 function wptagorder_noticephpversionwrong(): void {
 	// Get the required version, defaulting to 'unknown' if not defined.
-	$required_version = defined( 'WPTAGORDER_MINIMAL_REQUIRED_PHP_VERSION' )
-		? WPTAGORDER_MINIMAL_REQUIRED_PHP_VERSION
+	$required_version = defined( 'WP_TAG_ORDER_MINIMAL_REQUIRED_PHP_VERSION' )
+		? WP_TAG_ORDER_MINIMAL_REQUIRED_PHP_VERSION
 		: 'unknown';
 
 	$current_version = phpversion();
@@ -52,12 +52,12 @@ function wptagorder_noticephpversionwrong(): void {
  */
 function wptagorder_check_php_version(): bool {
 	// Ensure the required version constant is defined.
-	if ( ! defined( 'WPTAGORDER_MINIMAL_REQUIRED_PHP_VERSION' ) ) {
+	if ( ! defined( 'WP_TAG_ORDER_MINIMAL_REQUIRED_PHP_VERSION' ) ) {
 		return false;
 	}
 
 	$current_version  = phpversion();
-	$required_version = WPTAGORDER_MINIMAL_REQUIRED_PHP_VERSION;
+	$required_version = WP_TAG_ORDER_MINIMAL_REQUIRED_PHP_VERSION;
 
 	return version_compare( $current_version, $required_version, '>=' );
 }

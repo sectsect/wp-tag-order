@@ -16,7 +16,7 @@ declare(strict_types=1);
  */
 function wpto_register_rest_endpoints(): void {
 	register_rest_route(
-		WPTAGORDER_REST_NAMESPACE,
+		WP_TAG_ORDER_REST_NAMESPACE,
 		'/tags/order/(?P<post_id>\d+)',
 		array(
 			'methods'             => \WP_REST_Server::READABLE,
@@ -35,7 +35,7 @@ function wpto_register_rest_endpoints(): void {
 	);
 
 	register_rest_route(
-		WPTAGORDER_REST_NAMESPACE,
+		WP_TAG_ORDER_REST_NAMESPACE,
 		'/tags/order/(?P<post_id>\d+)',
 		array(
 			'methods'             => \WP_REST_Server::EDITABLE,
@@ -69,7 +69,7 @@ function wpto_register_rest_endpoints(): void {
 	);
 
 	register_rest_route(
-		WPTAGORDER_REST_NAMESPACE,
+		WP_TAG_ORDER_REST_NAMESPACE,
 		'/taxonomies/enabled',
 		array(
 			'methods'             => \WP_REST_Server::READABLE,
