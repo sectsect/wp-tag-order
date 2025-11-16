@@ -204,7 +204,7 @@ function wp_tag_order_rest_permission_check( \WP_REST_Request $request ): bool {
 	}
 
 	// Restrict to allowed post types.
-	$allowed_post_types = apply_filters( 'wpto_allowed_post_types', array( 'post', 'page' ) );
+	$allowed_post_types = apply_filters( 'wp_tag_order_allowed_post_types', array( 'post', 'page' ) );
 	if ( ! in_array( $post->post_type, $allowed_post_types, true ) ) {
 		return false;
 	}
@@ -452,10 +452,10 @@ function wp_tag_order_rest_taxonomies_permission_check( \WP_REST_Request $reques
 function wp_tag_order_get_enabled_taxonomies_endpoint( \WP_REST_Request $request ): \WP_REST_Response {
 	try {
 		// Get enabled taxonomies.
-		$enabled_taxonomies = apply_filters( 'wpto_enabled_taxonomies', wp_tag_order_get_enabled_taxonomies() );
+		$enabled_taxonomies = apply_filters( 'wp_tag_order_enabled_taxonomies', wp_tag_order_get_enabled_taxonomies() );
 
 		// Get all non-hierarchical taxonomies for reference.
-		$available_taxonomies     = apply_filters( 'wpto_non_hierarchical_taxonomies', wp_tag_order_get_non_hierarchical_taxonomies() );
+		$available_taxonomies     = apply_filters( 'wp_tag_order_non_hierarchical_taxonomies', wp_tag_order_get_non_hierarchical_taxonomies() );
 		$available_taxonomy_names = array_values(
 			array_filter(
 				array_map(
