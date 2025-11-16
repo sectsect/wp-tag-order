@@ -1,7 +1,6 @@
-(() => { // webpackBootstrap
+(() => {
 "use strict";
 var __webpack_modules__ = ({});
-/************************************************************************/
 // The module cache
 var __webpack_module_cache__ = {};
 
@@ -25,17 +24,15 @@ return module.exports;
 
 }
 
-/************************************************************************/
 // webpack/runtime/rspack_version
 (() => {
-__webpack_require__.rv = () => ("1.5.0")
+__webpack_require__.rv = () => ("1.6.3")
 })();
 // webpack/runtime/rspack_unique_id
 (() => {
-__webpack_require__.ruid = "bundler=rspack@1.5.0";
+__webpack_require__.ruid = "bundler=rspack@1.6.3";
 
 })();
-/************************************************************************/
 // extracted by css-extract-rspack-plugin
 
 })()

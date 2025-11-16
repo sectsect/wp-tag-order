@@ -427,11 +427,11 @@ function wpto_update_post_tag_order( \WP_REST_Request $request ): \WP_REST_Respo
  * Permission check for taxonomies REST API endpoints.
  *
  * @param \WP_REST_Request $request REST request object.
- * @return bool
+ * @return true
  *
  * @phpstan-param WP_REST_Request<array<string, mixed>> $request
  */
-function wpto_rest_taxonomies_permission_check( \WP_REST_Request $request ): bool {
+function wpto_rest_taxonomies_permission_check( \WP_REST_Request $request ): true {
 	// Allow read access to enabled taxonomies for all users.
 	// This is safe as it only exposes which taxonomies have tag ordering enabled,
 	// which is not sensitive information.
