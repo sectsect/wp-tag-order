@@ -214,7 +214,7 @@ function wp_tag_order_has_reorder_controller_in_metaboxes(): bool {
  * @return int
  * @throws InvalidArgumentException If the value is not numeric.
  */
-function wpto_cast_mixed_to_int( mixed $value ): int {
+function wp_tag_order_cast_mixed_to_int( mixed $value ): int {
 	if ( is_numeric( $value ) ) {
 		return (int) $value;
 	}
@@ -227,7 +227,7 @@ function wpto_cast_mixed_to_int( mixed $value ): int {
  * @param mixed $value Value to cast.
  * @return array<mixed>
  */
-function wpto_cast_mixed_to_array( mixed $value ): array {
+function wp_tag_order_cast_mixed_to_array( mixed $value ): array {
 	if ( is_null( $value ) ) {
 		return array();
 	}
@@ -241,7 +241,7 @@ function wpto_cast_mixed_to_array( mixed $value ): array {
  * @param mixed $value Value to cast.
  * @return array<int>
  */
-function wpto_cast_mixed_to_int_array( mixed $value ): array {
+function wp_tag_order_cast_mixed_to_int_array( mixed $value ): array {
 	if ( is_null( $value ) ) {
 		return array();
 	}
@@ -260,7 +260,7 @@ function wpto_cast_mixed_to_int_array( mixed $value ): array {
  * @return string
  * @throws InvalidArgumentException If the value cannot be cast to a string.
  */
-function wpto_cast_mixed_to_string( mixed $value ): string {
+function wp_tag_order_cast_mixed_to_string( mixed $value ): string {
 	if ( is_null( $value ) ) {
 		throw new InvalidArgumentException( 'Value cannot be null' );
 	}
@@ -278,7 +278,7 @@ function wpto_cast_mixed_to_string( mixed $value ): string {
  * @param string $action Nonce action name. Default is 'wpto_nonce_action'.
  * @return int Sanitized post ID
  */
-function wpto_validate_ajax_request( string $action = 'wpto_nonce_action' ): int {
+function wp_tag_order_validate_ajax_request( string $action = 'wpto_nonce_action' ): int {
 	// Validate request method.
 	if ( ! isset( $_SERVER['REQUEST_METHOD'] ) ) {
 		wp_send_json_error( 'Invalid request method', 400 );

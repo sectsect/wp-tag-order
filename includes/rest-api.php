@@ -14,14 +14,14 @@ declare(strict_types=1);
  *
  * @return void
  */
-function wpto_register_rest_endpoints(): void {
+function wp_tag_order_register_rest_endpoints(): void {
 	register_rest_route(
 		WP_TAG_ORDER_REST_NAMESPACE,
 		'/tags/order/(?P<post_id>\d+)',
 		array(
 			'methods'             => \WP_REST_Server::READABLE,
-			'callback'            => 'wpto_get_post_tag_order',
-			'permission_callback' => 'wpto_rest_permission_check',
+			'callback'            => 'wp_tag_order_get_post_tag_order',
+			'permission_callback' => 'wp_tag_order_rest_permission_check',
 			'args'                => array(
 				'post_id' => array(
 					'validate_callback' => function ( $value ) {
@@ -39,8 +39,8 @@ function wpto_register_rest_endpoints(): void {
 		'/tags/order/(?P<post_id>\d+)',
 		array(
 			'methods'             => \WP_REST_Server::EDITABLE,
-			'callback'            => 'wpto_update_post_tag_order',
-			'permission_callback' => 'wpto_rest_permission_check',
+			'callback'            => 'wp_tag_order_update_post_tag_order',
+			'permission_callback' => 'wp_tag_order_rest_permission_check',
 			'args'                => array(
 				'post_id'  => array(
 					'validate_callback' => function ( $value ) {
@@ -53,7 +53,7 @@ function wpto_register_rest_endpoints(): void {
 					'required'          => true,
 					'type'              => 'string',
 					'validate_callback' => function ( $value, $request, $key ) {
-						return wpto_validate_taxonomy( $value );
+						return wp_tag_order_validate_taxonomy( $value );
 					},
 				),
 				'tags'     => array(
@@ -61,7 +61,7 @@ function wpto_register_rest_endpoints(): void {
 					'type'              => 'string',
 					'validate_callback' => function ( $value, $request, $key ) {
 						$taxonomy = $request->get_param( 'taxonomy' );
-						return wpto_validate_tag_ids( $value, $taxonomy );
+						return wp_tag_order_validate_tag_ids( $value, $taxonomy );
 					},
 				),
 			),
@@ -73,12 +73,12 @@ function wpto_register_rest_endpoints(): void {
 		'/taxonomies/enabled',
 		array(
 			'methods'             => \WP_REST_Server::READABLE,
-			'callback'            => 'wpto_get_enabled_taxonomies_endpoint',
-			'permission_callback' => 'wpto_rest_taxonomies_permission_check',
+			'callback'            => 'wp_tag_order_get_enabled_taxonomies_endpoint',
+			'permission_callback' => 'wp_tag_order_rest_taxonomies_permission_check',
 		)
 	);
 }
-add_action( 'rest_api_init', 'wpto_register_rest_endpoints' );
+add_action( 'rest_api_init', 'wp_tag_order_register_rest_endpoints' );
 
 /**
  * Validate taxonomy for REST API request.
@@ -92,7 +92,7 @@ add_action( 'rest_api_init', 'wpto_register_rest_endpoints' );
  * @param string $taxonomy Taxonomy name to validate.
  * @return bool True if taxonomy is valid, false otherwise.
  */
-function wpto_validate_taxonomy( string $taxonomy ): bool {
+function wp_tag_order_validate_taxonomy( string $taxonomy ): bool {
 	// Check if taxonomy exists in WordPress.
 	if ( ! taxonomy_exists( $taxonomy ) ) {
 		return false;
@@ -136,7 +136,7 @@ function wpto_validate_taxonomy( string $taxonomy ): bool {
  * @param string $taxonomy Taxonomy to validate tags against.
  * @return bool
  */
-function wpto_validate_tag_ids( string $tags, string $taxonomy ): bool {
+function wp_tag_order_validate_tag_ids( string $tags, string $taxonomy ): bool {
 	// Split tags and convert to integers.
 	$tag_array = array_map( 'intval', explode( ',', $tags ) );
 
@@ -179,7 +179,7 @@ function wpto_validate_tag_ids( string $tags, string $taxonomy ): bool {
  *
  * @phpstan-param WP_REST_Request<array{post_id?: int}> $request
  */
-function wpto_rest_permission_check( \WP_REST_Request $request ): bool {
+function wp_tag_order_rest_permission_check( \WP_REST_Request $request ): bool {
 	// Always allow GET requests.
 	if ( 'GET' === $request->get_method() ) {
 		return true;
@@ -192,7 +192,7 @@ function wpto_rest_permission_check( \WP_REST_Request $request ): bool {
 
 	// Validate and retrieve post ID.
 	try {
-		$post_id = wpto_cast_mixed_to_int( $request->get_param( 'post_id' ) );
+		$post_id = wp_tag_order_cast_mixed_to_int( $request->get_param( 'post_id' ) );
 	} catch ( InvalidArgumentException $e ) {
 		return false;
 	}
@@ -225,8 +225,8 @@ function wpto_rest_permission_check( \WP_REST_Request $request ): bool {
  *
  * @phpstan-param WP_REST_Request<array{post_id?: int, taxonomy?: string}> $request
  */
-function wpto_get_post_tag_order( \WP_REST_Request $request ): \WP_REST_Response {
-	$post_id      = wpto_cast_mixed_to_int( $request->get_param( 'post_id' ) );
+function wp_tag_order_get_post_tag_order( \WP_REST_Request $request ): \WP_REST_Response {
+	$post_id      = wp_tag_order_cast_mixed_to_int( $request->get_param( 'post_id' ) );
 	$taxonomy     = $request->get_param( 'taxonomy' ) ?? 'post_tag';
 	$tags_value   = get_post_meta( $post_id, wp_tag_order_meta_key( $taxonomy ), true );
 	$tags         = is_string( $tags_value ) ? unserialize( $tags_value ) : array();
@@ -270,16 +270,16 @@ function wpto_get_post_tag_order( \WP_REST_Request $request ): \WP_REST_Response
  *
  * @phpstan-param WP_REST_Request<array{post_id?: int, taxonomy?: string, tags?: string}> $request
  */
-function wpto_update_post_tag_order( \WP_REST_Request $request ): \WP_REST_Response {
+function wp_tag_order_update_post_tag_order( \WP_REST_Request $request ): \WP_REST_Response {
 	try {
 		// Cast and validate input parameters.
-		$post_id  = wpto_cast_mixed_to_int( $request->get_param( 'post_id' ) );
-		$taxonomy = wpto_cast_mixed_to_string( $request->get_param( 'taxonomy' ) );
-		$tags     = explode( ',', wpto_cast_mixed_to_string( $request->get_param( 'tags' ) ) );
-		$tags     = wpto_cast_mixed_to_int_array( $tags );
+		$post_id  = wp_tag_order_cast_mixed_to_int( $request->get_param( 'post_id' ) );
+		$taxonomy = wp_tag_order_cast_mixed_to_string( $request->get_param( 'taxonomy' ) );
+		$tags     = explode( ',', wp_tag_order_cast_mixed_to_string( $request->get_param( 'tags' ) ) );
+		$tags     = wp_tag_order_cast_mixed_to_int_array( $tags );
 
 		// Validate taxonomy.
-		if ( ! wpto_validate_taxonomy( $taxonomy ) ) {
+		if ( ! wp_tag_order_validate_taxonomy( $taxonomy ) ) {
 			return rest_ensure_response(
 				array(
 					'success' => false,
@@ -318,7 +318,7 @@ function wpto_update_post_tag_order( \WP_REST_Request $request ): \WP_REST_Respo
 
 		// Retrieve current tag order.
 		$current_tags_value = get_post_meta( $post_id, wp_tag_order_meta_key( $taxonomy ), true );
-		$current_tags       = wpto_cast_mixed_to_array(
+		$current_tags       = wp_tag_order_cast_mixed_to_array(
 			is_string( $current_tags_value ) ? unserialize( $current_tags_value ) : $current_tags_value
 		);
 
@@ -431,7 +431,7 @@ function wpto_update_post_tag_order( \WP_REST_Request $request ): \WP_REST_Respo
  *
  * @phpstan-param WP_REST_Request<array<string, mixed>> $request
  */
-function wpto_rest_taxonomies_permission_check( \WP_REST_Request $request ): bool {
+function wp_tag_order_rest_taxonomies_permission_check( \WP_REST_Request $request ): bool {
 	// Allow read access to enabled taxonomies for all users.
 	// This is safe as it only exposes which taxonomies have tag ordering enabled,
 	// which is not sensitive information.
@@ -449,7 +449,7 @@ function wpto_rest_taxonomies_permission_check( \WP_REST_Request $request ): boo
  *
  * @phpstan-param WP_REST_Request<array<string, mixed>> $request
  */
-function wpto_get_enabled_taxonomies_endpoint( \WP_REST_Request $request ): \WP_REST_Response {
+function wp_tag_order_get_enabled_taxonomies_endpoint( \WP_REST_Request $request ): \WP_REST_Response {
 	try {
 		// Get enabled taxonomies.
 		$enabled_taxonomies = apply_filters( 'wpto_enabled_taxonomies', wp_tag_order_get_enabled_taxonomies() );

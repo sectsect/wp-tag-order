@@ -21,7 +21,7 @@ global $wpdb;
 // Add a constant for the register_setting arguments at the top of the file.
 const WP_TAG_ORDER_SETTING_ARGS = array(
 	'type'              => 'array',
-	'sanitize_callback' => 'wpto_sanitize_enabled_taxonomies',
+	'sanitize_callback' => 'wp_tag_order_sanitize_enabled_taxonomies',
 	'default'           => array(),
 );
 
@@ -33,7 +33,7 @@ const WP_TAG_ORDER_SETTING_ARGS = array(
  * @param array<string, mixed> $metabox The meta box arguments including 'taxonomy' to specify which taxonomy the tags belong to.
  * @return void
  */
-function wpto_meta_box_markup( WP_Post $obj, array $metabox ): void {
+function wp_tag_order_meta_box_markup( WP_Post $obj, array $metabox ): void {
 	// Use static variable to ensure nonce is only generated once per page load.
 	static $nonce_generated = false;
 
@@ -47,14 +47,14 @@ function wpto_meta_box_markup( WP_Post $obj, array $metabox ): void {
 	<ul>
 	<?php
 	$taxonomy   = isset( $metabox['args'] ) && is_array( $metabox['args'] ) && isset( $metabox['args']['taxonomy'] )
-		? wpto_cast_mixed_to_string( $metabox['args']['taxonomy'] )
+		? wp_tag_order_cast_mixed_to_string( $metabox['args']['taxonomy'] )
 		: '';
 	$meta_key   = wp_tag_order_meta_key( $taxonomy );
 	$tags_value = get_post_meta( $obj->ID, wp_tag_order_meta_key( $taxonomy ), true );
 	$tags       = is_string( $tags_value ) ? unserialize( $tags_value ) : array();
 	if ( $tags && is_array( $tags ) ) :
 		foreach ( $tags as $tagid ) :
-			$tagid = wpto_cast_mixed_to_int( $tagid );
+			$tagid = wp_tag_order_cast_mixed_to_int( $tagid );
 			$tag   = ! empty( $taxonomy ) ? get_term_by( 'id', $tagid, $taxonomy ) : null;
 			if ( ! $tag instanceof WP_Term ) {
 				continue; // Skip if $tag is not a WP_Term object.
@@ -63,7 +63,7 @@ function wpto_meta_box_markup( WP_Post $obj, array $metabox ): void {
 			?>
 		<li>
 			<input type="text" readonly="readonly" value="<?php echo esc_attr( $tag->name ); ?>">
-			<input type="hidden" name="<?php echo esc_attr( $hidden_name ); ?>" value="<?php echo esc_attr( wpto_cast_mixed_to_string( $tag->term_id ) ); ?>">
+			<input type="hidden" name="<?php echo esc_attr( $hidden_name ); ?>" value="<?php echo esc_attr( wp_tag_order_cast_mixed_to_string( $tag->term_id ) ); ?>">
 		</li>
 			<?php
 		endforeach;
@@ -95,7 +95,7 @@ function add_wpto_meta_box(): void {
 					add_meta_box(
 						'wpto_meta_box-' . $taxonomy,
 						__( 'Tag Order - ', 'wp-tag-order' ) . $label,
-						'wpto_meta_box_markup',
+						'wp_tag_order_meta_box_markup',
 						$screen,
 						'side',
 						'core',
@@ -224,7 +224,7 @@ add_action( 'save_post', 'save_wpto_meta_box', 10, 3 );
  *
  * @return array<string, mixed> The plugin data.
  */
-function wpto_get_plugin_data(): array {
+function wp_tag_order_get_plugin_data(): array {
 	$plugin_data = get_plugin_data( plugin_dir_path( __DIR__ ) . 'wp-tag-order.php' );
 	return $plugin_data;
 }
@@ -238,8 +238,8 @@ function wpto_get_plugin_data(): array {
  * @return void
  */
 function load_wpto_admin_script( string $hook ): void {
-	$plugin_data    = wpto_get_plugin_data();
-	$plugin_version = wpto_cast_mixed_to_string( $plugin_data['Version'] );
+	$plugin_data    = wp_tag_order_get_plugin_data();
+	$plugin_version = wp_tag_order_cast_mixed_to_string( $plugin_data['Version'] );
 	global $post;
 
 	// Early return for unsupported scenarios.
@@ -477,21 +477,21 @@ add_action( 'wp_ajax_nopriv_wto_update_tags', 'ajax_wto_update_tags' );
  *
  * @return void
  */
-function wpto_menu(): void {
-	$page_hook_suffix = add_options_page( 'WP Tag Order', 'WP Tag Order', 'manage_options', 'wpto_menu', 'wpto_options_page' );
-	add_action( 'admin_print_styles-' . $page_hook_suffix, 'wpto_admin_styles' );
-	add_action( 'admin_print_scripts-' . $page_hook_suffix, 'wpto_admin_scripts' );
+function wp_tag_order_menu(): void {
+	$page_hook_suffix = add_options_page( 'WP Tag Order', 'WP Tag Order', 'manage_options', 'wpto_menu', 'wp_tag_order_options_page' );
+	add_action( 'admin_print_styles-' . $page_hook_suffix, 'wp_tag_order_admin_styles' );
+	add_action( 'admin_print_scripts-' . $page_hook_suffix, 'wp_tag_order_admin_scripts' );
 	add_action( 'admin_init', 'register_wpto_settings' );
 }
-add_action( 'admin_menu', 'wpto_menu' );
+add_action( 'admin_menu', 'wp_tag_order_menu' );
 
 /**
  * Enqueues the admin styles for the plugin options page.
  *
  * @return void
  */
-function wpto_admin_styles(): void {
-	$plugin_data    = wpto_get_plugin_data();
+function wp_tag_order_admin_styles(): void {
+	$plugin_data    = wp_tag_order_get_plugin_data();
 	$plugin_version = $plugin_data['Version'];
 	$version        = is_string( $plugin_version ) ? $plugin_version : '';
 	wp_enqueue_style( 'sweetalert2', plugin_dir_url( __DIR__ ) . 'assets/css/options.css', array(), $version );
@@ -502,8 +502,8 @@ function wpto_admin_styles(): void {
  *
  * @return void
  */
-function wpto_admin_scripts(): void {
-	$plugin_data    = wpto_get_plugin_data();
+function wp_tag_order_admin_scripts(): void {
+	$plugin_data    = wp_tag_order_get_plugin_data();
 	$plugin_version = $plugin_data['Version'];
 	$version        = is_string( $plugin_version ) ? $plugin_version : '';
 	// wp_enqueue_script( 'wto-commons', plugin_dir_url( __DIR__ ) . 'assets/js/commons.js?v=' . $plugin_version, array( 'jquery' ), null, true ); // phpcs:ignore.
@@ -603,7 +603,7 @@ add_action( 'wp_ajax_nopriv_wto_options', 'ajax_wto_options' );
  * @param mixed $value The value to sanitize.
  * @return array<string> The sanitized array of taxonomy names.
  */
-function wpto_sanitize_enabled_taxonomies( mixed $value ): array {
+function wp_tag_order_sanitize_enabled_taxonomies( mixed $value ): array {
 	if ( ! is_array( $value ) ) {
 		return array();
 	}
@@ -638,6 +638,6 @@ function register_wpto_settings(): void {
  *
  * @return void
  */
-function wpto_options_page(): void {
+function wp_tag_order_options_page(): void {
 	require_once plugin_dir_path( __DIR__ ) . 'options/index.php';
 }
