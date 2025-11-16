@@ -16,10 +16,10 @@ require_once __DIR__ . '/../includes/functions.php';
  *
  * @package Wp_Tag_Order
  *
- * @covers ::wpto_cast_mixed_to_int
- * @covers ::wpto_cast_mixed_to_array
- * @covers ::wpto_cast_mixed_to_int_array
- * @covers ::wpto_cast_mixed_to_string
+ * @covers ::wp_tag_order_cast_mixed_to_int
+ * @covers ::wp_tag_order_cast_mixed_to_array
+ * @covers ::wp_tag_order_cast_mixed_to_int_array
+ * @covers ::wp_tag_order_cast_mixed_to_string
  */
 class FunctionTests extends WP_UnitTestCase {
 	/**
@@ -28,8 +28,8 @@ class FunctionTests extends WP_UnitTestCase {
 	 * @covers wto_is_array_empty
 	 */
 	public function testWtoIsArrayEmpty() {
-		$this->assertTrue( wto_is_array_empty( array() ) );
-		$this->assertFalse( wto_is_array_empty( array( 'value' ) ) );
+		$this->assertTrue( wp_tag_order_is_array_empty( array() ) );
+		$this->assertFalse( wp_tag_order_is_array_empty( array( 'value' ) ) );
 	}
 
 	/**
@@ -41,7 +41,7 @@ class FunctionTests extends WP_UnitTestCase {
 		$array1   = array( 'apple', 'banana' );
 		$array2   = array( 'banana', 'cherry' );
 		$expected = array( 'apple', 'cherry' );
-		$this->assertEquals( $expected, wto_array_diff_interactive( $array1, $array2 ) );
+		$this->assertEquals( $expected, wp_tag_order_array_diff_interactive( $array1, $array2 ) );
 	}
 
 	/**
@@ -73,7 +73,7 @@ class FunctionTests extends WP_UnitTestCase {
 
 		update_option( 'wpto_enabled_taxonomies', $expected );
 
-		$result = wto_get_enabled_taxonomies();
+		$result = wp_tag_order_get_enabled_taxonomies();
 		$this->assertEquals( $expected, $result );
 	}
 
@@ -87,8 +87,8 @@ class FunctionTests extends WP_UnitTestCase {
 
 		update_option( 'wpto_enabled_taxonomies', $expected );
 
-		$this->assertTrue( wto_is_enabled_taxonomy( 'post_tag' ) );
-		$this->assertFalse( wto_is_enabled_taxonomy( 'disabled_cat' ) );
+		$this->assertTrue( wp_tag_order_is_enabled_taxonomy( 'post_tag' ) );
+		$this->assertFalse( wp_tag_order_is_enabled_taxonomy( 'disabled_cat' ) );
 	}
 
 	/**
@@ -101,8 +101,8 @@ class FunctionTests extends WP_UnitTestCase {
 
 		update_option( 'wpto_enabled_taxonomies', $expected );
 
-		$this->assertTrue( wto_has_enabled_taxonomy( array( 'post_tag', 'enabled_cat' ) ) );
-		$this->assertFalse( wto_has_enabled_taxonomy( array( 'disabled_cat' ) ) );
+		$this->assertTrue( wp_tag_order_has_enabled_taxonomy( array( 'post_tag', 'enabled_cat' ) ) );
+		$this->assertFalse( wp_tag_order_has_enabled_taxonomy( array( 'disabled_cat' ) ) );
 	}
 
 	/**
@@ -119,9 +119,9 @@ class FunctionTests extends WP_UnitTestCase {
 		$expected_post_tag        = array( 'post' );
 		$expected_custom_taxonomy = array( 'custom_post_type' );
 
-		$this->assertEquals( $expected_category, wto_get_post_types_by_taxonomy( 'category' ) );
-		$this->assertEquals( $expected_post_tag, wto_get_post_types_by_taxonomy( 'post_tag' ) );
-		$this->assertEquals( $expected_custom_taxonomy, wto_get_post_types_by_taxonomy( 'custom_taxonomy' ) );
+		$this->assertEquals( $expected_category, wp_tag_order_get_post_types_by_taxonomy( 'category' ) );
+		$this->assertEquals( $expected_post_tag, wp_tag_order_get_post_types_by_taxonomy( 'post_tag' ) );
+		$this->assertEquals( $expected_custom_taxonomy, wp_tag_order_get_post_types_by_taxonomy( 'custom_taxonomy' ) );
 	}
 
 	/**
@@ -150,7 +150,7 @@ class FunctionTests extends WP_UnitTestCase {
 
 		$expected_post_type = array( 'post', 'news' );
 
-		$this->assertEquals( $expected_post_type, wto_has_tag_posttype() );
+		$this->assertEquals( $expected_post_type, wp_tag_order_has_tag_posttype() );
 	}
 
 	/**
@@ -159,8 +159,8 @@ class FunctionTests extends WP_UnitTestCase {
 	 * @covers wto_strposa
 	 */
 	public function testWtoStrposa() {
-		$this->assertTrue( wto_strposa( 'hello world', 'world' ) );
-		$this->assertFalse( wto_strposa( 'hello world', 'test' ) );
+		$this->assertTrue( wp_tag_order_strposa( 'hello world', 'world' ) );
+		$this->assertFalse( wp_tag_order_strposa( 'hello world', 'test' ) );
 	}
 
 	/**
@@ -171,7 +171,7 @@ class FunctionTests extends WP_UnitTestCase {
 	public function testWtoReplaceScriptTag() {
 		$tag      = 'src="wp-tag-order/assets/js/script.js"';
 		$expected = 'type="module" src="wp-tag-order/assets/js/script.js"';
-		$this->assertEquals( $expected, wto_replace_script_tag( $tag ) );
+		$this->assertEquals( $expected, wp_tag_order_replace_script_tag( $tag ) );
 	}
 
 	/**
@@ -180,7 +180,7 @@ class FunctionTests extends WP_UnitTestCase {
 	 * @covers wto_has_reorder_controller_in_metaboxes
 	 */
 	public function testWtoHasReorderControllerInMetaboxes() {
-		$this->assertTrue( wto_has_reorder_controller_in_metaboxes() );
+		$this->assertTrue( wp_tag_order_has_reorder_controller_in_metaboxes() );
 	}
 
 	/**
@@ -192,8 +192,8 @@ class FunctionTests extends WP_UnitTestCase {
 	 * @param mixed $input Input value.
 	 * @param int   $expected Expected result.
 	 */
-	public function test_wpto_cast_mixed_to_int( $input, $expected ): void {
-		$this->assertSame( $expected, wpto_cast_mixed_to_int( $input ) );
+	public function test_wp_tag_order_cast_mixed_to_int( $input, $expected ): void {
+		$this->assertSame( $expected, wp_tag_order_cast_mixed_to_int( $input ) );
 	}
 
 	/**
@@ -216,7 +216,7 @@ class FunctionTests extends WP_UnitTestCase {
 	 */
 	public function test_wpto_cast_mixed_to_int_throws_exception(): void {
 		$this->expectException( InvalidArgumentException::class );
-		wpto_cast_mixed_to_int( 'not_numeric' );
+		wp_tag_order_cast_mixed_to_int( 'not_numeric' );
 	}
 
 	/**
@@ -228,8 +228,8 @@ class FunctionTests extends WP_UnitTestCase {
 	 * @param mixed $input Input value.
 	 * @param array $expected Expected result.
 	 */
-	public function test_wpto_cast_mixed_to_array( $input, $expected ): void {
-		$this->assertSame( $expected, wpto_cast_mixed_to_array( $input ) );
+	public function test_wp_tag_order_cast_mixed_to_array( $input, $expected ): void {
+		$this->assertSame( $expected, wp_tag_order_cast_mixed_to_array( $input ) );
 	}
 
 	/**
@@ -255,8 +255,8 @@ class FunctionTests extends WP_UnitTestCase {
 	 * @param mixed $input Input value.
 	 * @param array $expected Expected result.
 	 */
-	public function test_wpto_cast_mixed_to_int_array( $input, $expected ): void {
-		$this->assertSame( $expected, wpto_cast_mixed_to_int_array( $input ) );
+	public function test_wp_tag_order_cast_mixed_to_int_array( $input, $expected ): void {
+		$this->assertSame( $expected, wp_tag_order_cast_mixed_to_int_array( $input ) );
 	}
 
 	/**
@@ -283,13 +283,13 @@ class FunctionTests extends WP_UnitTestCase {
 	 * @param mixed  $input Input value.
 	 * @param string $expected Expected result.
 	 */
-	public function test_wpto_cast_mixed_to_string( $input, $expected ): void {
+	public function test_wp_tag_order_cast_mixed_to_string( $input, $expected ): void {
 		// Skip null and array inputs.
 		if ( null === $input || is_array( $input ) ) {
 			$this->markTestSkipped( 'Skipping null or array input' );
 			return;
 		}
-		$this->assertSame( $expected, wpto_cast_mixed_to_string( $input ) );
+		$this->assertSame( $expected, wp_tag_order_cast_mixed_to_string( $input ) );
 	}
 
 	/**
@@ -314,6 +314,6 @@ class FunctionTests extends WP_UnitTestCase {
 	 */
 	public function test_wpto_cast_mixed_to_string_throws_exception(): void {
 		$this->expectException( InvalidArgumentException::class );
-		wpto_cast_mixed_to_string( new stdClass() );
+		wp_tag_order_cast_mixed_to_string( new stdClass() );
 	}
 }
