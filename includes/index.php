@@ -49,8 +49,8 @@ function wpto_meta_box_markup( WP_Post $obj, array $metabox ): void {
 	$taxonomy   = isset( $metabox['args'] ) && is_array( $metabox['args'] ) && isset( $metabox['args']['taxonomy'] )
 		? wpto_cast_mixed_to_string( $metabox['args']['taxonomy'] )
 		: '';
-	$meta_key   = wto_meta_key( $taxonomy );
-	$tags_value = get_post_meta( $obj->ID, wto_meta_key( $taxonomy ), true );
+	$meta_key   = wp_tag_order_meta_key( $taxonomy );
+	$tags_value = get_post_meta( $obj->ID, wp_tag_order_meta_key( $taxonomy ), true );
 	$tags       = is_string( $tags_value ) ? unserialize( $tags_value ) : array();
 	if ( $tags && is_array( $tags ) ) :
 		foreach ( $tags as $tagid ) :
@@ -59,7 +59,7 @@ function wpto_meta_box_markup( WP_Post $obj, array $metabox ): void {
 			if ( ! $tag instanceof WP_Term ) {
 				continue; // Skip if $tag is not a WP_Term object.
 			}
-			$hidden_name = wto_form_field_name( $taxonomy );
+			$hidden_name = wp_tag_order_form_field_name( $taxonomy );
 			?>
 		<li>
 			<input type="text" readonly="readonly" value="<?php echo esc_attr( $tag->name ); ?>">
@@ -81,9 +81,9 @@ function wpto_meta_box_markup( WP_Post $obj, array $metabox ): void {
  * @return void
  */
 function add_wpto_meta_box(): void {
-	$screens = wto_has_tag_posttype();
+	$screens = wp_tag_order_has_tag_posttype();
 	foreach ( $screens as $screen ) {
-		$taxonomies = wto_get_enabled_taxonomies();
+		$taxonomies = wp_tag_order_get_enabled_taxonomies();
 		if ( ! empty( $taxonomies ) ) {
 			foreach ( $taxonomies as $taxonomy ) {
 				if ( ! is_taxonomy_hierarchical( $taxonomy ) && 'post_format' !== $taxonomy ) {
@@ -123,7 +123,7 @@ function add_metabox_classes_tagsdiv( array $classes ): array {
 	$classes[] = 'wpto_meta_box';
 	$classes[] = 'wpto_meta_box_tagsdiv';
 	// add support for controller in metaboxes on WordPress 5.5 or higher.
-	if ( ! wto_has_reorder_controller_in_metaboxes() ) {
+	if ( ! wp_tag_order_has_reorder_controller_in_metaboxes() ) {
 		$classes[] = 'wpto_meta_box_no_reorder_controller';
 	}
 
@@ -141,7 +141,7 @@ function add_metabox_classes_panel( array $classes ): array {
 	$classes[] = 'wpto_meta_box';
 	$classes[] = 'wpto_meta_box_panel';
 	// add support for controller in metaboxes on WordPress 5.5 or higher.
-	if ( ! wto_has_reorder_controller_in_metaboxes() ) {
+	if ( ! wp_tag_order_has_reorder_controller_in_metaboxes() ) {
 		$classes[] = 'wpto_meta_box_no_reorder_controller';
 	}
 
@@ -176,7 +176,7 @@ function save_wpto_meta_box( int $post_id, WP_Post $post, bool $update ): void {
 	}
 
 	$post_type         = sanitize_key( $post->post_type );
-	$post_type_has_tag = wto_has_tag_posttype();
+	$post_type_has_tag = wp_tag_order_has_tag_posttype();
 	if ( ! in_array( $post_type, $post_type_has_tag, true ) ) {
 		return;
 	}
@@ -189,8 +189,8 @@ function save_wpto_meta_box( int $post_id, WP_Post $post, bool $update ): void {
 
 	foreach ( $taxonomies as $taxonomy ) {
 		$taxonomy = sanitize_key( $taxonomy );
-		if ( ! is_taxonomy_hierarchical( $taxonomy ) && wto_is_enabled_taxonomy( $taxonomy ) ) {
-			$fieldname = wto_meta_key( $taxonomy );
+		if ( ! is_taxonomy_hierarchical( $taxonomy ) && wp_tag_order_is_enabled_taxonomy( $taxonomy ) ) {
+			$fieldname = wp_tag_order_meta_key( $taxonomy );
 			$tags      = filter_input( INPUT_POST, $fieldname, FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
 
 			$meta_box_tags_value = '';
@@ -212,7 +212,7 @@ function save_wpto_meta_box( int $post_id, WP_Post $post, bool $update ): void {
 				$meta_box_tags_value = serialize( $filtered_tags );
 			}
 
-			update_post_meta( $post_id, wto_meta_key( $taxonomy ), $meta_box_tags_value );
+			update_post_meta( $post_id, wp_tag_order_meta_key( $taxonomy ), $meta_box_tags_value );
 		}
 	}
 }
@@ -253,7 +253,7 @@ function load_wpto_admin_script( string $hook ): void {
 		return;
 	}
 
-	$pt = wto_has_tag_posttype();
+	$pt = wp_tag_order_has_tag_posttype();
 
 	// Early validation and error handling for unsupported post types.
 	if ( ! in_array( $post->post_type, $pt, true ) ) {
@@ -263,7 +263,7 @@ function load_wpto_admin_script( string $hook ): void {
 	$taxonomies_attached = get_object_taxonomies( $post->post_type );
 
 	// Simply return if no enabled taxonomies are found.
-	if ( ! wto_has_enabled_taxonomy( $taxonomies_attached ) ) {
+	if ( ! wp_tag_order_has_enabled_taxonomy( $taxonomies_attached ) ) {
 		return;
 	}
 
@@ -291,7 +291,7 @@ function load_wpto_admin_script( string $hook ): void {
 
 		$action_sync        = WP_TAG_ORDER_ACTION_SYNC_TAGS;
 		$action_update      = WP_TAG_ORDER_ACTION_UPDATE_TAGS;
-		$taxonomies_enabled = wto_get_enabled_taxonomies();
+		$taxonomies_enabled = wp_tag_order_get_enabled_taxonomies();
 
 		// Use wp_localize_script with consolidated data to minimize AJAX nonce generation.
 		wp_localize_script(
@@ -375,12 +375,12 @@ function ajax_wto_sync_tags(): void {
 		}
 
 		$savedata = array();
-		$tags_val = get_post_meta( absint( $id ), wto_meta_key( $taxonomy ), true );
+		$tags_val = get_post_meta( absint( $id ), wp_tag_order_meta_key( $taxonomy ), true );
 
 		if ( $tags_val ) {
 			$basetagsids = is_string( $tags_val ) ? unserialize( $tags_val ) : array();
 			if ( is_array( $basetagsids ) ) {
-				$added = wto_array_diff_interactive( $newtagsids, $basetagsids );
+				$added = wp_tag_order_array_diff_interactive( $newtagsids, $basetagsids );
 				foreach ( $added as $val ) {
 					if ( ! in_array( $val, $basetagsids, true ) ) {
 						$basetagsids[] = $val;
@@ -398,7 +398,7 @@ function ajax_wto_sync_tags(): void {
 		}
 
 		$meta_box_tags_value = serialize( $savedata );
-		update_post_meta( absint( $id ), wto_meta_key( $taxonomy ), $meta_box_tags_value );
+		update_post_meta( absint( $id ), wp_tag_order_meta_key( $taxonomy ), $meta_box_tags_value );
 
 		$newtagsids_int    = array_map( 'intval', $newtagsids );
 		$term_taxonomy_ids = wp_set_object_terms( absint( $id ), $newtagsids_int, $taxonomy );
@@ -407,17 +407,17 @@ function ajax_wto_sync_tags(): void {
 		}
 
 		$return = '';
-		if ( ! wto_is_array_empty( $savedata ) ) {
+		if ( ! wp_tag_order_is_array_empty( $savedata ) ) {
 			foreach ( $savedata as $newtag ) {
 				$tag = get_term_by( 'id', (int) $newtag, $taxonomy );
 				if ( ! $tag instanceof WP_Term ) {
 					continue;
 				}
-				$return .= '<li><input type="text" readonly="readonly" value="' . esc_attr( $tag->name ) . '"><input type="hidden" name="' . esc_attr( wto_form_field_name( $taxonomy ) ) . '" value="' . esc_attr( (string) $tag->term_id ) . '"></li>';
+				$return .= '<li><input type="text" readonly="readonly" value="' . esc_attr( $tag->name ) . '"><input type="hidden" name="' . esc_attr( wp_tag_order_form_field_name( $taxonomy ) ) . '" value="' . esc_attr( (string) $tag->term_id ) . '"></li>';
 			}
 		}
 	} else {
-		delete_post_meta( absint( $id ), wto_meta_key( $taxonomy ) );
+		delete_post_meta( absint( $id ), wp_tag_order_meta_key( $taxonomy ) );
 		$return = '';
 	}
 
@@ -542,7 +542,7 @@ function ajax_wto_options(): void {
 	}
 
 	$count = 0;
-	$pts   = wto_has_tag_posttype();
+	$pts   = wp_tag_order_has_tag_posttype();
 	foreach ( $pts as $pt ) {
 		global $post;
 		$ids      = array();
@@ -567,19 +567,19 @@ function ajax_wto_options(): void {
 		if ( ! empty( $taxonomies ) ) {
 			foreach ( $ids as $postid ) {
 				foreach ( $taxonomies as $taxonomy ) {
-					if ( ! is_taxonomy_hierarchical( $taxonomy ) && 'post_format' !== $taxonomy && wto_has_enabled_taxonomy( $taxonomies ) ) {
+					if ( ! is_taxonomy_hierarchical( $taxonomy ) && 'post_format' !== $taxonomy && wp_tag_order_has_enabled_taxonomy( $taxonomies ) ) {
 						$terms = get_the_terms( $postid, $taxonomy );
 						if ( is_wp_error( $terms ) || false === $terms ) {
 							continue; // Skip if $terms is a WP_Error or false.
 						}
-													$meta = get_post_meta( $postid, wto_meta_key( $taxonomy ), true );
+													$meta = get_post_meta( $postid, wp_tag_order_meta_key( $taxonomy ), true );
 						if ( ! empty( $terms ) && ! $meta ) {
 							$term_ids = array();
 							foreach ( $terms as $term ) {
 								array_push( $term_ids, $term->term_id );
 							}
 							$meta_box_tags_value = serialize( $term_ids );
-							$return              = update_post_meta( $postid, wto_meta_key( $taxonomy ), $meta_box_tags_value );
+							$return              = update_post_meta( $postid, wp_tag_order_meta_key( $taxonomy ), $meta_box_tags_value );
 							if ( $return ) {
 								++$count;
 							}

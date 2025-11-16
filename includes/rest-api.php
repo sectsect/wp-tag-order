@@ -99,7 +99,7 @@ function wpto_validate_taxonomy( string $taxonomy ): bool {
 	}
 
 	// Check if taxonomy is enabled for the plugin.
-	if ( ! wto_is_enabled_taxonomy( $taxonomy ) ) {
+	if ( ! wp_tag_order_is_enabled_taxonomy( $taxonomy ) ) {
 		return false;
 	}
 
@@ -228,7 +228,7 @@ function wpto_rest_permission_check( \WP_REST_Request $request ): bool {
 function wpto_get_post_tag_order( \WP_REST_Request $request ): \WP_REST_Response {
 	$post_id      = wpto_cast_mixed_to_int( $request->get_param( 'post_id' ) );
 	$taxonomy     = $request->get_param( 'taxonomy' ) ?? 'post_tag';
-	$tags_value   = get_post_meta( $post_id, wto_meta_key( $taxonomy ), true );
+	$tags_value   = get_post_meta( $post_id, wp_tag_order_meta_key( $taxonomy ), true );
 	$tags         = is_string( $tags_value ) ? unserialize( $tags_value ) : array();
 	$ordered_tags = array_map(
 		function ( $tag_id ) use ( $taxonomy ): ?array {
@@ -317,7 +317,7 @@ function wpto_update_post_tag_order( \WP_REST_Request $request ): \WP_REST_Respo
 		}
 
 		// Retrieve current tag order.
-		$current_tags_value = get_post_meta( $post_id, wto_meta_key( $taxonomy ), true );
+		$current_tags_value = get_post_meta( $post_id, wp_tag_order_meta_key( $taxonomy ), true );
 		$current_tags       = wpto_cast_mixed_to_array(
 			is_string( $current_tags_value ) ? unserialize( $current_tags_value ) : $current_tags_value
 		);
@@ -452,10 +452,10 @@ function wpto_rest_taxonomies_permission_check( \WP_REST_Request $request ): boo
 function wpto_get_enabled_taxonomies_endpoint( \WP_REST_Request $request ): \WP_REST_Response {
 	try {
 		// Get enabled taxonomies.
-		$enabled_taxonomies = apply_filters( 'wpto_enabled_taxonomies', wto_get_enabled_taxonomies() );
+		$enabled_taxonomies = apply_filters( 'wpto_enabled_taxonomies', wp_tag_order_get_enabled_taxonomies() );
 
 		// Get all non-hierarchical taxonomies for reference.
-		$available_taxonomies     = apply_filters( 'wpto_non_hierarchical_taxonomies', wto_get_non_hierarchical_taxonomies() );
+		$available_taxonomies     = apply_filters( 'wpto_non_hierarchical_taxonomies', wp_tag_order_get_non_hierarchical_taxonomies() );
 		$available_taxonomy_names = array_values(
 			array_filter(
 				array_map(

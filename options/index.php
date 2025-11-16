@@ -26,10 +26,10 @@
 				<legend style="display: block; margin-bottom: 10px;"><?php esc_html_e( 'Enable for these taxonomies', 'wp-tag-order' ); ?></legend>
 
 				<?php
-				$taxonomies = wto_get_non_hierarchical_taxonomies();
+				$taxonomies = wp_tag_order_get_non_hierarchical_taxonomies();
 
 				if ( ! empty( $taxonomies ) ) :
-					$enabled_taxonomies = wto_get_enabled_taxonomies();
+					$enabled_taxonomies = wp_tag_order_get_enabled_taxonomies();
 
 					foreach ( $taxonomies as $taxonomy ) :
 						$is_checked = in_array( $taxonomy->name, (array) $enabled_taxonomies, true );

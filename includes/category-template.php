@@ -27,7 +27,7 @@ function get_the_terms_ordered( int|WP_Post $post, string $taxonomy ): array|fal
 		return false;
 	}
 
-	$ids = get_post_meta( intval( $post->ID ), wto_meta_key( $taxonomy ), true );
+	$ids = get_post_meta( intval( $post->ID ), wp_tag_order_meta_key( $taxonomy ), true );
 	if ( ! is_string( $ids ) ) {
 		return false; // Ensure that $ids is a string before unserializing.
 	}
