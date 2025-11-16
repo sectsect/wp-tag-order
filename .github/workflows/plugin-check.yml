@@ -21,5 +21,6 @@ jobs:
     - name: Run plugin check
       uses: wordpress/plugin-check-action@v1
       with:
+        slug: 'wto'
         exclude-checks: 'trademarks,file_type,plugin_readme'
         exclude-directories: '.github,bin,vendor'
