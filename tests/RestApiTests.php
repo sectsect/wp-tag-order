@@ -12,13 +12,13 @@ require_once __DIR__ . '/../includes/rest-api.php';
 /**
  * Test REST API endpoints and related functions.
  *
- * @covers ::wpto_validate_taxonomy
- * @covers ::wpto_validate_tag_ids
- * @covers ::wpto_rest_permission_check
- * @covers ::wpto_get_post_tag_order
- * @covers ::wpto_update_post_tag_order
- * @covers ::wpto_rest_taxonomies_permission_check
- * @covers ::wpto_get_enabled_taxonomies_endpoint
+ * @covers ::wp_tag_order_validate_taxonomy
+ * @covers ::wp_tag_order_validate_tag_ids
+ * @covers ::wp_tag_order_rest_permission_check
+ * @covers ::wp_tag_order_get_post_tag_order
+ * @covers ::wp_tag_order_update_post_tag_order
+ * @covers ::wp_tag_order_rest_taxonomies_permission_check
+ * @covers ::wp_tag_order_get_enabled_taxonomies_endpoint
  */
 class RestApiTests extends WP_UnitTestCase {
 	/**
@@ -59,20 +59,20 @@ class RestApiTests extends WP_UnitTestCase {
 
 		// Mock the wto_is_enabled_taxonomy function.
 		$this->mockFunction(
-			'wto_is_enabled_taxonomy',
+			'wp_tag_order_is_enabled_taxonomy',
 			function ( $taxonomy ) {
 				return 'test_taxonomy' === $taxonomy;
 			}
 		);
 
 		// Directly call the mocked function.
-		$mock_function = $GLOBALS['__test_mock_functions']['wto_is_enabled_taxonomy'];
+		$mock_function = $GLOBALS['__test_mock_functions']['wp_tag_order_is_enabled_taxonomy'];
 
 		$this->assertTrue(
 			taxonomy_exists( 'test_taxonomy' ) &&
 			$mock_function( 'test_taxonomy' )
 		);
-		$this->assertFalse( wpto_validate_taxonomy( 'non_existent_taxonomy' ) );
+		$this->assertFalse( wp_tag_order_validate_taxonomy( 'non_existent_taxonomy' ) );
 	}
 
 	/**
@@ -89,8 +89,8 @@ class RestApiTests extends WP_UnitTestCase {
 		$valid_tags   = implode( ',', array( $tag1['term_id'], $tag2['term_id'] ) );
 		$invalid_tags = implode( ',', array( $tag1['term_id'], 99999 ) );
 
-		$this->assertTrue( wpto_validate_tag_ids( $valid_tags, $taxonomy ) );
-		$this->assertFalse( wpto_validate_tag_ids( $invalid_tags, $taxonomy ) );
+		$this->assertTrue( wp_tag_order_validate_tag_ids( $valid_tags, $taxonomy ) );
+		$this->assertFalse( wp_tag_order_validate_tag_ids( $invalid_tags, $taxonomy ) );
 	}
 
 	/**
@@ -110,7 +110,7 @@ class RestApiTests extends WP_UnitTestCase {
 		$request = new WP_REST_Request( 'POST', '/wp-tag-order/v1/tags/order/' . $post_id );
 		$request->set_param( 'post_id', $post_id );
 
-		$this->assertTrue( wpto_rest_permission_check( $request ) );
+		$this->assertTrue( wp_tag_order_rest_permission_check( $request ) );
 	}
 
 	/**
@@ -139,7 +139,7 @@ class RestApiTests extends WP_UnitTestCase {
 		$request->set_param( 'post_id', $post_id );
 
 		// Test custom order retrieval.
-		$retrieved_order = wpto_get_post_tag_order( $request );
+		$retrieved_order = wp_tag_order_get_post_tag_order( $request );
 
 		// Check if the retrieved order is a WP_REST_Response.
 		$this->assertInstanceOf( WP_REST_Response::class, $retrieved_order );
@@ -156,7 +156,7 @@ class RestApiTests extends WP_UnitTestCase {
 		$default_request = new WP_REST_Request( 'GET', '/wp-tag-order/v1/tags/order' );
 		$default_request->set_param( 'post_id', $another_post_id );
 
-		$default_response = wpto_get_post_tag_order( $default_request );
+		$default_response = wp_tag_order_get_post_tag_order( $default_request );
 
 		// Check if the default response is a WP_REST_Response.
 		$this->assertInstanceOf( WP_REST_Response::class, $default_response );
@@ -184,7 +184,7 @@ class RestApiTests extends WP_UnitTestCase {
 		$request = new WP_REST_Request( 'GET', '/wp-tag-order/v1/tags/order' );
 		$request->set_param( 'post_id', $post_id );
 
-		$retrieved_order = wpto_get_post_tag_order( $request );
+		$retrieved_order = wp_tag_order_get_post_tag_order( $request );
 
 		// Check if the response is a WP_REST_Response.
 		$this->assertInstanceOf( WP_REST_Response::class, $retrieved_order );
@@ -206,7 +206,7 @@ class RestApiTests extends WP_UnitTestCase {
 		$request = new WP_REST_Request( 'GET', '/wp-tag-order/v1/tags/order' );
 		$request->set_param( 'post_id', $non_existent_post_id );
 
-		$retrieved_order = wpto_get_post_tag_order( $request );
+		$retrieved_order = wp_tag_order_get_post_tag_order( $request );
 
 		// Check if the response is a WP_REST_Response.
 		$this->assertInstanceOf( WP_REST_Response::class, $retrieved_order );
@@ -243,7 +243,7 @@ class RestApiTests extends WP_UnitTestCase {
 		wp_set_current_user( $user_id );
 
 		// Call the function.
-		$response = wpto_update_post_tag_order( $request );
+		$response = wp_tag_order_update_post_tag_order( $request );
 
 		// Assert the response is a WP_REST_Response.
 		$this->assertInstanceOf( WP_REST_Response::class, $response );
@@ -271,7 +271,7 @@ class RestApiTests extends WP_UnitTestCase {
 		wp_set_current_user( $user_id );
 
 		// Expect a WP_REST_Response with 200 status (as per current implementation).
-		$response = wpto_update_post_tag_order( $request );
+		$response = wp_tag_order_update_post_tag_order( $request );
 		$this->assertInstanceOf( WP_REST_Response::class, $response );
 
 		// Check the response data.
@@ -300,7 +300,7 @@ class RestApiTests extends WP_UnitTestCase {
 		wp_set_current_user( $user_id );
 
 		// Expect a WP_REST_Response.
-		$response = wpto_update_post_tag_order( $request );
+		$response = wp_tag_order_update_post_tag_order( $request );
 		$this->assertInstanceOf( WP_REST_Response::class, $response );
 
 		// Check the response data.
@@ -329,7 +329,7 @@ class RestApiTests extends WP_UnitTestCase {
 		wp_set_current_user( $user_id );
 
 		// Expect a WP_REST_Response.
-		$response = wpto_update_post_tag_order( $request );
+		$response = wp_tag_order_update_post_tag_order( $request );
 		$this->assertInstanceOf( WP_REST_Response::class, $response );
 
 		// Check the response data.
@@ -348,16 +348,16 @@ class RestApiTests extends WP_UnitTestCase {
 		$request = new WP_REST_Request( 'GET', '/wp-tag-order/v1/taxonomies/enabled' );
 
 		// Test that the permission check always returns true for read access.
-		$this->assertTrue( wpto_rest_taxonomies_permission_check( $request ) );
+		$this->assertTrue( wp_tag_order_rest_taxonomies_permission_check( $request ) );
 
 		// Test with different user states.
 		$user_id = $this->factory()->user->create( array( 'role' => 'subscriber' ) );
 		wp_set_current_user( $user_id );
-		$this->assertTrue( wpto_rest_taxonomies_permission_check( $request ) );
+		$this->assertTrue( wp_tag_order_rest_taxonomies_permission_check( $request ) );
 
 		// Test with no logged-in user.
 		wp_set_current_user( 0 );
-		$this->assertTrue( wpto_rest_taxonomies_permission_check( $request ) );
+		$this->assertTrue( wp_tag_order_rest_taxonomies_permission_check( $request ) );
 	}
 
 	/**
@@ -399,14 +399,14 @@ class RestApiTests extends WP_UnitTestCase {
 
 		// Use WordPress filters to override the data during testing.
 		add_filter(
-			'wpto_enabled_taxonomies',
+			'wp_tag_order_enabled_taxonomies',
 			function () use ( $expected_enabled ) {
 				return $expected_enabled;
 			}
 		);
 
 		add_filter(
-			'wpto_non_hierarchical_taxonomies',
+			'wp_tag_order_non_hierarchical_taxonomies',
 			function () use ( $expected_available ) {
 				return $expected_available;
 			}
@@ -416,11 +416,11 @@ class RestApiTests extends WP_UnitTestCase {
 		$request = new WP_REST_Request( 'GET', '/wp-tag-order/v1/taxonomies/enabled' );
 
 		// Call the endpoint.
-		$response = wpto_get_enabled_taxonomies_endpoint( $request );
+		$response = wp_tag_order_get_enabled_taxonomies_endpoint( $request );
 
 		// Clean up filters.
-		remove_all_filters( 'wpto_enabled_taxonomies' );
-		remove_all_filters( 'wpto_non_hierarchical_taxonomies' );
+		remove_all_filters( 'wp_tag_order_enabled_taxonomies' );
+		remove_all_filters( 'wp_tag_order_non_hierarchical_taxonomies' );
 
 		// Verify response type.
 		$this->assertInstanceOf( WP_REST_Response::class, $response );
@@ -465,14 +465,14 @@ class RestApiTests extends WP_UnitTestCase {
 
 		// Use WordPress filters to override the data during testing.
 		add_filter(
-			'wpto_enabled_taxonomies',
+			'wp_tag_order_enabled_taxonomies',
 			function () use ( $expected_enabled ) {
 				return $expected_enabled;
 			}
 		);
 
 		add_filter(
-			'wpto_non_hierarchical_taxonomies',
+			'wp_tag_order_non_hierarchical_taxonomies',
 			function () use ( $expected_available ) {
 				return $expected_available;
 			}
@@ -482,11 +482,11 @@ class RestApiTests extends WP_UnitTestCase {
 		$request = new WP_REST_Request( 'GET', '/wp-tag-order/v1/taxonomies/enabled' );
 
 		// Call the endpoint.
-		$response = wpto_get_enabled_taxonomies_endpoint( $request );
+		$response = wp_tag_order_get_enabled_taxonomies_endpoint( $request );
 
 		// Clean up filters.
-		remove_all_filters( 'wpto_enabled_taxonomies' );
-		remove_all_filters( 'wpto_non_hierarchical_taxonomies' );
+		remove_all_filters( 'wp_tag_order_enabled_taxonomies' );
+		remove_all_filters( 'wp_tag_order_non_hierarchical_taxonomies' );
 
 		// Verify response type.
 		$this->assertInstanceOf( WP_REST_Response::class, $response );
@@ -522,14 +522,14 @@ class RestApiTests extends WP_UnitTestCase {
 
 		// Use WordPress filters to override the data during testing.
 		add_filter(
-			'wpto_enabled_taxonomies',
+			'wp_tag_order_enabled_taxonomies',
 			function () use ( $expected_enabled ) {
 				return $expected_enabled;
 			}
 		);
 
 		add_filter(
-			'wpto_non_hierarchical_taxonomies',
+			'wp_tag_order_non_hierarchical_taxonomies',
 			function () use ( $expected_available ) {
 				return $expected_available;
 			}
@@ -539,11 +539,11 @@ class RestApiTests extends WP_UnitTestCase {
 		$request = new WP_REST_Request( 'GET', '/wp-tag-order/v1/taxonomies/enabled' );
 
 		// Call the endpoint.
-		$response = wpto_get_enabled_taxonomies_endpoint( $request );
+		$response = wp_tag_order_get_enabled_taxonomies_endpoint( $request );
 
 		// Clean up filters.
-		remove_all_filters( 'wpto_enabled_taxonomies' );
-		remove_all_filters( 'wpto_non_hierarchical_taxonomies' );
+		remove_all_filters( 'wp_tag_order_enabled_taxonomies' );
+		remove_all_filters( 'wp_tag_order_non_hierarchical_taxonomies' );
 
 		// Get response data.
 		$data = $response->get_data();

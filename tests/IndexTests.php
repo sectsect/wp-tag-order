@@ -18,7 +18,7 @@ require_once __DIR__ . '/../includes/index.php';
  *
  * @package WP_Tag_Order
  *
- * @covers ::wpto_meta_box_markup
+ * @covers ::wp_tag_order_meta_box_markup
  */
 class WPTOTest extends WP_UnitTestCase {
 
@@ -50,7 +50,7 @@ class WPTOTest extends WP_UnitTestCase {
 	 *
 	 * @return void
 	 *
-	 * @covers ::wpto_meta_box_markup
+	 * @covers ::wp_tag_order_meta_box_markup
 	 */
 	public function test_wpto_meta_box_markup() {
 		$post_id = $this->factory->post->create();
@@ -63,7 +63,7 @@ class WPTOTest extends WP_UnitTestCase {
 		);
 
 		ob_start();
-		wpto_meta_box_markup( $post, $metabox );
+		wp_tag_order_meta_box_markup( $post, $metabox );
 		$output = ob_get_clean();
 
 		$this->assertStringContainsString( '<div class="inner">', $output );

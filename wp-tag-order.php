@@ -16,17 +16,17 @@
 
 declare(strict_types=1);
 
-const WPTAGORDER_MINIMAL_REQUIRED_PHP_VERSION = '8.0';
+const WP_TAG_ORDER_MINIMAL_REQUIRED_PHP_VERSION = '8.0';
 
 /**
  * Displays an admin notice if the PHP version is less than the required version.
  *
  * @return void
  */
-function wptagorder_noticephpversionwrong(): void {
+function wp_tag_order_notice_php_version_wrong(): void {
 	// Get the required version, defaulting to 'unknown' if not defined.
-	$required_version = defined( 'WPTAGORDER_MINIMAL_REQUIRED_PHP_VERSION' )
-		? WPTAGORDER_MINIMAL_REQUIRED_PHP_VERSION
+	$required_version = defined( 'WP_TAG_ORDER_MINIMAL_REQUIRED_PHP_VERSION' )
+		? WP_TAG_ORDER_MINIMAL_REQUIRED_PHP_VERSION
 		: 'unknown';
 
 	$current_version = phpversion();
@@ -50,14 +50,14 @@ function wptagorder_noticephpversionwrong(): void {
  *
  * @return bool True if the PHP version is sufficient, false otherwise.
  */
-function wptagorder_check_php_version(): bool {
+function wp_tag_order_check_php_version(): bool {
 	// Ensure the required version constant is defined.
-	if ( ! defined( 'WPTAGORDER_MINIMAL_REQUIRED_PHP_VERSION' ) ) {
+	if ( ! defined( 'WP_TAG_ORDER_MINIMAL_REQUIRED_PHP_VERSION' ) ) {
 		return false;
 	}
 
 	$current_version  = phpversion();
-	$required_version = WPTAGORDER_MINIMAL_REQUIRED_PHP_VERSION;
+	$required_version = WP_TAG_ORDER_MINIMAL_REQUIRED_PHP_VERSION;
 
 	return version_compare( $current_version, $required_version, '>=' );
 }
@@ -68,9 +68,9 @@ function wptagorder_check_php_version(): bool {
  *
  * @return void
  */
-function wptagorder_handle_php_version_error(): void {
-	if ( ! wptagorder_check_php_version() ) {
-		add_action( 'admin_notices', 'wptagorder_noticephpversionwrong' );
+function wp_tag_order_handle_php_version_error(): void {
+	if ( ! wp_tag_order_check_php_version() ) {
+		add_action( 'admin_notices', 'wp_tag_order_notice_php_version_wrong' );
 	}
 }
 
@@ -80,11 +80,11 @@ function wptagorder_handle_php_version_error(): void {
  *
  * @return bool True if the PHP version is sufficient, false otherwise.
  */
-function wptagorder_phpversioncheck(): bool {
-	$is_version_sufficient = wptagorder_check_php_version();
+function wp_tag_order_php_version_check(): bool {
+	$is_version_sufficient = wp_tag_order_check_php_version();
 
 	if ( ! $is_version_sufficient ) {
-		wptagorder_handle_php_version_error();
+		wp_tag_order_handle_php_version_error();
 	}
 
 	return $is_version_sufficient;
@@ -100,15 +100,15 @@ function wptagorder_phpversioncheck(): bool {
  *
  * @return array<string> The modified plugin metadata array.
  */
-function wptagorder_add_github_link( array $plugin_meta, string $plugin_file, array $plugin_data, string $status ): array {
+function wp_tag_order_add_github_link( array $plugin_meta, string $plugin_file, array $plugin_data, string $status ): array {
 	if ( plugin_basename( __FILE__ ) === $plugin_file ) {
 		$plugin_meta[] = '<a href="https://github.com/sectsect/wp-tag-order" target="_blank"><span class="dashicons dashicons-randomize"></span> GitHub</a>';
 	}
 	return $plugin_meta;
 }
-add_filter( 'plugin_row_meta', 'wptagorder_add_github_link', 10, 4 );
+add_filter( 'plugin_row_meta', 'wp_tag_order_add_github_link', 10, 4 );
 
-if ( wptagorder_phpversioncheck() ) {
+if ( wp_tag_order_php_version_check() ) {
 	require_once plugin_dir_path( __FILE__ ) . 'includes/functions.php';
 	require_once plugin_dir_path( __FILE__ ) . 'includes/class-tag-updater.php';
 	require_once plugin_dir_path( __FILE__ ) . 'includes/category-template.php';

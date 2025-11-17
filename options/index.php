@@ -26,16 +26,16 @@
 				<legend style="display: block; margin-bottom: 10px;"><?php esc_html_e( 'Enable for these taxonomies', 'wp-tag-order' ); ?></legend>
 
 				<?php
-				$taxonomies = wto_get_non_hierarchical_taxonomies();
+				$taxonomies = wp_tag_order_get_non_hierarchical_taxonomies();
 
 				if ( ! empty( $taxonomies ) ) :
-					$enabled_taxonomies = wto_get_enabled_taxonomies();
+					$enabled_taxonomies = wp_tag_order_get_enabled_taxonomies();
 
 					foreach ( $taxonomies as $taxonomy ) :
 						$is_checked = in_array( $taxonomy->name, (array) $enabled_taxonomies, true );
 						?>
 					<div style="margin-top: 5px;">
-						<input type="checkbox" id="<?php echo esc_attr( $taxonomy->name ); ?>" name="<?php echo esc_attr( WPTAGORDER_OPTION_ENABLED_TAXONOMIES ); ?>[]" value="<?php echo esc_attr( $taxonomy->name ); ?>" <?php checked( $is_checked ); ?> />
+						<input type="checkbox" id="<?php echo esc_attr( $taxonomy->name ); ?>" name="<?php echo esc_attr( WP_TAG_ORDER_OPTION_ENABLED_TAXONOMIES ); ?>[]" value="<?php echo esc_attr( $taxonomy->name ); ?>" <?php checked( $is_checked ); ?> />
 						<label for="<?php echo esc_attr( $taxonomy->name ); ?>">
 							<?php echo esc_html( $taxonomy->label ); ?>
 						</label>

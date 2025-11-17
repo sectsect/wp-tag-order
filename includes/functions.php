@@ -11,12 +11,12 @@
 declare(strict_types=1);
 
 // Global constants for meta keys and other identifiers.
-const WPTAGORDER_META_KEY_PREFIX           = 'wp-tag-order-';
-const WPTAGORDER_REST_NAMESPACE            = 'wp-tag-order/v1';
-const WPTAGORDER_OPTION_ENABLED_TAXONOMIES = 'wpto_enabled_taxonomies';
-const WPTAGORDER_ACTION_SYNC_TAGS          = 'wto_sync_tags';
-const WPTAGORDER_ACTION_UPDATE_TAGS        = 'wto_update_tags';
-const WPTAGORDER_ACTION_OPTIONS            = 'wto_options';
+const WP_TAG_ORDER_META_KEY_PREFIX           = 'wp-tag-order-';
+const WP_TAG_ORDER_REST_NAMESPACE            = 'wp-tag-order/v1';
+const WP_TAG_ORDER_OPTION_ENABLED_TAXONOMIES = 'wpto_enabled_taxonomies';
+const WP_TAG_ORDER_ACTION_SYNC_TAGS          = 'wto_sync_tags';
+const WP_TAG_ORDER_ACTION_UPDATE_TAGS        = 'wto_update_tags';
+const WP_TAG_ORDER_ACTION_OPTIONS            = 'wto_options';
 
 /**
  * Builds post meta key for the given taxonomy.
@@ -24,8 +24,8 @@ const WPTAGORDER_ACTION_OPTIONS            = 'wto_options';
  * @param string $taxonomy The taxonomy name.
  * @return string The complete meta key for storing tag order.
  */
-function wto_meta_key( string $taxonomy ): string {
-	return WPTAGORDER_META_KEY_PREFIX . $taxonomy;
+function wp_tag_order_meta_key( string $taxonomy ): string {
+	return WP_TAG_ORDER_META_KEY_PREFIX . $taxonomy;
 }
 
 /**
@@ -34,8 +34,8 @@ function wto_meta_key( string $taxonomy ): string {
  * @param string $taxonomy The taxonomy name.
  * @return string The complete field name for form inputs.
  */
-function wto_form_field_name( string $taxonomy ): string {
-	return WPTAGORDER_META_KEY_PREFIX . $taxonomy . '[]';
+function wp_tag_order_form_field_name( string $taxonomy ): string {
+	return WP_TAG_ORDER_META_KEY_PREFIX . $taxonomy . '[]';
 }
 
 /**
@@ -45,7 +45,7 @@ function wto_form_field_name( string $taxonomy ): string {
  *
  * @return bool True if the array is empty, false otherwise.
  */
-function wto_is_array_empty( array $arr ): bool {
+function wp_tag_order_is_array_empty( array $arr ): bool {
 	return empty( array_filter( (array) $arr ) );
 }
 
@@ -57,7 +57,7 @@ function wto_is_array_empty( array $arr ): bool {
  *
  * @return array<mixed> The difference between the two arrays.
  */
-function wto_array_diff_interactive( array $array_1, array $array_2 ): array {
+function wp_tag_order_array_diff_interactive( array $array_1, array $array_2 ): array {
 	return array_merge( array_diff( $array_1, $array_2 ), array_diff( $array_2, $array_1 ) );
 }
 
@@ -66,7 +66,7 @@ function wto_array_diff_interactive( array $array_1, array $array_2 ): array {
  *
  * @return array<WP_Taxonomy> An array of non-hierarchical taxonomies.
  */
-function wto_get_non_hierarchical_taxonomies(): array {
+function wp_tag_order_get_non_hierarchical_taxonomies(): array {
 	$args               = array(
 		'object_type'  => array( 'post' ),
 		'public'       => true,
@@ -95,8 +95,8 @@ function wto_get_non_hierarchical_taxonomies(): array {
  *
  * @return array<string> The value of the "wpto_enabled_taxonomies" option.
  */
-function wto_get_enabled_taxonomies(): array {
-	$option = get_option( WPTAGORDER_OPTION_ENABLED_TAXONOMIES, array() );
+function wp_tag_order_get_enabled_taxonomies(): array {
+	$option = get_option( WP_TAG_ORDER_OPTION_ENABLED_TAXONOMIES, array() );
 	return array_filter( is_array( $option ) ? $option : array(), 'is_string' );
 }
 
@@ -107,8 +107,8 @@ function wto_get_enabled_taxonomies(): array {
  *
  * @return bool True if the taxonomy is enabled, false otherwise.
  */
-function wto_is_enabled_taxonomy( string $taxonomy ): bool {
-	return in_array( $taxonomy, wto_get_enabled_taxonomies(), true );
+function wp_tag_order_is_enabled_taxonomy( string $taxonomy ): bool {
+	return in_array( $taxonomy, wp_tag_order_get_enabled_taxonomies(), true );
 }
 
 /**
@@ -118,8 +118,8 @@ function wto_is_enabled_taxonomy( string $taxonomy ): bool {
  *
  * @return bool True if any of the taxonomies are enabled, false otherwise.
  */
-function wto_has_enabled_taxonomy( array $taxonomies ): bool {
-	return ! empty( array_intersect( wto_get_enabled_taxonomies(), $taxonomies ) );
+function wp_tag_order_has_enabled_taxonomy( array $taxonomies ): bool {
+	return ! empty( array_intersect( wp_tag_order_get_enabled_taxonomies(), $taxonomies ) );
 }
 
 /**
@@ -129,7 +129,7 @@ function wto_has_enabled_taxonomy( array $taxonomies ): bool {
  *
  * @return array<string> An array of post types associated with the given taxonomy.
  */
-function wto_get_post_types_by_taxonomy( string $tax = 'category' ): array {
+function wp_tag_order_get_post_types_by_taxonomy( string $tax = 'category' ): array {
 	global $wp_taxonomies;
 	return $wp_taxonomies[ $tax ]->object_type ?? array();
 }
@@ -139,7 +139,7 @@ function wto_get_post_types_by_taxonomy( string $tax = 'category' ): array {
  *
  * @return array<string> An array of post types that have non-hierarchical taxonomies.
  */
-function wto_has_tag_posttype(): array {
+function wp_tag_order_has_tag_posttype(): array {
 	$args      = array(
 		'public'   => true,
 		'_builtin' => false,
@@ -171,7 +171,7 @@ function wto_has_tag_posttype(): array {
  *
  * @return bool True if any of the needles are found in the haystack, false otherwise.
  */
-function wto_strposa( string $haystack, array|string $needles, int $offset = 0 ): bool {
+function wp_tag_order_strposa( string $haystack, array|string $needles, int $offset = 0 ): bool {
 	$needles = (array) $needles;
 	foreach ( $needles as $needle ) {
 		if ( strpos( $haystack, $needle, $offset ) !== false ) {
@@ -188,14 +188,14 @@ function wto_strposa( string $haystack, array|string $needles, int $offset = 0 )
  *
  * @return string The modified HTML script tag.
  */
-function wto_replace_script_tag( string $tag ): string {
+function wp_tag_order_replace_script_tag( string $tag ): string {
 	$module = array( 'wp-tag-order/assets/js/' );
-	if ( wto_strposa( $tag, $module ) ) {
+	if ( wp_tag_order_strposa( $tag, $module ) ) {
 		$tag = str_replace( array( " type='text/javascript'", 'src=' ), array( '', 'type="module" src=' ), $tag );
 	}
 	return $tag;
 }
-add_filter( 'script_loader_tag', 'wto_replace_script_tag', 10, 1 );
+add_filter( 'script_loader_tag', 'wp_tag_order_replace_script_tag', 10, 1 );
 
 /**
  * Checks if the WordPress version is 5.5 or higher.
@@ -203,7 +203,7 @@ add_filter( 'script_loader_tag', 'wto_replace_script_tag', 10, 1 );
  * @see https://make.wordpress.org/core/2020/08/06/allow-post-boxes-and-metaboxes-to-be-reordered-by-using-the-keyboard/
  * @return boolean result of the comparison between the WordPress version and '5.5'.
  */
-function wto_has_reorder_controller_in_metaboxes(): bool {
+function wp_tag_order_has_reorder_controller_in_metaboxes(): bool {
 	return version_compare( get_bloginfo( 'version' ), '5.5', '>=' );
 }
 
@@ -214,7 +214,7 @@ function wto_has_reorder_controller_in_metaboxes(): bool {
  * @return int
  * @throws InvalidArgumentException If the value is not numeric.
  */
-function wpto_cast_mixed_to_int( mixed $value ): int {
+function wp_tag_order_cast_mixed_to_int( mixed $value ): int {
 	if ( is_numeric( $value ) ) {
 		return (int) $value;
 	}
@@ -227,7 +227,7 @@ function wpto_cast_mixed_to_int( mixed $value ): int {
  * @param mixed $value Value to cast.
  * @return array<mixed>
  */
-function wpto_cast_mixed_to_array( mixed $value ): array {
+function wp_tag_order_cast_mixed_to_array( mixed $value ): array {
 	if ( is_null( $value ) ) {
 		return array();
 	}
@@ -241,7 +241,7 @@ function wpto_cast_mixed_to_array( mixed $value ): array {
  * @param mixed $value Value to cast.
  * @return array<int>
  */
-function wpto_cast_mixed_to_int_array( mixed $value ): array {
+function wp_tag_order_cast_mixed_to_int_array( mixed $value ): array {
 	if ( is_null( $value ) ) {
 		return array();
 	}
@@ -260,7 +260,7 @@ function wpto_cast_mixed_to_int_array( mixed $value ): array {
  * @return string
  * @throws InvalidArgumentException If the value cannot be cast to a string.
  */
-function wpto_cast_mixed_to_string( mixed $value ): string {
+function wp_tag_order_cast_mixed_to_string( mixed $value ): string {
 	if ( is_null( $value ) ) {
 		throw new InvalidArgumentException( 'Value cannot be null' );
 	}
@@ -278,7 +278,7 @@ function wpto_cast_mixed_to_string( mixed $value ): string {
  * @param string $action Nonce action name. Default is 'wpto_nonce_action'.
  * @return int Sanitized post ID
  */
-function wpto_validate_ajax_request( string $action = 'wpto_nonce_action' ): int {
+function wp_tag_order_validate_ajax_request( string $action = 'wpto_nonce_action' ): int {
 	// Validate request method.
 	if ( ! isset( $_SERVER['REQUEST_METHOD'] ) ) {
 		wp_send_json_error( 'Invalid request method', 400 );

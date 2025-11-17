@@ -53,7 +53,7 @@ class Tag_Updater {
 			throw new \InvalidArgumentException( 'Tag IDs cannot be empty' );
 		}
 
-		if ( ! wto_is_enabled_taxonomy( $taxonomy ) ) {
+		if ( ! wp_tag_order_is_enabled_taxonomy( $taxonomy ) ) {
 			throw new \InvalidArgumentException( sprintf( 'Taxonomy %s is not enabled for tag ordering', esc_html( $taxonomy ) ) );
 		}
 
@@ -84,6 +84,6 @@ class Tag_Updater {
 		$meta_box_tags_value = serialize( $sanitized_tag_ids );
 
 		// Update post meta.
-		return update_post_meta( $post_id, wto_meta_key( $taxonomy ), $meta_box_tags_value );
+		return update_post_meta( $post_id, wp_tag_order_meta_key( $taxonomy ), $meta_box_tags_value );
 	}
 }

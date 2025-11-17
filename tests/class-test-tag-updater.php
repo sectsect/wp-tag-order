@@ -41,7 +41,7 @@ class Test_Tag_Updater extends WP_UnitTestCase {
 		$this->test_taxonomy = 'post_tag';
 
 		// Ensure the test taxonomy is enabled for the plugin.
-		add_filter( 'wto_is_enabled_taxonomy', array( $this, 'enable_test_taxonomy' ), 10, 1 );
+		add_filter( 'wp_tag_order_is_enabled_taxonomy', array( $this, 'enable_test_taxonomy' ), 10, 1 );
 
 		// Register test taxonomy if not already registered.
 		if ( ! taxonomy_exists( $this->test_taxonomy ) ) {
@@ -59,7 +59,7 @@ class Test_Tag_Updater extends WP_UnitTestCase {
 	 */
 	protected function tearDown(): void {
 		// Remove the filter after the test.
-		remove_filter( 'wto_is_enabled_taxonomy', array( $this, 'enable_test_taxonomy' ) );
+		remove_filter( 'wp_tag_order_is_enabled_taxonomy', array( $this, 'enable_test_taxonomy' ) );
 
 		// Reset the enabled taxonomies option.
 		delete_option( 'wpto_enabled_taxonomies' );
@@ -99,7 +99,7 @@ class Test_Tag_Updater extends WP_UnitTestCase {
 		$this->assertNotFalse( $result, 'Failed to update metadata for tag order' );
 
 		// Verify meta was saved correctly.
-		$saved_tags = unserialize( get_post_meta( $post_id, wto_meta_key( $this->test_taxonomy ), true ) );
+		$saved_tags = unserialize( get_post_meta( $post_id, wp_tag_order_meta_key( $this->test_taxonomy ), true ) );
 		$this->assertSame( $tag_ids, $saved_tags );
 	}
 
@@ -126,7 +126,7 @@ class Test_Tag_Updater extends WP_UnitTestCase {
 		$this->assertNotFalse( $result, 'Failed to update metadata for tag order' );
 
 		// Verify meta was saved correctly.
-		$saved_tags = unserialize( get_post_meta( $post_id, wto_meta_key( $this->test_taxonomy ), true ) );
+		$saved_tags = unserialize( get_post_meta( $post_id, wp_tag_order_meta_key( $this->test_taxonomy ), true ) );
 		$this->assertSame( $tag_ids, $saved_tags );
 	}
 
