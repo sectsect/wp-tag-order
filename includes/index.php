@@ -340,17 +340,22 @@ function ajax_wto_sync_tags(): void {
 		? sanitize_text_field( wp_unslash( $_POST['tags'] ) )
 		: '';
 
-	if (
-		! $id ||
-		! $nonce ||
-		! $action ||
-		! wp_verify_nonce( $nonce, $action ) ||
-		! check_ajax_referer( (string) $action, 'nonce', false ) ||
-		! isset( $_SERVER['REQUEST_METHOD'] ) ||
-		'POST' !== $_SERVER['REQUEST_METHOD']
-	) {
-		wp_safe_redirect( home_url( '/' ), 301 );
-		exit;
+	// Validate request method.
+	if ( ! isset( $_SERVER['REQUEST_METHOD'] ) || 'POST' !== $_SERVER['REQUEST_METHOD'] ) {
+		wp_send_json_error( array( 'message' => 'Invalid request method' ), 405 );
+	}
+
+	// Validate nonce.
+	if ( ! $nonce || ! $action || ! wp_verify_nonce( $nonce, $action ) || ! check_ajax_referer( (string) $action, 'nonce', false ) ) {
+		wp_send_json_error( array( 'message' => 'Invalid nonce' ), 403 );
+	}
+
+	// Validate and convert post ID to integer.
+	$post_id = filter_var( $id, FILTER_VALIDATE_INT );
+
+	// If post_id is invalid or negative, return error.
+	if ( false === $post_id || $post_id < 0 ) {
+		wp_send_json_error( array( 'message' => 'Invalid post ID' ), 400 );
 	}
 
 	$meta_box_tags_value = '';
@@ -362,7 +367,7 @@ function ajax_wto_sync_tags(): void {
 		foreach ( $newtags as $newtag ) {
 			$term = term_exists( $newtag, $taxonomy );
 			if ( null === $term ) {
-				$term_taxonomy_ids = wp_set_object_terms( absint( $id ), $newtag, $taxonomy, true );
+				$term_taxonomy_ids = wp_set_object_terms( $post_id, $newtag, $taxonomy, true );
 				if ( is_wp_error( $term_taxonomy_ids ) ) {
 					exit;
 				}
@@ -375,7 +380,7 @@ function ajax_wto_sync_tags(): void {
 		}
 
 		$savedata = array();
-		$tags_val = get_post_meta( absint( $id ), wp_tag_order_meta_key( $taxonomy ), true );
+		$tags_val = get_post_meta( $post_id, wp_tag_order_meta_key( $taxonomy ), true );
 
 		if ( $tags_val ) {
 			$basetagsids = is_string( $tags_val ) ? unserialize( $tags_val ) : array();
@@ -398,10 +403,10 @@ function ajax_wto_sync_tags(): void {
 		}
 
 		$meta_box_tags_value = serialize( $savedata );
-		update_post_meta( absint( $id ), wp_tag_order_meta_key( $taxonomy ), $meta_box_tags_value );
+		update_post_meta( $post_id, wp_tag_order_meta_key( $taxonomy ), $meta_box_tags_value );
 
 		$newtagsids_int    = array_map( 'intval', $newtagsids );
-		$term_taxonomy_ids = wp_set_object_terms( absint( $id ), $newtagsids_int, $taxonomy );
+		$term_taxonomy_ids = wp_set_object_terms( $post_id, $newtagsids_int, $taxonomy );
 		if ( is_wp_error( $term_taxonomy_ids ) ) {
 			exit;
 		}
@@ -417,7 +422,7 @@ function ajax_wto_sync_tags(): void {
 			}
 		}
 	} else {
-		delete_post_meta( absint( $id ), wp_tag_order_meta_key( $taxonomy ) );
+		delete_post_meta( $post_id, wp_tag_order_meta_key( $taxonomy ) );
 		$return = '';
 	}
 
@@ -440,25 +445,33 @@ function ajax_wto_update_tags(): void {
 	$taxonomy = filter_input( INPUT_POST, 'taxonomy', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
 	$tags     = filter_input( INPUT_POST, 'tags', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
 
-	if (
-		empty( $id ) ||
-		empty( $nonce ) ||
-		empty( $action ) ||
-		empty( $taxonomy ) ||
-		empty( $tags ) ||
-		! wp_verify_nonce( $nonce, $action ) ||
-		! check_ajax_referer( $action, 'nonce', false ) ||
-		! isset( $_SERVER['REQUEST_METHOD'] ) ||
-		'POST' !== $_SERVER['REQUEST_METHOD']
-	) {
-		wp_safe_redirect( home_url( '/' ), 301 );
-		exit;
+	// Validate request method.
+	if ( ! isset( $_SERVER['REQUEST_METHOD'] ) || 'POST' !== $_SERVER['REQUEST_METHOD'] ) {
+		wp_send_json_error( array( 'message' => 'Invalid request method' ), 405 );
+	}
+
+	// Validate nonce.
+	if ( ! $nonce || ! $action || ! wp_verify_nonce( $nonce, $action ) || ! check_ajax_referer( $action, 'nonce', false ) ) {
+		wp_send_json_error( array( 'message' => 'Invalid nonce' ), 403 );
+	}
+
+	// Validate required parameters.
+	if ( empty( $taxonomy ) || empty( $tags ) ) {
+		wp_send_json_error( array( 'message' => 'Missing required parameters' ), 400 );
+	}
+
+	// Validate and convert post ID to integer.
+	$post_id = filter_var( $id, FILTER_VALIDATE_INT );
+
+	// If post_id is invalid or negative, return error.
+	if ( false === $post_id || $post_id < 0 ) {
+		wp_send_json_error( array( 'message' => 'Invalid post ID' ), 400 );
 	}
 
 	try {
 		$tag_updater = new \WP_Tag_Order\Tag_Updater();
 		$result      = $tag_updater->update_tag_order(
-			intval( $id ),
+			$post_id,
 			$taxonomy,
 			$tags
 		);
