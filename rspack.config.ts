@@ -1,6 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import path from 'path';
 
+import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
 import type { Configuration } from '@rspack/cli';
 import * as rspack from '@rspack/core';
 import type { SwcLoaderOptions } from '@rspack/core';
@@ -14,7 +15,6 @@ import notifier from 'node-notifier';
 import StyleLintPlugin from 'stylelint-webpack-plugin';
 // import SVGSpritemapPlugin from 'svg-spritemap-webpack-plugin';
 import type { WebpackError } from 'webpack/types';
-import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import RemoveEmptyScriptsPlugin from 'webpack-remove-empty-scripts';
 
 dotenv.config();
@@ -106,13 +106,10 @@ const getJSPlugins = () => {
         title: 'TypeScript',
       }),
     );
-    plugins.push(
-      new BundleAnalyzerPlugin({
-        // analyzerMode: 'static',
-        // reportFilename: path.join(__dirname, 'report.html'),
-        openAnalyzer: false,
-      }),
-    );
+  }
+
+  if (process.env.RSDOCTOR) {
+    plugins.push(new RsdoctorRspackPlugin({}));
   }
 
   plugins.push(
