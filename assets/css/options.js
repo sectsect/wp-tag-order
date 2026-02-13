@@ -26,12 +26,11 @@ return module.exports;
 
 // webpack/runtime/rspack_version
 (() => {
-__webpack_require__.rv = () => ("1.6.3")
+__webpack_require__.rv = () => ("1.7.6")
 })();
 // webpack/runtime/rspack_unique_id
 (() => {
-__webpack_require__.ruid = "bundler=rspack@1.6.3";
-
+__webpack_require__.ruid = "bundler=rspack@1.7.6";
 })();
 // extracted by css-extract-rspack-plugin
 
