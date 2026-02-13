@@ -24,7 +24,6 @@ jobs:
         image: mariadb:10.11
         env:
           MYSQL_ALLOW_EMPTY_PASSWORD: yes
-          MYSQL_DATABASE: wordpress_test
         ports:
           - 3306:3306
         options: >-
