@@ -9,6 +9,7 @@ node_modules/
 /vendor/
 
 .tsbuildinfo
+.rsdoctor/
 
 # PHPUnit
 /.phpunit.cache
