@@ -8,6 +8,10 @@
  * @subpackage WP_Tag_Order/includes
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 ?>
 
 <div class="wrap">

@@ -9,6 +9,10 @@
 
 declare(strict_types=1);
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Register REST API endpoints for tag ordering.
  *

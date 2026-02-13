@@ -16,6 +16,10 @@
 
 declare(strict_types=1);
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 const WP_TAG_ORDER_MINIMAL_REQUIRED_PHP_VERSION = '8.0';
 
 /**

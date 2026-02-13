@@ -10,6 +10,10 @@
 
 declare(strict_types=1);
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 // Global constants for meta keys and other identifiers.
 const WP_TAG_ORDER_META_KEY_PREFIX           = 'wp-tag-order-';
 const WP_TAG_ORDER_REST_NAMESPACE            = 'wp-tag-order/v1';
