@@ -163,7 +163,7 @@
           line-height: 1;
           color: #999;
           text-align: center;
-          content: 'Save once to activate';
+          content: 'Save post to enable';
         }
 
         &::after {
