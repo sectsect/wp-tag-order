@@ -418,7 +418,7 @@ function ajax_wto_sync_tags(): void {
 		$return = '';
 		if ( ! wp_tag_order_is_array_empty( $savedata ) ) {
 			foreach ( $savedata as $newtag ) {
-				$tag = get_term_by( 'id', (int) $newtag, $taxonomy );
+				$tag = get_term_by( 'id', wp_tag_order_cast_mixed_to_int( $newtag ), $taxonomy );
 				if ( ! $tag instanceof WP_Term ) {
 					continue;
 				}
