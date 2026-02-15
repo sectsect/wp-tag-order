@@ -58,8 +58,12 @@ function wp_tag_order_meta_box_markup( WP_Post $obj, array $metabox ): void {
 	$tags       = is_string( $tags_value ) ? unserialize( $tags_value ) : array();
 	if ( $tags && is_array( $tags ) ) :
 		foreach ( $tags as $tagid ) :
-			$tagid = wp_tag_order_cast_mixed_to_int( $tagid );
-			$tag   = ! empty( $taxonomy ) ? get_term_by( 'id', $tagid, $taxonomy ) : null;
+			try {
+				$tagid = wp_tag_order_cast_mixed_to_int( $tagid );
+			} catch ( \InvalidArgumentException $e ) {
+				continue;
+			}
+			$tag = ! empty( $taxonomy ) ? get_term_by( 'id', $tagid, $taxonomy ) : null;
 			if ( ! $tag instanceof WP_Term ) {
 				continue; // Skip if $tag is not a WP_Term object.
 			}
@@ -418,7 +422,12 @@ function ajax_wto_sync_tags(): void {
 		$return = '';
 		if ( ! wp_tag_order_is_array_empty( $savedata ) ) {
 			foreach ( $savedata as $newtag ) {
-				$tag = get_term_by( 'id', wp_tag_order_cast_mixed_to_int( $newtag ), $taxonomy );
+				try {
+					$tag_id = wp_tag_order_cast_mixed_to_int( $newtag );
+				} catch ( \InvalidArgumentException $e ) {
+					continue;
+				}
+				$tag = get_term_by( 'id', $tag_id, $taxonomy );
 				if ( ! $tag instanceof WP_Term ) {
 					continue;
 				}
