@@ -1,21 +1,19 @@
-/* eslint-disable import/no-extraneous-dependencies */
-import path from 'path';
-
 import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
-import type { Configuration } from '@rspack/cli';
 import * as rspack from '@rspack/core';
-import type { SwcLoaderOptions } from '@rspack/core';
 import { WebpackSweetEntry } from '@sect/webpack-sweet-entry';
 import NotifierPlugin from '@soda/friendly-errors-webpack-plugin';
 import dotenv from 'dotenv';
-import ESLintPlugin from 'eslint-rspack-plugin';
 import ForkTsCheckerNotifierWebpackPlugin from 'fork-ts-checker-notifier-webpack-plugin';
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 import notifier from 'node-notifier';
 import StyleLintPlugin from 'stylelint-webpack-plugin';
+import RemoveEmptyScriptsPlugin from 'webpack-remove-empty-scripts';
+
+import type { Configuration } from '@rspack/cli';
+import type { SwcLoaderOptions } from '@rspack/core';
 // import SVGSpritemapPlugin from 'svg-spritemap-webpack-plugin';
 import type { WebpackError } from 'webpack/types';
-import RemoveEmptyScriptsPlugin from 'webpack-remove-empty-scripts';
+import path from 'node:path';
 
 dotenv.config();
 
@@ -32,24 +30,13 @@ const getJSPlugins = () => {
 
   plugins.push(
     new rspack.ProvidePlugin({
+      // biome-ignore lint/style/useNamingConvention: jQuery is a global variable
       $: 'jquery',
       jQuery: 'jquery',
       'window.jQuery': 'jquery',
-      // R: 'rambda',
     }),
   );
 
-  plugins.push(
-    new ESLintPlugin({
-      context: path.resolve(sourcePath, 'assets'),
-      extensions: ['ts', 'tsx', 'js', 'jsx'],
-      fix: true,
-      emitError: true,
-      lintDirtyModulesOnly: true,
-      configType: 'flat',
-      eslintPath: require.resolve('eslint/use-at-your-own-risk'),
-    }),
-  );
   // plugins.push(
   //   new SVGSpritemapPlugin(path.resolve(sourcePath, 'assets/images/svg/raw/**/*.svg'), {
   //     output: {
@@ -266,5 +253,4 @@ const config = () =>
     },
   ] as const satisfies Configuration[];
 
-// eslint-disable-next-line import/no-default-export
 export default config;

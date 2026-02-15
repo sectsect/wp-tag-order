@@ -1,5 +1,4 @@
 import type { Compiler, WebpackError } from 'webpack';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { Plugin } from 'webpack';
 
 declare class FriendlyErrorsWebpackPlugin extends Plugin {

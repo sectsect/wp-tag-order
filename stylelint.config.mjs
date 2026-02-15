@@ -1,10 +1,6 @@
 /** @type {import('stylelint').Config} */
 const config = {
-  extends: [
-    'stylelint-config-standard',
-    'stylelint-config-recess-order',
-  ],
-  plugins: ['stylelint-prettier'],
+  extends: ['stylelint-config-standard', 'stylelint-config-recess-order'],
   rules: {
     'alpha-value-notation': 'number',
     'at-rule-empty-line-before': 'always',
@@ -25,7 +21,6 @@ const config = {
     ],
     // 'max-nesting-depth': 4,
     'no-descending-specificity': null,
-    'prettier/prettier': true,
     'selector-class-pattern': null,
   },
 };

@@ -20,7 +20,6 @@
     "src/**/*",
     "rspack.config.ts",
     "commitlint.config.ts",
-    "prettier.config.mjs",
     "postcss.config.mjs",
     "stylelint.config.mjs"
   ],
