@@ -113,6 +113,9 @@ function wp_tag_order_add_github_link( array $plugin_meta, string $plugin_file, 
 add_filter( 'plugin_row_meta', 'wp_tag_order_add_github_link', 10, 4 );
 
 if ( wp_tag_order_php_version_check() ) {
+	// Load Composer autoloader for dependencies.
+	require_once plugin_dir_path( __FILE__ ) . 'vendor/autoload.php';
+
 	require_once plugin_dir_path( __FILE__ ) . 'includes/functions.php';
 	require_once plugin_dir_path( __FILE__ ) . 'includes/class-tag-updater.php';
 	require_once plugin_dir_path( __FILE__ ) . 'includes/category-template.php';
