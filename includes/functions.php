@@ -14,6 +14,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+use Webmozart\Assert\Assert;
+
 // Global constants for meta keys and other identifiers.
 const WP_TAG_ORDER_META_KEY_PREFIX           = 'wp-tag-order-';
 const WP_TAG_ORDER_REST_NAMESPACE            = 'wp-tag-order/v1';
@@ -219,10 +221,8 @@ function wp_tag_order_has_reorder_controller_in_metaboxes(): bool {
  * @throws InvalidArgumentException If the value is not numeric.
  */
 function wp_tag_order_cast_mixed_to_int( mixed $value ): int {
-	if ( is_numeric( $value ) ) {
-		return (int) $value;
-	}
-	throw new InvalidArgumentException( 'Value must be numeric' );
+	Assert::numeric( $value );
+	return (int) $value;
 }
 
 /**
@@ -265,15 +265,8 @@ function wp_tag_order_cast_mixed_to_int_array( mixed $value ): array {
  * @throws InvalidArgumentException If the value cannot be cast to a string.
  */
 function wp_tag_order_cast_mixed_to_string( mixed $value ): string {
-	if ( is_null( $value ) ) {
-		throw new InvalidArgumentException( 'Value cannot be null' );
-	}
-
-	if ( is_scalar( $value ) ) {
-		return (string) $value;
-	}
-
-	throw new InvalidArgumentException( 'Value must be a scalar type' );
+	Assert::scalar( $value );
+	return (string) $value;
 }
 
 /**
