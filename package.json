@@ -13,6 +13,7 @@
     "dev": "rspack build --env development --mode development --watch",
     "build": "rspack build --env production --mode production",
     "build:analyze": "RSDOCTOR=true rspack build --env production --mode production",
+    "secretlint": "secretlint --maskSecrets --secretlintignore .gitignore '**/*'",
     "prepare": "husky"
   },
   "browserslist": "defaults and fully supports es6-module",
