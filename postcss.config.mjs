@@ -1,12 +1,12 @@
-import postcssImport from 'postcss-import';
 import postcssGlobalDataPlugin from '@csstools/postcss-global-data';
-import postcssPresetEnvPlugin from 'postcss-preset-env';
-import postcssSortMediaQueries from 'postcss-sort-media-queries';
-import postcssCombineSelectors from 'postcss-combine-duplicated-selectors';
-import postcssPixelToRemPlugin from 'postcss-pxtorem';
 import postcssCalc from 'postcss-calc';
+import postcssCombineSelectors from 'postcss-combine-duplicated-selectors';
 import postcssHexrgba from 'postcss-hexrgba';
+import postcssImport from 'postcss-import';
+import postcssPresetEnvPlugin from 'postcss-preset-env';
+import postcssPixelToRemPlugin from 'postcss-pxtorem';
 import postcssReporterPlugin from 'postcss-reporter';
+import postcssSortMediaQueries from 'postcss-sort-media-queries';
 
 const postcssGlobalData = postcssGlobalDataPlugin({
   files: ['src/assets/css/_base/settings.css'],

@@ -1,5 +1,3 @@
 {
-  "recommendations": [
-    "swordev.phpstan"
-  ]
+  "recommendations": ["biomejs.biome", "swordev.phpstan"]
 }

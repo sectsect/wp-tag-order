@@ -88,7 +88,6 @@ export const post = () => {
                 jQuery(`#wpto_meta_box-${t} .inside .inner ul`).html(data);
               })
               .fail(() => {
-                // eslint-disable-next-line no-alert
                 alert('Load Error. Please Reload...');
               })
               .always(() => {
@@ -138,7 +137,6 @@ export const post = () => {
         })
         .done(() => {})
         .fail(() => {
-          // eslint-disable-next-line no-alert
           alert('Load Error. Please Reload...');
         })
         .always(() => {

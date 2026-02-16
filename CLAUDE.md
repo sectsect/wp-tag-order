@@ -62,7 +62,7 @@ WP Tag Order is a WordPress plugin that enables drag-and-drop ordering of tags (
 
 ### Code Standards
 - **PHP**: WordPress Coding Standards (WPCS), PHPStan analysis
-- **JavaScript/TypeScript**: ESLint with Airbnb config
+- **JavaScript/TypeScript**: Biome
 - **CSS**: StyleLint
 
 ## Key APIs

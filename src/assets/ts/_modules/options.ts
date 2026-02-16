@@ -78,7 +78,7 @@ export const options = () => {
       return data;
     } catch (error) {
       Swal.showValidationMessage(`Request failed: ${error}`);
-      // eslint-disable-next-line no-console
+      // biome-ignore lint/suspicious/noConsole: Logging the error
       console.log(error);
       throw error;
     }
