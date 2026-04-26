@@ -1,7 +1,7 @@
 {
   "extends": "@spotify/tsconfig",
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "ESNext",
     "moduleResolution": "node",
     "lib": ["dom", "dom.iterable", "esnext"],
     // "noImplicitThis": false,
