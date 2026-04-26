@@ -35,6 +35,8 @@
     }
   },
   "scripts": {
+    "phpcs": "phpcs",
+    "phpcbf": "phpcbf",
     "phpstan": "vendor/bin/phpstan analyse --memory-limit=2048M"
   }
 }
