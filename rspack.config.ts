@@ -14,6 +14,12 @@ import type { SwcLoaderOptions } from '@rspack/core';
 // import SVGSpritemapPlugin from 'svg-spritemap-webpack-plugin';
 import type { WebpackError } from 'webpack/types';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+// biome-ignore lint/style/useNamingConvention: __filename/__dirname mirror Node.js CJS globals
+const __filename = fileURLToPath(import.meta.url);
+// biome-ignore lint/style/useNamingConvention: __filename/__dirname mirror Node.js CJS globals
+const __dirname = path.dirname(__filename);
 
 dotenv.config();
 
