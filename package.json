@@ -58,7 +58,7 @@
     "svg-spritemap-webpack-plugin": "^5.1.0",
     "ts-node": "^10.9.2",
     "tsc-files": "^1.1.4",
-    "typescript": "^5.9.3",
+    "typescript": "^6.0.3",
     "webpack": "^5.105.1",
     "webpack-remove-empty-scripts": "^1.1.1"
   },

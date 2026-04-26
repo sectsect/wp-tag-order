@@ -2,19 +2,13 @@
   "extends": "@spotify/tsconfig",
   "compilerOptions": {
     "module": "ESNext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "lib": ["dom", "dom.iterable", "esnext"],
-    // "noImplicitThis": false,
     "target": "esnext",
     "incremental": true,
     "tsBuildInfoFile": "./.tsbuildinfo",
     "skipLibCheck": true,
-    // "baseUrl": "src/@types",
-    "baseUrl": ".",
-    "paths": {
-      // "*": ["*"],
-      "*": ["node_modules/*", "src/@types/*"]
-    }
+    "types": ["jquery", "jqueryui", "node", "node-notifier"]
   },
   "include": [
     "src/**/*",

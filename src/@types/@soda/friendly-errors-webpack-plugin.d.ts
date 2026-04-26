@@ -1,27 +1,27 @@
-import { Plugin } from 'webpack';
+declare module '@soda/friendly-errors-webpack-plugin' {
+  type WebpackError = import('webpack').WebpackError;
 
-import type { Compiler, WebpackError } from 'webpack';
-
-declare class FriendlyErrorsWebpackPlugin extends Plugin {
-  constructor(options?: FriendlyErrorsWebpackPlugin.Options);
-  apply(compiler: Compiler): void;
-}
-
-declare namespace FriendlyErrorsWebpackPlugin {
-  type Severity = 'error' | 'warning';
-
-  interface Options {
-    compilationSuccessInfo?: {
-      messages: string[];
-      notes: string[];
-    };
-    onErrors?: (severity: Severity, errors: WebpackError[]) => void;
-    clearConsole?: boolean;
-    additionalFormatters?: Array<
-      (errors: WebpackError[], type: Severity) => string[]
-    >;
-    additionalTransformers?: Array<(error: WebpackError) => WebpackError>;
+  class FriendlyErrorsWebpackPlugin extends import('webpack').Plugin {
+    constructor(options?: FriendlyErrorsWebpackPlugin.Options);
+    apply(compiler: import('webpack').Compiler): void;
   }
-}
 
-export = FriendlyErrorsWebpackPlugin;
+  namespace FriendlyErrorsWebpackPlugin {
+    type Severity = 'error' | 'warning';
+
+    interface Options {
+      compilationSuccessInfo?: {
+        messages: string[];
+        notes: string[];
+      };
+      onErrors?: (severity: Severity, errors: WebpackError[]) => void;
+      clearConsole?: boolean;
+      additionalFormatters?: Array<
+        (errors: WebpackError[], type: Severity) => string[]
+      >;
+      additionalTransformers?: Array<(error: WebpackError) => WebpackError>;
+    }
+  }
+
+  export = FriendlyErrorsWebpackPlugin;
+}
