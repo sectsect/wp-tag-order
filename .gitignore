@@ -16,4 +16,7 @@ node_modules/
 /.phpunit.cache
 .phpunit.result.cache
 
+### Claude ###
+.claude/settings.local.json
+
 docs/
