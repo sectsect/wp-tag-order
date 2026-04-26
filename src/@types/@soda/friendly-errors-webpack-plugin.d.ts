@@ -1,5 +1,6 @@
-import type { Compiler, WebpackError } from 'webpack';
 import { Plugin } from 'webpack';
+
+import type { Compiler, WebpackError } from 'webpack';
 
 declare class FriendlyErrorsWebpackPlugin extends Plugin {
   constructor(options?: FriendlyErrorsWebpackPlugin.Options);

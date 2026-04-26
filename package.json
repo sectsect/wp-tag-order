@@ -19,7 +19,7 @@
   },
   "browserslist": "defaults and fully supports es6-module",
   "devDependencies": {
-    "@biomejs/biome": "2.3.15",
+    "@biomejs/biome": "2.4.13",
     "@commitlint/cli": "^20.4.1",
     "@commitlint/config-conventional": "^20.4.1",
     "@commitlint/types": "^20.4.0",

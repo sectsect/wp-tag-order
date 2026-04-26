@@ -22,7 +22,6 @@
       position: absolute;
       top: 50%;
       right: 12px;
-      left: 50%;
       left: auto;
       z-index: 100;
       visibility: hidden;
@@ -57,7 +56,6 @@
       position: absolute;
       top: 50%;
       right: 12px;
-      left: 50%;
       left: auto;
       z-index: 100;
       visibility: hidden;
