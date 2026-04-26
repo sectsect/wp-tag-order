@@ -17,9 +17,6 @@ importers:
       jquery:
         specifier: ^4.0.0
         version: 4.0.0
-      node-notifier:
-        specifier: ^10.0.1
-        version: 10.0.1
       sweetalert2:
         specifier: ^11.26.18
         version: 11.26.18
@@ -54,9 +51,6 @@ importers:
       '@sect/webpack-sweet-entry':
         specifier: ^8.0.1
         version: 8.0.1
-      '@soda/friendly-errors-webpack-plugin':
-        specifier: ^1.8.1
-        version: 1.8.1(webpack@5.105.1)
       '@spotify/tsconfig':
         specifier: ^15.0.0
         version: 15.0.0(typescript@6.0.3)
@@ -69,9 +63,6 @@ importers:
       '@types/node':
         specifier: ^25.2.3
         version: 25.2.3
-      '@types/node-notifier':
-        specifier: ^8.0.5
-        version: 8.0.5
       css-loader:
         specifier: ^7.1.3
         version: 7.1.3(@rspack/core@2.0.0)(webpack@5.105.1)
@@ -926,12 +917,6 @@ packages:
   '@socket.io/component-emitter@3.1.2':
     resolution: {integrity: sha512-9BCxFwvbGg/RsZK9tjXd8s4UcwR0MWeFQ1XEKIQVVvAGJyINdrqKMcTRyLoK8Rse1GjzLV9cwjWV1olXRWEXVA==}
 
-  '@soda/friendly-errors-webpack-plugin@1.8.1':
-    resolution: {integrity: sha512-h2ooWqP8XuFqTXT+NyAFbrArzfQA7R6HTezADrvD9Re8fxMLTPPniLdqVTdDaO0eIoLaAwKT+d6w+5GeTk7Vbg==}
-    engines: {node: '>=8.0.0'}
-    peerDependencies:
-      webpack: ^4.0.0 || ^5.0.0
-
   '@spotify/tsconfig@15.0.0':
     resolution: {integrity: sha512-MQ5lJXgqVAr6eTJzoXcCVqr95a/+rTmpaIjTT3htpQ6m9aq/mHVnFoS7AbD0vEG7i5qUdaKbnWJWXITE8STLow==}
     engines: {node: '>=18'}
@@ -1007,9 +992,6 @@ packages:
 
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
-
-  '@types/node-notifier@8.0.5':
-    resolution: {integrity: sha512-LX7+8MtTsv6szumAp6WOy87nqMEdGhhry/Qfprjm1Ma6REjVzeF7SCyvPtp5RaF6IkXCS9V4ra8g5fwvf2ZAYg==}
 
   '@types/node@25.2.3':
     resolution: {integrity: sha512-m0jEgYlYz+mDJZ2+F4v8D1AyQb+QzsNqRuI7xg1VQX/KlKS0qT9r1Mo16yo5F/MtifXFgaofIFsdFMox2SxIbQ==}
@@ -1261,10 +1243,6 @@ packages:
 
   caniuse-lite@1.0.30001790:
     resolution: {integrity: sha512-bOoxfJPyYo+ds6W0YfptaCWbFnJYjh2Y1Eow5lRv+vI2u8ganPZqNm1JwNh0t2ELQCqIWg4B3dWEusgAmsoyOw==}
-
-  chalk@3.0.0:
-    resolution: {integrity: sha512-4D3B6Wf41KOYRFdszmDqMCGq5VV/uMAB273JILmO+3jAlh8X4qDtdtgCR3fxtbLEMzSx22QdhnDcJvu2u1fVwg==}
-    engines: {node: '>=8'}
 
   chalk@4.1.2:
     resolution: {integrity: sha512-oKnbhFyRIXpUuez8iBMmyEa4nbj4IOQyuhc/wy9kY7/WVPcwIO9VA668Pu8RkO7+0G76SLROeyw9CpQ061i4mA==}
@@ -1569,9 +1547,6 @@ packages:
 
   error-ex@1.3.4:
     resolution: {integrity: sha512-sqQamAnR14VgCr1A618A3sGrygcpK+HEbenA/HiEAkkUwcZIIB/tgWqHFxWgOyDh4nB4JCRimh79dR5Ywc9MDQ==}
-
-  error-stack-parser@2.1.4:
-    resolution: {integrity: sha512-Sk5V6wVazPhq5MhpO+AUxJn5x7XSXGl1R93Vn7i+zS15KDVxQijejNCrz8340/2bgLBjR9GtEG8ZVKONDjcqGQ==}
 
   es-module-lexer@2.0.0:
     resolution: {integrity: sha512-5POEcUuZybH7IdmGsD8wlf0AI55wMecM9rVBTI/qEAy2c1kTOm3DjFYjrBdI2K3BaJjJYfYFeRtM0t9ssnRuxw==}
@@ -2614,9 +2589,6 @@ packages:
   stable@0.1.8:
     resolution: {integrity: sha512-ji9qxRnOVfcuLDySj9qzhGSEFVobyt1kIOSkj1qZzYLzq7Tos/oUUWvotUPQLlrsidqsK6tBH89Bc9kL5zHA6w==}
     deprecated: 'Modern JS already guarantees Array#sort() is a stable sort, so this library is deprecated. See the compatibility table on MDN: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#browser_compatibility'
-
-  stackframe@1.3.4:
-    resolution: {integrity: sha512-oeVtt7eWQS+Na6F//S4kJ2K2VbRlS9D43mAlMyVpVWovy9o+jfgH8O9agzANzaiLjclA0oYzUXEM4PurhSUChw==}
 
   string-argv@0.3.2:
     resolution: {integrity: sha512-aqD2Q0144Z+/RqG52NeHEkZauTAUWJO8c6yTftGJKO3Tja5tUgIfmIl6kExvhtxSDP7fXB6DvzkfMpCd/F3G+Q==}
@@ -3850,14 +3822,6 @@ snapshots:
 
   '@socket.io/component-emitter@3.1.2': {}
 
-  '@soda/friendly-errors-webpack-plugin@1.8.1(webpack@5.105.1)':
-    dependencies:
-      chalk: 3.0.0
-      error-stack-parser: 2.1.4
-      string-width: 4.2.3
-      strip-ansi: 6.0.1
-      webpack: 5.105.1
-
   '@spotify/tsconfig@15.0.0(typescript@6.0.3)':
     dependencies:
       typescript: 6.0.3
@@ -3947,10 +3911,6 @@ snapshots:
       '@types/jquery': 3.5.33
 
   '@types/json-schema@7.0.15': {}
-
-  '@types/node-notifier@8.0.5':
-    dependencies:
-      '@types/node': 25.2.3
 
   '@types/node@25.2.3':
     dependencies:
@@ -4207,11 +4167,6 @@ snapshots:
   caniuse-lite@1.0.30001769: {}
 
   caniuse-lite@1.0.30001790: {}
-
-  chalk@3.0.0:
-    dependencies:
-      ansi-styles: 4.3.0
-      supports-color: 7.2.0
 
   chalk@4.1.2:
     dependencies:
@@ -4493,10 +4448,6 @@ snapshots:
   error-ex@1.3.4:
     dependencies:
       is-arrayish: 0.2.1
-
-  error-stack-parser@2.1.4:
-    dependencies:
-      stackframe: 1.3.4
 
   es-module-lexer@2.0.0: {}
 
@@ -5543,8 +5494,6 @@ snapshots:
   split2@4.2.0: {}
 
   stable@0.1.8: {}
-
-  stackframe@1.3.4: {}
 
   string-argv@0.3.2: {}
 

@@ -8,7 +8,7 @@
     "incremental": true,
     "tsBuildInfoFile": "./.tsbuildinfo",
     "skipLibCheck": true,
-    "types": ["jquery", "jqueryui", "node", "node-notifier"]
+    "types": ["jquery", "jqueryui", "node"]
   },
   "include": [
     "src/**/*",

@@ -1,18 +1,15 @@
 import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
 import * as rspack from '@rspack/core';
 import { WebpackSweetEntry } from '@sect/webpack-sweet-entry';
-import NotifierPlugin from '@soda/friendly-errors-webpack-plugin';
 import dotenv from 'dotenv';
 import ForkTsCheckerNotifierWebpackPlugin from 'fork-ts-checker-notifier-webpack-plugin';
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
-import notifier from 'node-notifier';
 import StyleLintPlugin from 'stylelint-webpack-plugin';
 import RemoveEmptyScriptsPlugin from 'webpack-remove-empty-scripts';
 
 import type { Configuration } from '@rspack/cli';
 import type { SwcLoaderOptions } from '@rspack/core';
 // import SVGSpritemapPlugin from 'svg-spritemap-webpack-plugin';
-import type { WebpackError } from 'webpack/types';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -105,21 +102,6 @@ const getJSPlugins = () => {
     plugins.push(new RsdoctorRspackPlugin({}));
   }
 
-  plugins.push(
-    new NotifierPlugin({
-      onErrors: (severity: string, errors: WebpackError[]) => {
-        if (severity !== 'error') return;
-        const error = errors[0];
-        notifier.notify({
-          title: 'Webpack error',
-          message: `${severity}: ${error.name}`,
-          sound: 'Bottle',
-          subtitle: error.file || '',
-        });
-      },
-    }),
-  );
-
   return plugins;
 };
 
@@ -139,21 +121,6 @@ const getCSSPlugins = () => {
   plugins.push(
     new rspack.CssExtractRspackPlugin({
       filename: '[name].css',
-    }),
-  );
-
-  plugins.push(
-    new NotifierPlugin({
-      onErrors: (severity: string, errors: WebpackError[]) => {
-        if (severity !== 'error') return;
-        const error = errors[0];
-        notifier.notify({
-          title: 'Webpack error',
-          message: `${severity}: ${error.name}`,
-          sound: 'Bottle',
-          subtitle: error.file || '',
-        });
-      },
     }),
   );
 
