@@ -162,7 +162,7 @@ const config = () =>
       },
       resolve: {
         extensions: ['.tsx', '.ts', '.jsx', '.js'],
-        modules: [path.resolve(__dirname, 'node_modules')],
+        modules: ['node_modules'],
       },
       optimization: {
         splitChunks: {
@@ -212,7 +212,7 @@ const config = () =>
         ],
       },
       resolve: {
-        modules: [path.resolve(__dirname, 'node_modules')],
+        modules: ['node_modules'],
       },
       optimization: {
         minimizer: [new rspack.LightningCssMinimizerRspackPlugin()],
