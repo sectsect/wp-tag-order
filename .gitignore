@@ -2,6 +2,7 @@
 Thumbs.db
 wp-cli.local.yml
 node_modules/
+.pnpm-store/
 *.sql
 *.tar.gz
 *.zip
@@ -14,3 +15,8 @@ node_modules/
 # PHPUnit
 /.phpunit.cache
 .phpunit.result.cache
+
+### Claude ###
+.claude/settings.local.json
+
+docs/
