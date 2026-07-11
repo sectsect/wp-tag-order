@@ -199,7 +199,7 @@ function save_wpto_meta_box( int $post_id, WP_Post $post, bool $update ): void {
 		$taxonomy = sanitize_key( $taxonomy );
 		if ( ! is_taxonomy_hierarchical( $taxonomy ) && wp_tag_order_is_enabled_taxonomy( $taxonomy ) ) {
 			$fieldname = wp_tag_order_meta_key( $taxonomy );
-			$tags      = filter_input( INPUT_POST, $fieldname, FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+			$tags      = filter_input( INPUT_POST, $fieldname, FILTER_UNSAFE_RAW, FILTER_REQUIRE_ARRAY );
 
 			$meta_box_tags_value = '';
 			if ( $tags ) {
@@ -393,7 +393,8 @@ function ajax_wto_sync_tags(): void {
 		if ( $tags_val ) {
 			$basetagsids = is_string( $tags_val ) ? unserialize( $tags_val ) : array();
 			if ( is_array( $basetagsids ) ) {
-				$added = wp_tag_order_array_diff_interactive( $newtagsids, $basetagsids );
+				$basetagsids = array_map( 'strval', array_filter( $basetagsids, 'is_scalar' ) );
+				$added       = wp_tag_order_array_diff_interactive( $newtagsids, $basetagsids );
 				foreach ( $added as $val ) {
 					if ( ! in_array( $val, $basetagsids, true ) ) {
 						$basetagsids[] = $val;
