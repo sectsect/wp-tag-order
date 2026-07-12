@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.4.13/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.5.3/schema.json",
   "vcs": {
     "enabled": true,
     "clientKind": "git",
@@ -24,7 +24,7 @@
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true,
+      "preset": "recommended",
       "suspicious": {
         "noImportCycles": "warn",
         "noUnknownAtRules": "off",
@@ -34,23 +34,17 @@
             "allow": ["warn", "error"]
           }
         },
-        "noEvolvingTypes": "error"
+        "noEvolvingTypes": "error",
+        "noUnnecessaryConditions": "error",
+        "noNestedPromises": "error",
+        "noShadow": "warn",
+        "useArraySortCompare": "error"
       },
       "nursery": {
-        "noUnnecessaryConditions": "error",
         "noFloatingPromises": "error",
         // "noLeakedRender": "error",
         "noMisusedPromises": "error",
-        "noNestedPromises": "error",
-        "noShadow": "warn",
-        "useFind": "error",
-        "useArraySortCompare": "error",
         "useAwaitThenable": "error",
-        "useErrorCause": "warn",
-        "noUselessReturn": {
-          "level": "error",
-          "fix": "safe"
-        },
         "useSortedClasses": {
           "fix": "safe",
           "level": "error",
@@ -107,7 +101,8 @@
           }
         },
         "noNestedTernary": "error",
-        "noYodaExpression": "error"
+        "noYodaExpression": "error",
+        "useErrorCause": "warn"
       },
       "complexity": {
         "useSimplifiedLogicExpression": "error",
@@ -120,6 +115,11 @@
           "options": {
             "maxAllowedComplexity": 15
           }
+        },
+        "useArrayFind": "error",
+        "noUselessReturn": {
+          "level": "error",
+          "fix": "safe"
         }
       },
       "security": {

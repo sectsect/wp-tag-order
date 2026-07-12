@@ -58,10 +58,10 @@ function wp_tag_order_is_array_empty( array $arr ): bool {
 /**
  * Computes the difference between two arrays.
  *
- * @param array<mixed> $array_1 The first array.
- * @param array<mixed> $array_2 The second array.
+ * @param array<int|string> $array_1 The first array.
+ * @param array<int|string> $array_2 The second array.
  *
- * @return array<mixed> The difference between the two arrays.
+ * @return array<int|string> The difference between the two arrays.
  */
 function wp_tag_order_array_diff_interactive( array $array_1, array $array_2 ): array {
 	return array_merge( array_diff( $array_1, $array_2 ), array_diff( $array_2, $array_1 ) );
